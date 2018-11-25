@@ -1,0 +1,45 @@
+{
+  "name": "pokemon-sanctuary",
+  "description": "Hilo3D animated first-generation Pokemon material showcase",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "npm run typecheck && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "assets:optimize": "python3 scripts/optimize-assets.py",
+    "models:validate": "node scripts/test-pose-baker.mjs && node scripts/test-animated-models.mjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/06wj/pokemon.git"
+  },
+  "keywords": [
+    "pokemon",
+    "3d"
+  ],
+  "author": "06wj",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/06wj/pokemon/issues"
+  },
+  "homepage": "https://github.com/06wj/pokemon#readme",
+  "engines": {
+    "node": ">=20.19.0"
+  },
+  "devDependencies": {
+    "@types/node": "22.20.1",
+    "@types/react": "19.2.18",
+    "@types/react-dom": "19.2.4",
+    "@vitejs/plugin-react": "6.1.0",
+    "typescript": "7.0.2",
+    "vite": "8.2.2"
+  },
+  "dependencies": {
+    "hilo3d": "2.0.0-alpha.4",
+    "react": "19.2.8",
+    "react-dom": "19.2.8"
+  }
+}

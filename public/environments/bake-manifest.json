@@ -1,0 +1,22 @@
+{
+  "forest": {
+    "source": "forest_slope_1k.hdr",
+    "sourceExposureMultiplier": 1.3300050851017542,
+    "specularSide": 128,
+    "specularLevels": 8,
+    "diffuseSide": 16,
+    "samples": 512,
+    "diffuseConvolution": "full-image SH9 analytic cosine",
+    "specularConvolution": "GGX PDF-filtered solid-angle HDR mip pyramid"
+  },
+  "studio": {
+    "source": "studio_small_09_1k.hdr",
+    "sourceExposureMultiplier": 0.762795762133241,
+    "specularSide": 128,
+    "specularLevels": 8,
+    "diffuseSide": 16,
+    "samples": 512,
+    "diffuseConvolution": "full-image SH9 analytic cosine",
+    "specularConvolution": "GGX PDF-filtered solid-angle HDR mip pyramid"
+  }
+}

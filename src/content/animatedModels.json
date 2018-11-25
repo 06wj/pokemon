@@ -1,0 +1,6726 @@
+{
+  "001": {
+    "model": "models/001/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0001_00_00_00000_defaultwait01_loop.gfbanm",
+        "duration": 3.5416666666666665
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0001_00_00_00030_walk01_loop.gfbanm",
+        "duration": 2.5416666666666665
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0001_00_00_00100_run01_loop.gfbanm",
+        "duration": 1.0416666666666667
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0001_00_00_00400_attack01.gfbanm",
+        "duration": 5.458333333333333
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0001_00_00_00550_glad01.gfbanm",
+        "duration": 5.875
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0001_00_00_00281_sleep01_loop.gfbanm",
+        "duration": 9.208333333333334
+      }
+    ],
+    "source": "pm0001_00.blend",
+    "fps": 24.0,
+    "bytes": 4436540
+  },
+  "002": {
+    "model": "models/002/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0002_00_00_00000_defaultwait01_loop.gfbanm",
+        "duration": 3.7916666666666665
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0002_00_00_00030_walk01_loop.gfbanm",
+        "duration": 3.375
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0002_00_00_00100_run01_loop.gfbanm",
+        "duration": 1.2916666666666667
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0002_00_00_00400_attack01.gfbanm",
+        "duration": 4.625
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0002_00_00_00550_glad01.gfbanm",
+        "duration": 5.458333333333333
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0002_00_00_00281_sleep01_loop.gfbanm",
+        "duration": 8.375
+      }
+    ],
+    "source": "pm0002_00.blend",
+    "fps": 24.0,
+    "bytes": 6050020
+  },
+  "003": {
+    "model": "models/003/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0003_00_00_00000_defaultwait01_loop",
+        "duration": 2.0
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0003_00_00_00030_walk01_loop",
+        "duration": 1.3333333333333333
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0003_00_00_00100_run01_loop",
+        "duration": 0.6
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0003_00_00_00400_attack01",
+        "duration": 2.1666666666666665
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0003_00_00_00550_glad01",
+        "duration": 2.0
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0003_00_00_00281_sleep01_loop",
+        "duration": 2.0
+      }
+    ],
+    "source": "pm0003.blend",
+    "fps": 60.0,
+    "bytes": 8046340
+  },
+  "004": {
+    "model": "models/004/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0004_00_00_00000_defaultwait01_loop.gfbanm",
+        "duration": 3.7916666666666665
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0004_00_00_00030_walk01_loop.gfbanm",
+        "duration": 2.5416666666666665
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0004_00_00_00100_run01_loop.gfbanm",
+        "duration": 1.7083333333333333
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0004_00_00_00400_attack01.gfbanm",
+        "duration": 5.458333333333333
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0004_00_00_00550_glad01.gfbanm",
+        "duration": 4.208333333333333
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0004_00_00_00281_sleep01_loop.gfbanm",
+        "duration": 6.708333333333333
+      }
+    ],
+    "source": "pm0004_00.blend",
+    "fps": 24.0,
+    "bytes": 3173596
+  },
+  "005": {
+    "model": "models/005/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0005_00_00_00000_defaultwait01_loop.gfbanm",
+        "duration": 5.041666666666667
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0005_00_00_00030_walk01_loop.gfbanm",
+        "duration": 2.5416666666666665
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0005_00_00_00100_run01_loop.gfbanm",
+        "duration": 1.7083333333333333
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0005_00_00_00400_attack01.gfbanm",
+        "duration": 4.625
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0005_00_00_00550_glad01.gfbanm",
+        "duration": 4.208333333333333
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0005_00_00_00281_sleep01_loop.gfbanm",
+        "duration": 8.375
+      }
+    ],
+    "source": "pm0005_00.blend",
+    "fps": 24.0,
+    "bytes": 3853812
+  },
+  "006": {
+    "model": "models/006/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0006_00_00_00000_defaultwait01_loop.gfbanm",
+        "duration": 6.041666666666667
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0006_00_00_00030_walk01_loop.gfbanm",
+        "duration": 4.041666666666667
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0006_00_00_00100_run01_loop.gfbanm",
+        "duration": 2.125
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0006_00_00_00400_attack01.gfbanm",
+        "duration": 5.458333333333333
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0006_00_00_00550_glad01.gfbanm",
+        "duration": 5.875
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0006_00_00_00281_sleep01_loop.gfbanm",
+        "duration": 5.875
+      }
+    ],
+    "source": "pm0006_00.blend",
+    "fps": 24.0,
+    "bytes": 7238092
+  },
+  "007": {
+    "model": "models/007/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0007_00_00_00000_defaultwait01_loop.gfbanm",
+        "duration": 3.375
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0007_00_00_00030_walk01_loop.gfbanm",
+        "duration": 2.0416666666666665
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0007_00_00_00100_run01_loop.gfbanm",
+        "duration": 1.2916666666666667
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0007_00_00_00400_attack01.gfbanm",
+        "duration": 4.625
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0007_00_00_00550_glad01.gfbanm",
+        "duration": 3.7916666666666665
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0007_00_00_00281_sleep01_loop.gfbanm",
+        "duration": 5.875
+      }
+    ],
+    "source": "pm0007_00.blend",
+    "fps": 24.0,
+    "bytes": 4546268
+  },
+  "008": {
+    "model": "models/008/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0008_00_00_00000_defaultwait01_loop.gfbanm",
+        "duration": 2.7083333333333335
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0008_00_00_00030_walk01_loop.gfbanm",
+        "duration": 2.5416666666666665
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0008_00_00_00100_run01_loop.gfbanm",
+        "duration": 1.7083333333333333
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0008_00_00_00400_attack01.gfbanm",
+        "duration": 4.625
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0008_00_00_00550_glad01.gfbanm",
+        "duration": 4.708333333333333
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0008_00_00_00281_sleep01_loop.gfbanm",
+        "duration": 5.458333333333333
+      }
+    ],
+    "source": "pm0008_00.blend",
+    "fps": 24.0,
+    "bytes": 4535740
+  },
+  "009": {
+    "model": "models/009/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0009_00_00_00000_defaultwait01_loop.gfbanm",
+        "duration": 6.708333333333333
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0009_00_00_00030_walk01_loop.gfbanm",
+        "duration": 3.375
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0009_00_00_00100_run01_loop.gfbanm",
+        "duration": 2.125
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0009_00_00_00400_attack01.gfbanm",
+        "duration": 5.458333333333333
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0009_00_00_00550_glad01.gfbanm",
+        "duration": 4.208333333333333
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0009_00_00_00281_sleep01_loop.gfbanm",
+        "duration": 8.375
+      }
+    ],
+    "source": "pm0009_00.blend",
+    "fps": 24.0,
+    "bytes": 7597532
+  },
+  "010": {
+    "model": "models/010/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0010_00_ba10_waitA01.gfbanm",
+        "duration": 2.04
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0010_00_fi20_walk01.gfbanm",
+        "duration": 2.44
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0010_00_fi21_run01.gfbanm",
+        "duration": 1.24
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0010_00_ba21_tokusyu01.gfbanm",
+        "duration": 2.24
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0010_00_kw32_happyB01.gfbanm",
+        "duration": 2.04
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0010_00_kw20_drowseB01.gfbanm",
+        "duration": 2.04
+      }
+    ],
+    "source": "pm0010_00.blend",
+    "fps": 25.0,
+    "bytes": 400496
+  },
+  "011": {
+    "model": "models/011/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0011_00_kw01_wait01.gfbanm",
+        "duration": 2.44
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0011_00_fi20_walk01.gfbanm",
+        "duration": 2.6
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0011_00_fi21_run01.gfbanm",
+        "duration": 2.6
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0011_00_ba20_buturi01.gfbanm",
+        "duration": 1.64
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0011_00_kw32_happyB01.gfbanm",
+        "duration": 2.44
+      }
+    ],
+    "source": "pm0011_00.blend",
+    "fps": 25.0,
+    "bytes": 363200
+  },
+  "012": {
+    "model": "models/012/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0012_00_ba10_waitA01.gfbanm",
+        "duration": 2.6
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0012_00_fi20_walk01.gfbanm",
+        "duration": 4.36
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0012_00_fi21_run01.gfbanm",
+        "duration": 2.44
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0012_00_ba20_buturi01.gfbanm",
+        "duration": 2.44
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0012_00_kw32_happyB01.gfbanm",
+        "duration": 2.04
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0012_00_kw20_drowseB01.gfbanm",
+        "duration": 3.64
+      }
+    ],
+    "source": "pm0012_00.blend",
+    "fps": 25.0,
+    "bytes": 682356
+  },
+  "013": {
+    "model": "models/013/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0013_00_kw01_wait01.gfbanm",
+        "duration": 2.44
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0013_00_fi20_walk01.gfbanm",
+        "duration": 2.44
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0013_00_fi21_run01.gfbanm",
+        "duration": 1.24
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0013_00_ba21_tokusyu01.gfbanm",
+        "duration": 2.04
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0013_00_kw32_happyB01.gfbanm",
+        "duration": 2.04
+      }
+    ],
+    "source": "pm0013_00.blend",
+    "fps": 25.0,
+    "bytes": 644424
+  },
+  "014": {
+    "model": "models/014/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0014_00_kw01_wait01.gfbanm",
+        "duration": 3.04
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0014_00_fi20_walk01.gfbanm",
+        "duration": 2.44
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0014_00_fi21_run01.gfbanm",
+        "duration": 2.44
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0014_00_ba21_tokusyu01.gfbanm",
+        "duration": 2.44
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0014_00_kw32_happyB01.gfbanm",
+        "duration": 3.04
+      }
+    ],
+    "source": "pm0014_00.blend",
+    "fps": 25.0,
+    "bytes": 289216
+  },
+  "015": {
+    "model": "models/015/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0015_00_kw01_wait01.gfbanm",
+        "duration": 1.64
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0015_00_fi20_walk01.gfbanm",
+        "duration": 2.44
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0015_00_fi21_run01.gfbanm",
+        "duration": 1.64
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0015_00_ba20_buturi01.gfbanm",
+        "duration": 2.04
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0015_00_kw32_happyB01.gfbanm",
+        "duration": 2.44
+      }
+    ],
+    "source": "pm0015_00.blend",
+    "fps": 25.0,
+    "bytes": 684720
+  },
+  "016": {
+    "model": "models/016/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0016_00_kw01_wait01.gfbanm",
+        "duration": 1.48
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0016_00_fi20_walk01.gfbanm",
+        "duration": 1.32
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0016_00_fi21_run01.gfbanm",
+        "duration": 1.0
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0016_00_ba20_buturi01.gfbanm",
+        "duration": 2.04
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0016_00_kw32_happyB01.gfbanm",
+        "duration": 2.64
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0016_00_kw20_drowseB01.gfbanm",
+        "duration": 2.44
+      }
+    ],
+    "source": "pm0016_00.blend",
+    "fps": 25.0,
+    "bytes": 788816
+  },
+  "017": {
+    "model": "models/017/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0017_00_kw01_wait01.gfbanm",
+        "duration": 1.64
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0017_00_fi20_walk01.gfbanm",
+        "duration": 1.64
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0017_00_fi21_run01.gfbanm",
+        "duration": 1.32
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0017_00_ba20_buturi01.gfbanm",
+        "duration": 3.24
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0017_00_kw32_happyB01.gfbanm",
+        "duration": 2.04
+      }
+    ],
+    "source": "pm0017_00.blend",
+    "fps": 25.0,
+    "bytes": 1139276
+  },
+  "018": {
+    "model": "models/018/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0018_00_kw01_wait01.gfbanm",
+        "duration": 1.24
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0018_00_fi20_walk01.gfbanm",
+        "duration": 2.28
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0018_00_fi21_run01.gfbanm",
+        "duration": 1.64
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0018_00_ba20_buturi01.gfbanm",
+        "duration": 2.52
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0018_00_kw32_happyB01.gfbanm",
+        "duration": 2.32
+      }
+    ],
+    "source": "pm0018_00.blend",
+    "fps": 25.0,
+    "bytes": 1268292
+  },
+  "019": {
+    "model": "models/019/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0019_00_kw01_wait01.gfbanm",
+        "duration": 1.64
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0019_00_fi20_walk01.gfbanm",
+        "duration": 1.64
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0019_00_fi21_run01.gfbanm",
+        "duration": 0.84
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0019_00_ba20_buturi01.gfbanm",
+        "duration": 2.32
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0019_00_kw32_happyB01.gfbanm",
+        "duration": 2.24
+      }
+    ],
+    "source": "pm0019_00.blend",
+    "fps": 25.0,
+    "bytes": 879720
+  },
+  "020": {
+    "model": "models/020/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0020_00_kw01_wait01.gfbanm",
+        "duration": 2.52
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0020_00_fi20_walk01.gfbanm",
+        "duration": 1.96
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0020_00_fi21_run01.gfbanm",
+        "duration": 1.0
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0020_00_ba20_buturi01.gfbanm",
+        "duration": 2.04
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0020_00_kw32_happyB01.gfbanm",
+        "duration": 2.04
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0020_00_kw20_drowseB01.gfbanm",
+        "duration": 2.44
+      }
+    ],
+    "source": "pm0020_00.blend",
+    "fps": 25.0,
+    "bytes": 1002292
+  },
+  "021": {
+    "model": "models/021/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0021_00_kw01_wait01.gfbanm",
+        "duration": 1.0
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0021_00_fi20_walk01.gfbanm",
+        "duration": 1.32
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0021_00_fi21_run01.gfbanm",
+        "duration": 1.0
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0021_00_ba20_buturi01.gfbanm",
+        "duration": 1.88
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0021_00_kw32_happyB01.gfbanm",
+        "duration": 2.2
+      }
+    ],
+    "source": "pm0021_00.blend",
+    "fps": 25.0,
+    "bytes": 1065324
+  },
+  "022": {
+    "model": "models/022/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0022_00_kw01_wait01.gfbanm",
+        "duration": 2.033333333333333
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0022_00_fi20_walk01.gfbanm",
+        "duration": 2.033333333333333
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0022_00_fi21_run01.gfbanm",
+        "duration": 1.5666666666666667
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0022_00_ba20_buturi01.gfbanm",
+        "duration": 2.7
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0022_00_kw32_happyB01.gfbanm",
+        "duration": 1.7
+      }
+    ],
+    "source": "pm0022_00.blend",
+    "fps": 30.0,
+    "bytes": 1246888
+  },
+  "023": {
+    "model": "models/023/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0023_00_00_00000_defaultwait01_loop.gfbanm",
+        "duration": 5.041666666666667
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0023_00_00_00030_walk01_loop.gfbanm",
+        "duration": 3.375
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0023_00_00_00100_run01_loop.gfbanm",
+        "duration": 1.2083333333333333
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0023_00_00_00400_attack01.gfbanm",
+        "duration": 3.7916666666666665
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0023_00_00_00550_glad01.gfbanm",
+        "duration": 3.375
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0023_00_00_00281_sleep01_loop.gfbanm",
+        "duration": 5.041666666666667
+      }
+    ],
+    "source": "pm0023_00.blend",
+    "fps": 24.0,
+    "bytes": 3728648
+  },
+  "024": {
+    "model": "models/024/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0024_00_00_00000_defaultwait01_loop.gfbanm",
+        "duration": 6.708333333333333
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0024_00_00_00030_walk01_loop.gfbanm",
+        "duration": 2.5416666666666665
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0024_00_00_00100_run01_loop.gfbanm",
+        "duration": 1.7083333333333333
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0024_00_00_00400_attack01.gfbanm",
+        "duration": 4.625
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0024_00_00_00550_glad01.gfbanm",
+        "duration": 5.041666666666667
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0024_00_00_00281_sleep01_loop.gfbanm",
+        "duration": 8.375
+      }
+    ],
+    "source": "pm0024_00.blend",
+    "fps": 24.0,
+    "bytes": 3290096
+  },
+  "025": {
+    "model": "models/025/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0025_00_00_00000_defaultwait01_loop",
+        "duration": 1.1333333333333333
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0025_00_00_00030_walk01_loop",
+        "duration": 1.0
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0025_00_00_00100_run01_loop",
+        "duration": 0.4
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0025_00_00_00400_attack01",
+        "duration": 1.8333333333333333
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0025_00_00_00550_glad01",
+        "duration": 1.6666666666666667
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0025_00_00_00281_sleep01_loop",
+        "duration": 4.0
+      }
+    ],
+    "source": "pm0025.blend",
+    "fps": 60.0,
+    "bytes": 7344736
+  },
+  "026": {
+    "model": "models/026/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0026_00_00_00000_defaultwait01_loop",
+        "duration": 1.0
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0026_00_00_00030_walk01_loop",
+        "duration": 1.0
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0026_00_00_00100_run01_loop",
+        "duration": 0.4666666666666667
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0026_00_00_00400_attack01",
+        "duration": 1.5
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0026_00_00_00550_glad01",
+        "duration": 1.9333333333333333
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0026_00_00_00281_sleep01_loop",
+        "duration": 1.3333333333333333
+      }
+    ],
+    "source": "pm0026.blend",
+    "fps": 60.0,
+    "bytes": 5769908
+  },
+  "027": {
+    "model": "models/027/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0027_00_00_00000_defaultwait01_loop.gfbanm",
+        "duration": 2.5416666666666665
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0027_00_00_00030_walk01_loop.gfbanm",
+        "duration": 2.875
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0027_00_00_00100_run01_loop.gfbanm",
+        "duration": 0.875
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0027_00_00_00400_attack01.gfbanm",
+        "duration": 3.7916666666666665
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0027_00_00_00550_glad01.gfbanm",
+        "duration": 4.625
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0027_00_00_00281_sleep01_loop.gfbanm",
+        "duration": 5.041666666666667
+      }
+    ],
+    "source": "pm0027_00.blend",
+    "fps": 24.0,
+    "bytes": 4915668
+  },
+  "028": {
+    "model": "models/028/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0028_00_00_00000_defaultwait01_loop.gfbanm",
+        "duration": 4.041666666666667
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0028_00_00_00030_walk01_loop.gfbanm",
+        "duration": 2.5416666666666665
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0028_00_00_00100_run01_loop.gfbanm",
+        "duration": 1.7083333333333333
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0028_00_00_00400_attack01.gfbanm",
+        "duration": 3.7916666666666665
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0028_00_00_00550_glad01.gfbanm",
+        "duration": 4.208333333333333
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0028_00_00_00281_sleep01_loop.gfbanm",
+        "duration": 4.208333333333333
+      }
+    ],
+    "source": "pm0028_00.blend",
+    "fps": 24.0,
+    "bytes": 10234480
+  },
+  "029": {
+    "model": "models/029/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0029_00_kw01_wait01.gfbanm",
+        "duration": 2.6
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0029_00_fi20_walk01.gfbanm",
+        "duration": 1.64
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0029_00_fi21_run01.gfbanm",
+        "duration": 0.76
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0029_00_ba20_buturi01.gfbanm",
+        "duration": 1.64
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0029_00_kw32_happyB01.gfbanm",
+        "duration": 1.88
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0029_00_kw20_drowseB01.gfbanm",
+        "duration": 1.64
+      }
+    ],
+    "source": "pm0029_00.blend",
+    "fps": 25.0,
+    "bytes": 788600
+  },
+  "030": {
+    "model": "models/030/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0030_00_kw01_wait01.gfbanm",
+        "duration": 1.64
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0030_00_fi20_walk01.gfbanm",
+        "duration": 1.72
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0030_00_fi21_run01.gfbanm",
+        "duration": 1.0
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0030_00_ba20_buturi01.gfbanm",
+        "duration": 2.04
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0030_00_kw32_happyB01.gfbanm",
+        "duration": 2.04
+      }
+    ],
+    "source": "pm0030_00.blend",
+    "fps": 25.0,
+    "bytes": 900452
+  },
+  "031": {
+    "model": "models/031/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0031_00_kw01_wait01.gfbanm",
+        "duration": 2.04
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0031_00_fi20_walk01.gfbanm",
+        "duration": 3.08
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0031_00_fi21_run01.gfbanm",
+        "duration": 1.56
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0031_00_ba20_buturi01.gfbanm",
+        "duration": 2.24
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0031_00_kw32_happyB01.gfbanm",
+        "duration": 2.16
+      }
+    ],
+    "source": "pm0031_00.blend",
+    "fps": 25.0,
+    "bytes": 802540
+  },
+  "032": {
+    "model": "models/032/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0032_00_kw01_wait01.gfbanm",
+        "duration": 2.04
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0032_00_fi20_walk01.gfbanm",
+        "duration": 1.8
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0032_00_fi21_run01.gfbanm",
+        "duration": 0.84
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0032_00_ba20_buturi01.gfbanm",
+        "duration": 2.24
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0032_00_kw32_happyB01.gfbanm",
+        "duration": 2.24
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0032_00_kw20_drowseB01.gfbanm",
+        "duration": 1.64
+      }
+    ],
+    "source": "pm0032_00.blend",
+    "fps": 25.0,
+    "bytes": 886268
+  },
+  "033": {
+    "model": "models/033/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0033_00_kw01_wait01.gfbanm",
+        "duration": 2.04
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0033_00_fi20_walk01.gfbanm",
+        "duration": 2.04
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0033_00_fi21_run01.gfbanm",
+        "duration": 1.08
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0033_00_ba20_buturi01.gfbanm",
+        "duration": 2.2
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0033_00_kw32_happyB01.gfbanm",
+        "duration": 2.28
+      }
+    ],
+    "source": "pm0033_00.blend",
+    "fps": 25.0,
+    "bytes": 784800
+  },
+  "034": {
+    "model": "models/034/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0034_00_kw01_wait01.gfbanm",
+        "duration": 1.72
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0034_00_fi20_walk01.gfbanm",
+        "duration": 3.24
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0034_00_fi21_run01.gfbanm",
+        "duration": 1.64
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0034_00_ba20_buturi01.gfbanm",
+        "duration": 2.44
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0034_00_kw32_happyB01.gfbanm",
+        "duration": 2.2
+      }
+    ],
+    "source": "pm0034_00.blend",
+    "fps": 25.0,
+    "bytes": 856844
+  },
+  "035": {
+    "model": "models/035/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0035_00_00_00000_defaultwait01_loop.gfbanm",
+        "duration": 2.7
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0035_00_00_00030_walk01_loop.gfbanm",
+        "duration": 2.033333333333333
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0035_00_00_00100_run01_loop.gfbanm",
+        "duration": 1.4333333333333333
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0035_00_00_00400_attack01.gfbanm",
+        "duration": 3.033333333333333
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0035_00_00_00550_glad01.gfbanm",
+        "duration": 3.3666666666666667
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0035_00_00_00281_sleep01_loop.gfbanm",
+        "duration": 5.033333333333333
+      }
+    ],
+    "source": "pm0035_00.blend",
+    "fps": 30.0,
+    "bytes": 2804148
+  },
+  "036": {
+    "model": "models/036/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0036_00_00_00000_defaultwait01_loop.gfbanm",
+        "duration": 3.375
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0036_00_00_00030_walk01_loop.gfbanm",
+        "duration": 2.125
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0036_00_00_00100_run01_loop.gfbanm",
+        "duration": 1.2916666666666667
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0036_00_00_00400_attack01.gfbanm",
+        "duration": 5.458333333333333
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0036_00_00_00550_glad01.gfbanm",
+        "duration": 5.041666666666667
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0036_00_00_00281_sleep01_loop.gfbanm",
+        "duration": 7.541666666666667
+      }
+    ],
+    "source": "pm0036_00.blend",
+    "fps": 24.0,
+    "bytes": 2836616
+  },
+  "037": {
+    "model": "models/037/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0037_00_00_00000_defaultwait01_loop.gfbanm",
+        "duration": 3.375
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0037_00_00_00030_walk01_loop.gfbanm",
+        "duration": 2.0416666666666665
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0037_00_00_00100_run01_loop.gfbanm",
+        "duration": 0.875
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0037_00_00_00400_attack01.gfbanm",
+        "duration": 3.7916666666666665
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0037_00_00_00550_glad01.gfbanm",
+        "duration": 3.7916666666666665
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0037_00_00_00281_sleep01_loop.gfbanm",
+        "duration": 6.291666666666667
+      }
+    ],
+    "source": "pm0037_00.blend",
+    "fps": 24.0,
+    "bytes": 5192852
+  },
+  "038": {
+    "model": "models/038/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0038_00_00_00000_defaultwait01_loop.gfbanm",
+        "duration": 5.041666666666667
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0038_00_00_00030_walk01_loop.gfbanm",
+        "duration": 2.5416666666666665
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0038_00_00_00100_run01_loop.gfbanm",
+        "duration": 1.2916666666666667
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0038_00_00_00400_attack01.gfbanm",
+        "duration": 5.458333333333333
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0038_00_00_00550_glad01.gfbanm",
+        "duration": 4.208333333333333
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0038_00_00_00281_sleep01_loop.gfbanm",
+        "duration": 10.041666666666666
+      }
+    ],
+    "source": "pm0038_00.blend",
+    "fps": 24.0,
+    "bytes": 6202404
+  },
+  "039": {
+    "model": "models/039/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0039_00_00_00000_defaultwait01_loop.gfbanm",
+        "duration": 4.208333333333333
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0039_00_00_00030_walk01_loop.gfbanm",
+        "duration": 2.5416666666666665
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0039_00_00_00100_run01_loop.gfbanm",
+        "duration": 2.5416666666666665
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0039_00_00_00400_attack01.gfbanm",
+        "duration": 5.458333333333333
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0039_00_00_00550_glad01.gfbanm",
+        "duration": 4.208333333333333
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0039_00_00_00281_sleep01_loop.gfbanm",
+        "duration": 5.041666666666667
+      }
+    ],
+    "source": "pm0039_00.blend",
+    "fps": 24.0,
+    "bytes": 2701004
+  },
+  "040": {
+    "model": "models/040/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0040_00_00_00000_defaultwait01_loop.gfbanm",
+        "duration": 4.291666666666667
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0040_00_00_00030_walk01_loop.gfbanm",
+        "duration": 2.7083333333333335
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0040_00_00_00100_run01_loop.gfbanm",
+        "duration": 2.7083333333333335
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0040_00_00_00400_attack01.gfbanm",
+        "duration": 3.7916666666666665
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0040_00_00_00550_glad01.gfbanm",
+        "duration": 4.208333333333333
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0040_00_00_00281_sleep01_loop.gfbanm",
+        "duration": 10.458333333333334
+      }
+    ],
+    "source": "pm0040_00.blend",
+    "fps": 24.0,
+    "bytes": 2715048
+  },
+  "041": {
+    "model": "models/041/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0041_00_kw01_wait01.gfbanm",
+        "duration": 1.64
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0041_00_fi20_walk01.gfbanm",
+        "duration": 3.24
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0041_00_fi21_run01.gfbanm",
+        "duration": 2.04
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0041_00_ba20_buturi01.gfbanm",
+        "duration": 1.64
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0041_00_kw32_happyB01.gfbanm",
+        "duration": 1.64
+      }
+    ],
+    "source": "pm0041_00.blend",
+    "fps": 25.0,
+    "bytes": 578276
+  },
+  "042": {
+    "model": "models/042/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0042_00_kw01_wait01.gfbanm",
+        "duration": 1.64
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0042_00_fi20_walk01.gfbanm",
+        "duration": 4.84
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0042_00_fi21_run01.gfbanm",
+        "duration": 2.92
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0042_00_ba20_buturi01.gfbanm",
+        "duration": 1.84
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0042_00_kw32_happyB01.gfbanm",
+        "duration": 2.04
+      }
+    ],
+    "source": "pm0042_00.blend",
+    "fps": 25.0,
+    "bytes": 808352
+  },
+  "043": {
+    "model": "models/043/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0043_00_00_00000_defaultwait01_loop.gfbanm",
+        "duration": 4.625
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0043_00_00_00030_walk01_loop.gfbanm",
+        "duration": 2.0416666666666665
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0043_00_00_00100_run01_loop.gfbanm",
+        "duration": 1.5416666666666667
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0043_00_00_00400_attack01.gfbanm",
+        "duration": 4.625
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0043_00_00_00550_glad01.gfbanm",
+        "duration": 3.7916666666666665
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0043_00_00_00281_sleep01_loop.gfbanm",
+        "duration": 7.541666666666667
+      }
+    ],
+    "source": "pm0043_00.blend",
+    "fps": 24.0,
+    "bytes": 2138116
+  },
+  "044": {
+    "model": "models/044/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0044_00_00_00000_defaultwait01_loop",
+        "duration": 1.5
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0044_00_00_00030_walk01_loop",
+        "duration": 1.3333333333333333
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0044_00_00_00100_run01_loop",
+        "duration": 0.6666666666666666
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0044_00_00_00400_attack01",
+        "duration": 1.8333333333333333
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0044_00_00_00550_glad01",
+        "duration": 1.6666666666666667
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0044_00_00_00281_sleep01_loop",
+        "duration": 1.6666666666666667
+      }
+    ],
+    "source": "pm0044.blend",
+    "fps": 60.0,
+    "bytes": 2808932
+  },
+  "045": {
+    "model": "models/045/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0045_00_00_00000_defaultwait01_loop",
+        "duration": 1.5
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0045_00_00_00030_walk01_loop",
+        "duration": 1.0
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0045_00_00_00100_run01_loop",
+        "duration": 0.8666666666666667
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0045_00_00_00400_attack01",
+        "duration": 1.5
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0045_00_00_00550_glad01",
+        "duration": 2.0
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0045_00_00_00281_sleep01_loop",
+        "duration": 1.8
+      }
+    ],
+    "source": "pm0045.blend",
+    "fps": 60.0,
+    "bytes": 3549536
+  },
+  "046": {
+    "model": "models/046/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0046_00_kw01_wait01.gfbanm",
+        "duration": 1.64
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0046_00_fi20_walk01.gfbanm",
+        "duration": 2.04
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0046_00_fi21_run01.gfbanm",
+        "duration": 1.0
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0046_00_ba20_buturi01.gfbanm",
+        "duration": 2.04
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0046_00_kw32_happyB01.gfbanm",
+        "duration": 2.04
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0046_00_kw20_drowseB01.gfbanm",
+        "duration": 2.44
+      }
+    ],
+    "source": "pm0046_00.blend",
+    "fps": 25.0,
+    "bytes": 793876
+  },
+  "047": {
+    "model": "models/047/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0047_00_kw01_wait01.gfbanm",
+        "duration": 2.44
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0047_00_fi20_walk01.gfbanm",
+        "duration": 2.44
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0047_00_fi21_run01.gfbanm",
+        "duration": 1.32
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0047_00_ba20_buturi01.gfbanm",
+        "duration": 2.04
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0047_00_kw32_happyB01.gfbanm",
+        "duration": 2.04
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0047_00_kw20_drowseB01.gfbanm",
+        "duration": 2.44
+      }
+    ],
+    "source": "pm0047_00.blend",
+    "fps": 25.0,
+    "bytes": 734792
+  },
+  "048": {
+    "model": "models/048/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0048_00_00_00000_defaultwait01_loop.gfbanm",
+        "duration": 5.041666666666667
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0048_00_00_00030_walk01_loop.gfbanm",
+        "duration": 2.5416666666666665
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0048_00_00_00100_run01_loop.gfbanm",
+        "duration": 2.5416666666666665
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0048_00_00_00400_attack01.gfbanm",
+        "duration": 3.7916666666666665
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0048_00_00_00550_glad01.gfbanm",
+        "duration": 4.625
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0048_00_00_00281_sleep01_loop.gfbanm",
+        "duration": 4.208333333333333
+      }
+    ],
+    "source": "pm0048_00.blend",
+    "fps": 24.0,
+    "bytes": 5642864
+  },
+  "049": {
+    "model": "models/049/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0049_00_00_20000_defaultwait01_loop.gfbanm",
+        "duration": 4.041666666666667
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0049_00_00_20030_walk01_loop.gfbanm",
+        "duration": 3.0416666666666665
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0049_00_00_20100_run01_loop.gfbanm",
+        "duration": 2.5416666666666665
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0049_00_00_20400_attack01.gfbanm",
+        "duration": 4.625
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0049_00_00_20550_glad01.gfbanm",
+        "duration": 4.041666666666667
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0049_00_00_20281_sleep01_loop.gfbanm",
+        "duration": 5.041666666666667
+      }
+    ],
+    "source": "pm0049_00.blend",
+    "fps": 24.0,
+    "bytes": 4911960
+  },
+  "050": {
+    "model": "models/050/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0050_00_00_00000_defaultwait01_loop.gfbanm",
+        "duration": 2.7
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0050_00_00_00030_walk01_loop.gfbanm",
+        "duration": 2.033333333333333
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0050_00_00_00100_run01_loop.gfbanm",
+        "duration": 1.2333333333333334
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0050_00_00_00400_attack01.gfbanm",
+        "duration": 3.033333333333333
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0050_00_00_00550_glad01.gfbanm",
+        "duration": 3.3666666666666667
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0050_00_00_00281_sleep01_loop.gfbanm",
+        "duration": 5.366666666666666
+      }
+    ],
+    "source": "pm0050_00.blend",
+    "fps": 30.0,
+    "bytes": 5452984
+  },
+  "051": {
+    "model": "models/051/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0051_00_00_00000_defaultwait01_loop.gfbanm",
+        "duration": 4.033333333333333
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0051_00_00_00030_walk01_loop.gfbanm",
+        "duration": 4.033333333333333
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0051_00_00_00100_run01_loop.gfbanm",
+        "duration": 2.433333333333333
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0051_00_00_00400_attack01.gfbanm",
+        "duration": 3.7
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0051_00_00_00550_glad01.gfbanm",
+        "duration": 4.033333333333333
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0051_00_00_00281_sleep01_loop.gfbanm",
+        "duration": 4.033333333333333
+      }
+    ],
+    "source": "pm0051_00.blend",
+    "fps": 30.0,
+    "bytes": 5022656
+  },
+  "052": {
+    "model": "models/052/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0052_00_00_00000_defaultwait01_loop.gfbanm",
+        "duration": 3.5416666666666665
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0052_00_00_00030_walk01_loop.gfbanm",
+        "duration": 2.125
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0052_00_00_00100_run01_loop.gfbanm",
+        "duration": 1.2916666666666667
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0052_00_00_00400_attack01.gfbanm",
+        "duration": 3.7916666666666665
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0052_00_00_00550_glad01.gfbanm",
+        "duration": 4.208333333333333
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0052_00_00_00281_sleep01_loop.gfbanm",
+        "duration": 6.708333333333333
+      }
+    ],
+    "source": "pm0052_00.blend",
+    "fps": 24.0,
+    "bytes": 6888900
+  },
+  "053": {
+    "model": "models/053/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0053_00_00_00000_defaultwait01_loop.gfbanm",
+        "duration": 5.458333333333333
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0053_00_00_00030_walk01_loop.gfbanm",
+        "duration": 2.9583333333333335
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0053_00_00_00100_run01_loop.gfbanm",
+        "duration": 1.375
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0053_00_00_00400_attack01.gfbanm",
+        "duration": 4.625
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0053_00_00_00550_glad01.gfbanm",
+        "duration": 4.208333333333333
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0053_00_00_00281_sleep01_loop.gfbanm",
+        "duration": 6.708333333333333
+      }
+    ],
+    "source": "pm0053_00.blend",
+    "fps": 24.0,
+    "bytes": 6965740
+  },
+  "054": {
+    "model": "models/054/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0054_00_00_00000_defaultwait01_loop.gfbanm",
+        "duration": 4.208333333333333
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0054_00_00_00030_walk01_loop.gfbanm",
+        "duration": 2.5416666666666665
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0054_00_00_00100_run01_loop.gfbanm",
+        "duration": 2.375
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0054_00_00_00400_attack01.gfbanm",
+        "duration": 3.7916666666666665
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0054_00_00_00550_glad01.gfbanm",
+        "duration": 5.041666666666667
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0054_00_00_00281_sleep01_loop.gfbanm",
+        "duration": 5.875
+      }
+    ],
+    "source": "pm0054_00.blend",
+    "fps": 24.0,
+    "bytes": 3747856
+  },
+  "055": {
+    "model": "models/055/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0055_00_00_00000_defaultwait01_loop.gfbanm",
+        "duration": 5.041666666666667
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0055_00_00_00030_walk01_loop.gfbanm",
+        "duration": 2.5416666666666665
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0055_00_00_00100_run01_loop.gfbanm",
+        "duration": 1.7083333333333333
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0055_00_00_00400_attack01.gfbanm",
+        "duration": 3.7916666666666665
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0055_00_00_00550_glad01.gfbanm",
+        "duration": 4.625
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0055_00_00_00281_sleep01_loop.gfbanm",
+        "duration": 5.875
+      }
+    ],
+    "source": "pm0055_00.blend",
+    "fps": 24.0,
+    "bytes": 5127016
+  },
+  "056": {
+    "model": "models/056/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0056_00_00_00000_defaultwait01_loop.gfbanm",
+        "duration": 3.7916666666666665
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0056_00_00_00030_walk01_loop.gfbanm",
+        "duration": 2.125
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0056_00_00_00100_run01_loop.gfbanm",
+        "duration": 1.375
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0056_00_00_00400_attack01.gfbanm",
+        "duration": 3.7916666666666665
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0056_00_00_00550_glad01.gfbanm",
+        "duration": 4.625
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0056_00_00_00281_sleep01_loop.gfbanm",
+        "duration": 5.875
+      }
+    ],
+    "source": "pm0056_00.blend",
+    "fps": 24.0,
+    "bytes": 3346916
+  },
+  "057": {
+    "model": "models/057/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0057_00_00_00000_defaultwait01_loop.gfbanm",
+        "duration": 3.375
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0057_00_00_00030_walk01_loop.gfbanm",
+        "duration": 2.125
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0057_00_00_00100_run01_loop.gfbanm",
+        "duration": 1.2916666666666667
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0057_00_00_00400_attack01.gfbanm",
+        "duration": 3.7916666666666665
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0057_00_00_00550_glad01.gfbanm",
+        "duration": 4.208333333333333
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0057_00_00_00281_sleep01_loop.gfbanm",
+        "duration": 5.041666666666667
+      }
+    ],
+    "source": "pm0057_00.blend",
+    "fps": 24.0,
+    "bytes": 5948428
+  },
+  "058": {
+    "model": "models/058/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0058_00_00_00000_defaultwait01_loop.gfbanm",
+        "duration": 4.041666666666667
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0058_00_00_00030_walk01_loop.gfbanm",
+        "duration": 1.7083333333333333
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0058_00_00_00100_run01_loop.gfbanm",
+        "duration": 0.875
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0058_00_00_00400_attack01.gfbanm",
+        "duration": 4.625
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0058_00_00_00550_glad01.gfbanm",
+        "duration": 4.375
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0058_00_00_00281_sleep01_loop.gfbanm",
+        "duration": 8.375
+      }
+    ],
+    "source": "pm0058_00.blend",
+    "fps": 24.0,
+    "bytes": 6670884
+  },
+  "059": {
+    "model": "models/059/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0059_00_00_00000_defaultwait01_loop.gfbanm",
+        "duration": 4.375
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0059_00_00_00030_walk01_loop.gfbanm",
+        "duration": 3.2083333333333335
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0059_00_00_00100_run01_loop.gfbanm",
+        "duration": 1.2916666666666667
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0059_00_00_00400_attack01.gfbanm",
+        "duration": 4.625
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0059_00_00_00550_glad01.gfbanm",
+        "duration": 4.208333333333333
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0059_00_00_00281_sleep01_loop.gfbanm",
+        "duration": 6.708333333333333
+      }
+    ],
+    "source": "pm0059_00.blend",
+    "fps": 24.0,
+    "bytes": 8033232
+  },
+  "060": {
+    "model": "models/060/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0060_00_00_00000_defaultwait01_loop.gfbanm",
+        "duration": 3.7916666666666665
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0060_00_00_00030_walk01_loop.gfbanm",
+        "duration": 2.0416666666666665
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0060_00_00_00100_run01_loop.gfbanm",
+        "duration": 1.375
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0060_00_00_00400_attack01.gfbanm",
+        "duration": 3.7916666666666665
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0060_00_00_00550_glad01.gfbanm",
+        "duration": 4.208333333333333
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0060_00_00_00281_sleep01_loop.gfbanm",
+        "duration": 5.041666666666667
+      }
+    ],
+    "source": "pm0060_00.blend",
+    "fps": 24.0,
+    "bytes": 2111708
+  },
+  "061": {
+    "model": "models/061/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0061_00_00_00000_defaultwait01_loop.gfbanm",
+        "duration": 3.375
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0061_00_00_00030_walk01_loop.gfbanm",
+        "duration": 2.5416666666666665
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0061_00_00_00100_run01_loop.gfbanm",
+        "duration": 1.375
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0061_00_00_00400_attack01.gfbanm",
+        "duration": 3.7916666666666665
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0061_00_00_00550_glad01.gfbanm",
+        "duration": 4.208333333333333
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0061_00_00_00281_sleep01_loop.gfbanm",
+        "duration": 5.041666666666667
+      }
+    ],
+    "source": "pm0061_00.blend",
+    "fps": 24.0,
+    "bytes": 1915124
+  },
+  "062": {
+    "model": "models/062/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0062_00_00_00000_defaultwait01_loop.gfbanm",
+        "duration": 5.041666666666667
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0062_00_00_00030_walk01_loop.gfbanm",
+        "duration": 2.5416666666666665
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0062_00_00_00100_run01_loop.gfbanm",
+        "duration": 1.2916666666666667
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0062_00_00_00400_attack01.gfbanm",
+        "duration": 3.7916666666666665
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0062_00_00_00550_glad01.gfbanm",
+        "duration": 5.041666666666667
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0062_00_00_00281_sleep01_loop.gfbanm",
+        "duration": 5.041666666666667
+      }
+    ],
+    "source": "pm0062_00.blend",
+    "fps": 24.0,
+    "bytes": 2153452
+  },
+  "063": {
+    "model": "models/063/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0063_00_kw01_wait01.gfbanm",
+        "duration": 3.24
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0063_00_fi20_walk01.gfbanm",
+        "duration": 3.64
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0063_00_fi21_run01.gfbanm",
+        "duration": 2.04
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0063_00_ba21_tokusyu01.gfbanm",
+        "duration": 2.64
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0063_00_kw32_happyB01.gfbanm",
+        "duration": 2.04
+      }
+    ],
+    "source": "pm0063_00.blend",
+    "fps": 25.0,
+    "bytes": 971952
+  },
+  "064": {
+    "model": "models/064/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0064_00_kw01_wait01.gfbanm",
+        "duration": 2.12
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0064_00_fi20_walk01.gfbanm",
+        "duration": 5.24
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0064_00_fi21_run01.gfbanm",
+        "duration": 3.4
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0064_00_ba20_buturi01.gfbanm",
+        "duration": 2.12
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0064_00_kw32_happyB01.gfbanm",
+        "duration": 2.04
+      }
+    ],
+    "source": "pm0064_00.blend",
+    "fps": 25.0,
+    "bytes": 1351944
+  },
+  "065": {
+    "model": "models/065/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0065_00_kw01_wait01.gfbanm",
+        "duration": 3.04
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0065_00_fi20_walk01.gfbanm",
+        "duration": 5.64
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0065_00_fi21_run01.gfbanm",
+        "duration": 4.04
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0065_00_ba20_buturi01.gfbanm",
+        "duration": 2.44
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0065_00_kw32_happyB01.gfbanm",
+        "duration": 2.04
+      }
+    ],
+    "source": "pm0065_00.blend",
+    "fps": 25.0,
+    "bytes": 1569892
+  },
+  "066": {
+    "model": "models/066/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0066_00_kw01_wait01.gfbanm",
+        "duration": 2.44
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0066_00_fi20_walk01.gfbanm",
+        "duration": 2.28
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0066_00_fi21_run01.gfbanm",
+        "duration": 1.64
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0066_00_ba20_buturi01.gfbanm",
+        "duration": 2.76
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0066_00_kw32_happyB01.gfbanm",
+        "duration": 2.28
+      }
+    ],
+    "source": "pm0066_00.blend",
+    "fps": 25.0,
+    "bytes": 849952
+  },
+  "067": {
+    "model": "models/067/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0067_00_kw01_wait01.gfbanm",
+        "duration": 1.72
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0067_00_fi20_walk01.gfbanm",
+        "duration": 2.44
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0067_00_fi21_run01.gfbanm",
+        "duration": 1.88
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0067_00_ba20_buturi01.gfbanm",
+        "duration": 1.84
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0067_00_kw32_happyB01.gfbanm",
+        "duration": 2.04
+      }
+    ],
+    "source": "pm0067_00.blend",
+    "fps": 25.0,
+    "bytes": 928740
+  },
+  "068": {
+    "model": "models/068/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0068_00_kw01_wait01.gfbanm",
+        "duration": 1.96
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0068_00_fi20_walk01.gfbanm",
+        "duration": 2.84
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0068_00_fi21_run01.gfbanm",
+        "duration": 1.88
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0068_00_ba20_buturi01.gfbanm",
+        "duration": 2.04
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0068_00_kw32_happyB01.gfbanm",
+        "duration": 2.2
+      }
+    ],
+    "source": "pm0068_00.blend",
+    "fps": 25.0,
+    "bytes": 1520024
+  },
+  "069": {
+    "model": "models/069/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0069_00_00_00000_defaultwait01_loop.gfbanm",
+        "duration": 7.541666666666667
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0069_00_00_00030_walk01_loop.gfbanm",
+        "duration": 1.5416666666666667
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0069_00_00_00100_run01_loop.gfbanm",
+        "duration": 1.2916666666666667
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0069_00_00_00400_attack01.gfbanm",
+        "duration": 3.7916666666666665
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0069_00_00_00550_glad01.gfbanm",
+        "duration": 5.041666666666667
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0069_00_00_00281_sleep01_loop.gfbanm",
+        "duration": 5.041666666666667
+      }
+    ],
+    "source": "pm0069_00.blend",
+    "fps": 24.0,
+    "bytes": 3150876
+  },
+  "070": {
+    "model": "models/070/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0070_00_00_20000_defaultwait01_loop.gfbanm",
+        "duration": 5.041666666666667
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0070_00_00_20030_walk01_loop.gfbanm",
+        "duration": 3.375
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0070_00_00_20100_run01_loop.gfbanm",
+        "duration": 1.7083333333333333
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0070_00_00_20400_attack01.gfbanm",
+        "duration": 3.7916666666666665
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0070_00_00_20550_glad01.gfbanm",
+        "duration": 4.208333333333333
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0070_00_00_20281_sleep01_loop.gfbanm",
+        "duration": 4.208333333333333
+      }
+    ],
+    "source": "pm0070_00.blend",
+    "fps": 24.0,
+    "bytes": 2772512
+  },
+  "071": {
+    "model": "models/071/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0071_00_00_20000_defaultwait01_loop.gfbanm",
+        "duration": 6.708333333333333
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0071_00_00_20030_walk01_loop.gfbanm",
+        "duration": 3.875
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0071_00_00_20100_run01_loop.gfbanm",
+        "duration": 2.5416666666666665
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0071_00_00_20400_attack01.gfbanm",
+        "duration": 5.458333333333333
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0071_00_00_20550_glad01.gfbanm",
+        "duration": 4.208333333333333
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0071_00_00_20281_sleep01_loop.gfbanm",
+        "duration": 5.041666666666667
+      }
+    ],
+    "source": "pm0071_00.blend",
+    "fps": 24.0,
+    "bytes": 4718360
+  },
+  "072": {
+    "model": "models/072/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0072_00_kw01_wait01.gfbanm",
+        "duration": 2.44
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0072_00_fi20_walk01.gfbanm",
+        "duration": 4.84
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0072_00_fi21_run01.gfbanm",
+        "duration": 1.96
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0072_00_ba20_buturi01.gfbanm",
+        "duration": 3.24
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0072_00_kw32_happyB01.gfbanm",
+        "duration": 2.44
+      }
+    ],
+    "source": "pm0072_00.blend",
+    "fps": 25.0,
+    "bytes": 501620
+  },
+  "073": {
+    "model": "models/073/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0073_00_kw01_wait01.gfbanm",
+        "duration": 3.24
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0073_00_fi20_walk01.gfbanm",
+        "duration": 3.24
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0073_00_fi21_run01.gfbanm",
+        "duration": 1.64
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0073_00_ba20_buturi01.gfbanm",
+        "duration": 2.64
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0073_00_kw32_happyB01.gfbanm",
+        "duration": 2.44
+      }
+    ],
+    "source": "pm0073_00.blend",
+    "fps": 25.0,
+    "bytes": 1221384
+  },
+  "074": {
+    "model": "models/074/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0074_00_00_20000_defaultwait01_loop.gfbanm",
+        "duration": 4.625
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0074_00_00_20030_walk01_loop.gfbanm",
+        "duration": 2.5416666666666665
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0074_00_00_20100_run01_loop.gfbanm",
+        "duration": 1.5416666666666667
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0074_00_00_20400_attack01.gfbanm",
+        "duration": 5.458333333333333
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0074_00_00_20550_glad01.gfbanm",
+        "duration": 4.208333333333333
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0074_00_00_20281_sleep01_loop.gfbanm",
+        "duration": 5.875
+      }
+    ],
+    "source": "pm0074_00.blend",
+    "fps": 24.0,
+    "bytes": 6885560
+  },
+  "075": {
+    "model": "models/075/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0075_00_00_00000_defaultwait01_loop.gfbanm",
+        "duration": 4.208333333333333
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0075_00_00_00030_walk01_loop.gfbanm",
+        "duration": 2.5416666666666665
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0075_00_00_00100_run01_loop.gfbanm",
+        "duration": 2.5416666666666665
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0075_00_00_00400_attack01.gfbanm",
+        "duration": 3.7916666666666665
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0075_00_00_00550_glad01.gfbanm",
+        "duration": 4.708333333333333
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0075_00_00_00281_sleep01_loop.gfbanm",
+        "duration": 5.041666666666667
+      }
+    ],
+    "source": "pm0075_00.blend",
+    "fps": 24.0,
+    "bytes": 5694584
+  },
+  "076": {
+    "model": "models/076/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0076_00_00_00000_defaultwait01_loop.gfbanm",
+        "duration": 5.041666666666667
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0076_00_00_00030_walk01_loop.gfbanm",
+        "duration": 3.7916666666666665
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0076_00_00_00100_run01_loop.gfbanm",
+        "duration": 1.7916666666666667
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0076_00_00_00400_attack01.gfbanm",
+        "duration": 5.458333333333333
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0076_00_00_00550_glad01.gfbanm",
+        "duration": 5.041666666666667
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0076_00_00_00281_sleep01_loop.gfbanm",
+        "duration": 6.708333333333333
+      }
+    ],
+    "source": "pm0076_00.blend",
+    "fps": 24.0,
+    "bytes": 7384708
+  },
+  "077": {
+    "model": "models/077/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0077_00_kw01_wait01.gfbanm",
+        "duration": 2.04
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0077_00_fi20_walk01.gfbanm",
+        "duration": 2.44
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0077_00_fi21_run01.gfbanm",
+        "duration": 1.24
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0077_00_ba20_buturi01.gfbanm",
+        "duration": 2.84
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0077_00_kw32_happyB01.gfbanm",
+        "duration": 2.44
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0077_00_kw20_drowseB01.gfbanm",
+        "duration": 2.44
+      }
+    ],
+    "source": "pm0077_00.blend",
+    "fps": 25.0,
+    "bytes": 1319800
+  },
+  "078": {
+    "model": "models/078/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0078_00_ba10_waitA01.gfbanm",
+        "duration": 3.24
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0078_00_fi20_walk01.gfbanm",
+        "duration": 3.4
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0078_00_fi21_run01.gfbanm",
+        "duration": 1.32
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0078_00_ba20_buturi01.gfbanm",
+        "duration": 2.52
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0078_00_kw32_happyB01.gfbanm",
+        "duration": 2.44
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0078_00_kw20_drowseB01.gfbanm",
+        "duration": 2.44
+      }
+    ],
+    "source": "pm0078_00.blend",
+    "fps": 25.0,
+    "bytes": 1461120
+  },
+  "079": {
+    "model": "models/079/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0079_00_00_00000_defaultwait01_loop.gfbanm",
+        "duration": 4.208333333333333
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0079_00_00_00030_walk01_loop.gfbanm",
+        "duration": 4.208333333333333
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0079_00_00_00100_run01_loop.gfbanm",
+        "duration": 1.2916666666666667
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0079_00_00_00400_attack01.gfbanm",
+        "duration": 4.625
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0079_00_00_00550_glad01.gfbanm",
+        "duration": 5.041666666666667
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0079_00_00_00281_sleep01_loop.gfbanm",
+        "duration": 5.041666666666667
+      }
+    ],
+    "source": "pm0079_00.blend",
+    "fps": 24.0,
+    "bytes": 1756128
+  },
+  "080": {
+    "model": "models/080/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0080_00_00_00000_defaultwait01_loop.gfbanm",
+        "duration": 5.041666666666667
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0080_00_00_00030_walk01_loop.gfbanm",
+        "duration": 4.041666666666667
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0080_00_00_00100_run01_loop.gfbanm",
+        "duration": 2.125
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0080_00_00_00400_attack01.gfbanm",
+        "duration": 4.625
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0080_00_00_00550_glad01.gfbanm",
+        "duration": 5.041666666666667
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0080_00_00_00281_sleep01_loop.gfbanm",
+        "duration": 8.375
+      }
+    ],
+    "source": "pm0080_00.blend",
+    "fps": 24.0,
+    "bytes": 4534080
+  },
+  "081": {
+    "model": "models/081/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0081_00_00_20000_defaultwait01_loop.gfbanm",
+        "duration": 2.9583333333333335
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0081_00_00_20030_walk01_loop.gfbanm",
+        "duration": 2.5416666666666665
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0081_00_00_20100_run01_loop.gfbanm",
+        "duration": 1.2916666666666667
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0081_00_00_20400_attack01.gfbanm",
+        "duration": 3.7916666666666665
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0081_00_00_20550_glad01.gfbanm",
+        "duration": 5.041666666666667
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0081_00_00_20281_sleep01_loop.gfbanm",
+        "duration": 6.708333333333333
+      }
+    ],
+    "source": "pm0081_00.blend",
+    "fps": 24.0,
+    "bytes": 1804076
+  },
+  "082": {
+    "model": "models/082/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0082_00_00_20000_defaultwait01_loop.gfbanm",
+        "duration": 5.041666666666667
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0082_00_00_20030_walk01_loop.gfbanm",
+        "duration": 2.5416666666666665
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0082_00_00_20100_run01_loop.gfbanm",
+        "duration": 1.2916666666666667
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0082_00_00_20400_attack01.gfbanm",
+        "duration": 3.7916666666666665
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0082_00_00_20550_glad01.gfbanm",
+        "duration": 4.208333333333333
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0082_00_00_20281_sleep01_loop.gfbanm",
+        "duration": 5.875
+      }
+    ],
+    "source": "pm0082_00.blend",
+    "fps": 24.0,
+    "bytes": 2107248
+  },
+  "083": {
+    "model": "models/083/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0083_00_ba10_waitA01.gfbanm",
+        "duration": 1.96
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0083_00_fi20_walk01.gfbanm",
+        "duration": 1.72
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0083_00_fi21_run01.gfbanm",
+        "duration": 2.44
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0083_00_ba20_buturi01.gfbanm",
+        "duration": 2.04
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0083_00_kw32_happyB01.gfbanm",
+        "duration": 2.24
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0083_00_kw20_drowseB01.gfbanm",
+        "duration": 2.44
+      }
+    ],
+    "source": "pm0083_00.blend",
+    "fps": 25.0,
+    "bytes": 918860
+  },
+  "084": {
+    "model": "models/084/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0084_00_00_00000_defaultwait01_loop",
+        "duration": 1.5333333333333334
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0084_00_00_00030_walk01_loop",
+        "duration": 1.0
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0084_00_00_00100_run01_loop",
+        "duration": 0.5
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0084_00_00_00400_attack01",
+        "duration": 2.1666666666666665
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0084_00_00_00550_glad01",
+        "duration": 1.6666666666666667
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0084_00_00_00281_sleep01_loop",
+        "duration": 2.0
+      }
+    ],
+    "source": "pm0084.blend",
+    "fps": 60.0,
+    "bytes": 5470080
+  },
+  "085": {
+    "model": "models/085/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0085_00_00_00000_defaultwait01_loop",
+        "duration": 2.0
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0085_00_00_00030_walk01_loop",
+        "duration": 1.0
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0085_00_00_00100_run01_loop",
+        "duration": 0.5
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0085_00_00_00400_attack01",
+        "duration": 1.5
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0085_00_00_00550_glad01",
+        "duration": 1.6666666666666667
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0085_00_00_00281_sleep01_loop",
+        "duration": 2.0
+      }
+    ],
+    "source": "pm0085.blend",
+    "fps": 60.0,
+    "bytes": 4918256
+  },
+  "086": {
+    "model": "models/086/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0086_00_00_00000_defaultwait01_loop.gfbanm",
+        "duration": 5.041666666666667
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0086_00_00_00030_walk01_loop.gfbanm",
+        "duration": 1.5416666666666667
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0086_00_00_00100_run01_loop.gfbanm",
+        "duration": 1.7083333333333333
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0086_00_00_00400_attack01.gfbanm",
+        "duration": 5.458333333333333
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0086_00_00_00550_glad01.gfbanm",
+        "duration": 5.041666666666667
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0086_00_00_00281_sleep01_loop.gfbanm",
+        "duration": 5.875
+      }
+    ],
+    "source": "pm0086_00.blend",
+    "fps": 24.0,
+    "bytes": 2744088
+  },
+  "087": {
+    "model": "models/087/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0087_00_00_00000_defaultwait01_loop.gfbanm",
+        "duration": 6.041666666666667
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0087_00_00_00030_walk01_loop.gfbanm",
+        "duration": 2.5416666666666665
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0087_00_00_00100_run01_loop.gfbanm",
+        "duration": 1.7083333333333333
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0087_00_00_10400_attack01.gfbanm",
+        "duration": 3.7916666666666665
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0087_00_00_00550_glad01.gfbanm",
+        "duration": 5.041666666666667
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0087_00_00_00281_sleep01_loop.gfbanm",
+        "duration": 5.875
+      }
+    ],
+    "source": "pm0087_00.blend",
+    "fps": 24.0,
+    "bytes": 3275804
+  },
+  "088": {
+    "model": "models/088/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0088_00_00_00000_defaultwait01_loop.gfbanm",
+        "duration": 6.708333333333333
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0088_00_00_00030_walk01_loop.gfbanm",
+        "duration": 2.5416666666666665
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0088_00_00_00100_run01_loop.gfbanm",
+        "duration": 1.5416666666666667
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0088_00_00_00400_attack01.gfbanm",
+        "duration": 5.458333333333333
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0088_00_00_00550_glad01.gfbanm",
+        "duration": 4.208333333333333
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0088_00_00_00281_sleep01_loop.gfbanm",
+        "duration": 6.708333333333333
+      }
+    ],
+    "source": "pm0088_00.blend",
+    "fps": 24.0,
+    "bytes": 3791400
+  },
+  "089": {
+    "model": "models/089/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0089_00_00_00000_defaultwait01_loop.gfbanm",
+        "duration": 6.708333333333333
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0089_00_00_00030_walk01_loop.gfbanm",
+        "duration": 2.5416666666666665
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0089_00_00_00100_run01_loop.gfbanm",
+        "duration": 1.5416666666666667
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0089_00_00_00400_attack01.gfbanm",
+        "duration": 5.458333333333333
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0089_00_00_00550_glad01.gfbanm",
+        "duration": 5.041666666666667
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0089_00_00_00281_sleep01_loop.gfbanm",
+        "duration": 3.375
+      }
+    ],
+    "source": "pm0089_00.blend",
+    "fps": 24.0,
+    "bytes": 3594088
+  },
+  "090": {
+    "model": "models/090/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0090_00_00_00000_defaultwait01_loop.gfbanm",
+        "duration": 3.375
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0090_00_00_00030_walk01_loop.gfbanm",
+        "duration": 2.5416666666666665
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0090_00_00_00100_run01_loop.gfbanm",
+        "duration": 1.2916666666666667
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0090_00_00_00400_attack01.gfbanm",
+        "duration": 5.458333333333333
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0090_00_00_00550_glad01.gfbanm",
+        "duration": 4.208333333333333
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0090_00_00_00281_sleep01_loop.gfbanm",
+        "duration": 5.041666666666667
+      }
+    ],
+    "source": "pm0090_00.blend",
+    "fps": 24.0,
+    "bytes": 3496044
+  },
+  "091": {
+    "model": "models/091/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0091_00_00_10000_defaultwait01_loop.gfbanm",
+        "duration": 4.958333333333333
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0091_00_00_10030_walk01_loop.gfbanm",
+        "duration": 2.5416666666666665
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0091_00_00_10100_run01_loop.gfbanm",
+        "duration": 1.2916666666666667
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0091_00_00_10400_attack01.gfbanm",
+        "duration": 5.458333333333333
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0091_00_00_10550_glad01.gfbanm",
+        "duration": 4.375
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0091_00_00_10281_sleep01_loop.gfbanm",
+        "duration": 5.041666666666667
+      }
+    ],
+    "source": "pm0091_00.blend",
+    "fps": 24.0,
+    "bytes": 4534844
+  },
+  "092": {
+    "model": "models/092/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0092_00_00_20000_defaultwait01_loop.gfbanm",
+        "duration": 5.458333333333333
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0092_00_00_20030_walk01_loop.gfbanm",
+        "duration": 5.041666666666667
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0092_00_00_20100_run01_loop.gfbanm",
+        "duration": 2.5416666666666665
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0092_00_00_20400_attack01.gfbanm",
+        "duration": 3.7916666666666665
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0092_00_00_20550_glad01.gfbanm",
+        "duration": 5.041666666666667
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0092_00_00_20281_sleep01_loop.gfbanm",
+        "duration": 3.375
+      }
+    ],
+    "source": "pm0092_00.blend",
+    "fps": 24.0,
+    "bytes": 1627348
+  },
+  "093": {
+    "model": "models/093/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0093_00_00_20000_defaultwait01_loop.gfbanm",
+        "duration": 5.041666666666667
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0093_00_00_20030_walk01_loop.gfbanm",
+        "duration": 5.041666666666667
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0093_00_00_20100_run01_loop.gfbanm",
+        "duration": 2.5416666666666665
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0093_00_00_20400_attack01.gfbanm",
+        "duration": 4.625
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0093_00_00_20550_glad01.gfbanm",
+        "duration": 4.208333333333333
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0093_00_00_20281_sleep01_loop.gfbanm",
+        "duration": 5.041666666666667
+      }
+    ],
+    "source": "pm0093_00.blend",
+    "fps": 24.0,
+    "bytes": 2142604
+  },
+  "094": {
+    "model": "models/094/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0094_00_00_00000_defaultwait01_loop.gfbanm",
+        "duration": 2.5416666666666665
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0094_00_00_00030_walk01_loop.gfbanm",
+        "duration": 2.5416666666666665
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0094_00_00_00100_run01_loop.gfbanm",
+        "duration": 1.7916666666666667
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0094_00_00_00400_attack01.gfbanm",
+        "duration": 3.7916666666666665
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0094_00_00_00550_glad01.gfbanm",
+        "duration": 5.875
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0094_00_00_00281_sleep01_loop.gfbanm",
+        "duration": 6.291666666666667
+      }
+    ],
+    "source": "pm0094_00.blend",
+    "fps": 24.0,
+    "bytes": 2562652
+  },
+  "095": {
+    "model": "models/095/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0095_00_kw01_wait01.gfbanm",
+        "duration": 2.48
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0095_00_fi20_walk01.gfbanm",
+        "duration": 4.84
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0095_00_fi21_run01.gfbanm",
+        "duration": 4.84
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0095_00_ba20_buturi01.gfbanm",
+        "duration": 2.84
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0095_00_kw32_happyB01.gfbanm",
+        "duration": 2.04
+      }
+    ],
+    "source": "pm0095_00.blend",
+    "fps": 25.0,
+    "bytes": 699472
+  },
+  "096": {
+    "model": "models/096/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0096_00_00_00000_defaultwait01_loop.gfbanm",
+        "duration": 5.041666666666667
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0096_00_00_00030_walk01_loop.gfbanm",
+        "duration": 2.5416666666666665
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0096_00_00_00100_run01_loop.gfbanm",
+        "duration": 2.0416666666666665
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0096_00_00_00400_attack01.gfbanm",
+        "duration": 4.625
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0096_00_00_00550_glad01.gfbanm",
+        "duration": 4.625
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0096_00_00_00281_sleep01_loop.gfbanm",
+        "duration": 5.458333333333333
+      }
+    ],
+    "source": "pm0096_00.blend",
+    "fps": 24.0,
+    "bytes": 4353188
+  },
+  "097": {
+    "model": "models/097/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0097_00_00_00000_defaultwait01_loop",
+        "duration": 1.6
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0097_00_00_00030_walk01_loop",
+        "duration": 1.0
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0097_00_00_00100_run01_loop",
+        "duration": 0.6666666666666666
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0097_00_00_00400_attack01",
+        "duration": 1.8333333333333333
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0097_00_00_00550_glad01",
+        "duration": 1.8
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0097_00_00_00281_sleep01_loop",
+        "duration": 2.1666666666666665
+      }
+    ],
+    "source": "pm0097.blend",
+    "fps": 60.0,
+    "bytes": 5191848
+  },
+  "098": {
+    "model": "models/098/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0098_00_kw01_wait01.gfbanm",
+        "duration": 1.64
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0098_00_fi20_walk01.gfbanm",
+        "duration": 2.44
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0098_00_fi21_run01.gfbanm",
+        "duration": 1.24
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0098_00_ba20_buturi01.gfbanm",
+        "duration": 1.76
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0098_00_kw32_happyB01.gfbanm",
+        "duration": 1.84
+      }
+    ],
+    "source": "pm0098_00.blend",
+    "fps": 25.0,
+    "bytes": 604064
+  },
+  "099": {
+    "model": "models/099/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0099_00_kw01_wait01.gfbanm",
+        "duration": 1.88
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0099_00_fi20_walk01.gfbanm",
+        "duration": 3.24
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0099_00_fi21_run01.gfbanm",
+        "duration": 1.64
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0099_00_ba20_buturi01.gfbanm",
+        "duration": 2.76
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0099_00_kw32_happyB01.gfbanm",
+        "duration": 2.28
+      }
+    ],
+    "source": "pm0099_00.blend",
+    "fps": 25.0,
+    "bytes": 890192
+  },
+  "100": {
+    "model": "models/100/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0100_00_00_00000_defaultwait01_loop.gfbanm",
+        "duration": 5.041666666666667
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0100_00_00_00030_walk01_loop.gfbanm",
+        "duration": 2.5416666666666665
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0100_00_00_00100_run01_loop.gfbanm",
+        "duration": 1.5416666666666667
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0100_00_00_00400_attack01.gfbanm",
+        "duration": 3.7916666666666665
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0100_00_00_00550_glad01.gfbanm",
+        "duration": 5.041666666666667
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0100_00_00_00281_sleep01_loop.gfbanm",
+        "duration": 5.041666666666667
+      }
+    ],
+    "source": "pm0100_00.blend",
+    "fps": 24.0,
+    "bytes": 1675404
+  },
+  "101": {
+    "model": "models/101/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0101_00_00_00000_defaultwait01_loop.gfbanm",
+        "duration": 7.541666666666667
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0101_00_00_00030_walk01_loop.gfbanm",
+        "duration": 3.375
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0101_00_00_00100_run01_loop.gfbanm",
+        "duration": 2.5416666666666665
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0101_00_00_00400_attack01.gfbanm",
+        "duration": 3.7916666666666665
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0101_00_00_00550_glad01.gfbanm",
+        "duration": 4.208333333333333
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0101_00_00_00281_sleep01_loop.gfbanm",
+        "duration": 7.541666666666667
+      }
+    ],
+    "source": "pm0101_00.blend",
+    "fps": 24.0,
+    "bytes": 1309876
+  },
+  "102": {
+    "model": "models/102/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0102_00_00_00000_defaultwait01_loop.gfbanm",
+        "duration": 5.875
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0102_00_00_00030_walk01_loop.gfbanm",
+        "duration": 2.2083333333333335
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0102_00_00_00100_run01_loop.gfbanm",
+        "duration": 1.7916666666666667
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0102_00_00_00400_attack01.gfbanm",
+        "duration": 5.458333333333333
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0102_00_00_00550_glad01.gfbanm",
+        "duration": 3.7916666666666665
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0102_00_00_00281_sleep01_loop.gfbanm",
+        "duration": 5.041666666666667
+      }
+    ],
+    "source": "pm0102_00.blend",
+    "fps": 24.0,
+    "bytes": 3334984
+  },
+  "103": {
+    "model": "models/103/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0103_00_00_00000_defaultwait01_loop.gfbanm",
+        "duration": 4.041666666666667
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0103_00_00_00030_walk01_loop.gfbanm",
+        "duration": 3.5416666666666665
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0103_00_00_00100_run01_loop.gfbanm",
+        "duration": 1.7083333333333333
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0103_00_00_00400_attack01.gfbanm",
+        "duration": 5.458333333333333
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0103_00_00_00550_glad01.gfbanm",
+        "duration": 5.041666666666667
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0103_00_00_00281_sleep01_loop.gfbanm",
+        "duration": 5.875
+      }
+    ],
+    "source": "pm0103_00.blend",
+    "fps": 24.0,
+    "bytes": 5216264
+  },
+  "104": {
+    "model": "models/104/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0104_00_kw01_wait01.gfbanm",
+        "duration": 1.96
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0104_00_fi20_walk01.gfbanm",
+        "duration": 2.44
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0104_00_fi21_run01.gfbanm",
+        "duration": 1.24
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0104_00_ba20_buturi01.gfbanm",
+        "duration": 2.12
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0104_00_kw32_happyB01.gfbanm",
+        "duration": 2.2
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0104_00_kw20_drowseB01.gfbanm",
+        "duration": 2.44
+      }
+    ],
+    "source": "pm0104_00.blend",
+    "fps": 25.0,
+    "bytes": 826992
+  },
+  "105": {
+    "model": "models/105/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0105_00_kw01_wait01.gfbanm",
+        "duration": 1.72
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0105_00_fi20_walk01.gfbanm",
+        "duration": 2.44
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0105_00_fi21_run01.gfbanm",
+        "duration": 1.24
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0105_00_ba20_buturi01.gfbanm",
+        "duration": 2.44
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0105_00_kw32_happyB01.gfbanm",
+        "duration": 2.04
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0105_00_kw20_drowseB01.gfbanm",
+        "duration": 2.44
+      }
+    ],
+    "source": "pm0105_00.blend",
+    "fps": 25.0,
+    "bytes": 871692
+  },
+  "106": {
+    "model": "models/106/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0106_00_00_00000_defaultwait01_loop.gfbanm",
+        "duration": 3.375
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0106_00_00_00030_walk01_loop.gfbanm",
+        "duration": 2.5416666666666665
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0106_00_00_00100_run01_loop.gfbanm",
+        "duration": 2.125
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0106_00_00_00400_attack01.gfbanm",
+        "duration": 4.625
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0106_00_00_00550_glad01.gfbanm",
+        "duration": 4.625
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0106_00_00_00281_sleep01_loop.gfbanm",
+        "duration": 5.458333333333333
+      }
+    ],
+    "source": "pm0106_00.blend",
+    "fps": 24.0,
+    "bytes": 2667404
+  },
+  "107": {
+    "model": "models/107/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0107_00_00_00000_defaultwait01_loop.gfbanm",
+        "duration": 3.375
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0107_00_00_00030_walk01_loop.gfbanm",
+        "duration": 2.5416666666666665
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0107_00_00_00100_run01_loop.gfbanm",
+        "duration": 1.7083333333333333
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0107_00_00_00400_attack01.gfbanm",
+        "duration": 3.7916666666666665
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0107_00_00_00550_glad01.gfbanm",
+        "duration": 4.708333333333333
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0107_00_00_00281_sleep01_loop.gfbanm",
+        "duration": 7.958333333333333
+      }
+    ],
+    "source": "pm0107_00.blend",
+    "fps": 24.0,
+    "bytes": 2637616
+  },
+  "108": {
+    "model": "models/108/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0108_00_kw01_wait01.gfbanm",
+        "duration": 1.0
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0108_00_fi20_walk01.gfbanm",
+        "duration": 3.24
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0108_00_fi21_run01.gfbanm",
+        "duration": 1.64
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0108_00_ba20_buturi01.gfbanm",
+        "duration": 2.04
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0108_00_kw32_happyB01.gfbanm",
+        "duration": 2.24
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0108_00_kw20_drowseB01.gfbanm",
+        "duration": 2.44
+      }
+    ],
+    "source": "pm0108_00.blend",
+    "fps": 25.0,
+    "bytes": 822144
+  },
+  "109": {
+    "model": "models/109/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0109_00_00_20000_defaultwait01_loop.gfbanm",
+        "duration": 7.125
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0109_00_00_20030_walk01_loop.gfbanm",
+        "duration": 5.041666666666667
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0109_00_00_20100_run01_loop.gfbanm",
+        "duration": 3.7916666666666665
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0109_00_00_20400_attack01.gfbanm",
+        "duration": 3.7916666666666665
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0109_00_00_20550_glad01.gfbanm",
+        "duration": 4.208333333333333
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0109_00_00_20281_sleep01_loop.gfbanm",
+        "duration": 5.875
+      }
+    ],
+    "source": "pm0109_00.blend",
+    "fps": 24.0,
+    "bytes": 1721052
+  },
+  "110": {
+    "model": "models/110/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0110_00_00_20000_defaultwait01_loop.gfbanm",
+        "duration": 6.708333333333333
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0110_00_00_20030_walk01_loop.gfbanm",
+        "duration": 5.041666666666667
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0110_00_00_20100_run01_loop.gfbanm",
+        "duration": 3.7916666666666665
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0110_00_00_20400_attack01.gfbanm",
+        "duration": 4.625
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0110_00_00_20550_glad01.gfbanm",
+        "duration": 4.208333333333333
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0110_00_00_20281_sleep01_loop.gfbanm",
+        "duration": 5.041666666666667
+      }
+    ],
+    "source": "pm0110_00.blend",
+    "fps": 24.0,
+    "bytes": 3418772
+  },
+  "111": {
+    "model": "models/111/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0111_00_00_00000_defaultwait01_loop",
+        "duration": 2.4
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0111_00_00_00030_walk01_loop",
+        "duration": 1.0
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0111_00_00_00100_run01_loop",
+        "duration": 0.4
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0111_00_00_00400_attack01",
+        "duration": 2.1666666666666665
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0111_00_00_00550_glad01",
+        "duration": 2.0
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0111_00_00_00281_sleep01_loop",
+        "duration": 2.3333333333333335
+      }
+    ],
+    "source": "pm0111.blend",
+    "fps": 60.0,
+    "bytes": 5923620
+  },
+  "112": {
+    "model": "models/112/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0112_00_00_00000_defaultwait01_loop",
+        "duration": 2.1333333333333333
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0112_00_00_00030_walk01_loop",
+        "duration": 1.6666666666666667
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0112_00_00_00100_run01_loop",
+        "duration": 0.9
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0112_00_00_00400_attack01",
+        "duration": 1.8333333333333333
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0112_00_00_00550_glad01",
+        "duration": 2.3333333333333335
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0112_00_00_00281_sleep01_loop",
+        "duration": 2.6666666666666665
+      }
+    ],
+    "source": "pm0112.blend",
+    "fps": 60.0,
+    "bytes": 5710280
+  },
+  "113": {
+    "model": "models/113/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0113_00_00_00000_defaultwait01_loop.gfbanm",
+        "duration": 1.75
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0113_00_00_00030_walk01_loop.gfbanm",
+        "duration": 1.35
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0113_00_00_00100_run01_loop.gfbanm",
+        "duration": 1.0166666666666666
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0113_00_00_00400_attack01.gfbanm",
+        "duration": 2.183333333333333
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0113_00_00_00550_glad01.gfbanm",
+        "duration": 1.85
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0113_00_00_00281_sleep01_loop.gfbanm",
+        "duration": 3.35
+      }
+    ],
+    "source": "pm0113_00.blend",
+    "fps": 60.0,
+    "bytes": 3246320
+  },
+  "114": {
+    "model": "models/114/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0114_00_kw01_wait01.gfbanm",
+        "duration": 2.28
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0114_00_fi20_walk01.gfbanm",
+        "duration": 2.44
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0114_00_fi21_run01.gfbanm",
+        "duration": 1.24
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0114_00_ba20_buturi01.gfbanm",
+        "duration": 2.44
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0114_00_kw32_happyB01.gfbanm",
+        "duration": 2.04
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0114_00_kw20_drowseB01.gfbanm",
+        "duration": 2.44
+      }
+    ],
+    "source": "pm0114_00.blend",
+    "fps": 25.0,
+    "bytes": 974872
+  },
+  "115": {
+    "model": "models/115/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0115_00_kw01_wait01.gfbanm",
+        "duration": 2.84
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0115_00_fi20_walk01.gfbanm",
+        "duration": 3.88
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0115_00_fi21_run01.gfbanm",
+        "duration": 1.8
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0115_00_ba20_buturi01.gfbanm",
+        "duration": 2.6
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0115_00_kw32_happyB01.gfbanm",
+        "duration": 2.24
+      }
+    ],
+    "source": "pm0115_00.blend",
+    "fps": 25.0,
+    "bytes": 1281924
+  },
+  "116": {
+    "model": "models/116/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0116_00_00_10000_defaultwait01_loop.gfbanm",
+        "duration": 5.875
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0116_00_00_10030_walk01_loop.gfbanm",
+        "duration": 2.5416666666666665
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0116_00_00_10100_run01_loop.gfbanm",
+        "duration": 1.2916666666666667
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0116_00_00_10400_attack01.gfbanm",
+        "duration": 4.625
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0116_00_00_10550_glad01.gfbanm",
+        "duration": 4.208333333333333
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0116_00_00_10281_sleep01_loop.gfbanm",
+        "duration": 5.458333333333333
+      }
+    ],
+    "source": "pm0116_00.blend",
+    "fps": 24.0,
+    "bytes": 2202424
+  },
+  "117": {
+    "model": "models/117/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0117_00_00_10000_defaultwait01_loop.gfbanm",
+        "duration": 6.708333333333333
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0117_00_00_10030_walk01_loop.gfbanm",
+        "duration": 3.375
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0117_00_00_10100_run01_loop.gfbanm",
+        "duration": 2.5416666666666665
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0117_00_00_10400_attack01.gfbanm",
+        "duration": 3.7916666666666665
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0117_00_00_10550_glad01.gfbanm",
+        "duration": 4.208333333333333
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0117_00_00_10281_sleep01_loop.gfbanm",
+        "duration": 5.875
+      }
+    ],
+    "source": "pm0117_00.blend",
+    "fps": 24.0,
+    "bytes": 2928364
+  },
+  "118": {
+    "model": "models/118/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0118_00_kw01_wait01.gfbanm",
+        "duration": 2.8
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0118_00_fi20_walk01.gfbanm",
+        "duration": 2.84
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0118_00_fi21_run01.gfbanm",
+        "duration": 1.64
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0118_00_ba20_buturi01.gfbanm",
+        "duration": 3.64
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0118_00_kw32_happyB01.gfbanm",
+        "duration": 2.44
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0118_00_kw20_drowseB01.gfbanm",
+        "duration": 2.44
+      }
+    ],
+    "source": "pm0118_00.blend",
+    "fps": 25.0,
+    "bytes": 965156
+  },
+  "119": {
+    "model": "models/119/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0119_00_kw01_wait01.gfbanm",
+        "duration": 2.44
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0119_00_fi20_walk01.gfbanm",
+        "duration": 3.24
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0119_00_fi21_run01.gfbanm",
+        "duration": 2.44
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0119_00_ba20_buturi01.gfbanm",
+        "duration": 2.24
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0119_00_kw32_happyB01.gfbanm",
+        "duration": 2.04
+      }
+    ],
+    "source": "pm0119_00.blend",
+    "fps": 25.0,
+    "bytes": 786248
+  },
+  "120": {
+    "model": "models/120/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0120_00_kw01_wait01.gfbanm",
+        "duration": 2.44
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0120_00_fi20_walk01.gfbanm",
+        "duration": 2.44
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0120_00_fi21_run01.gfbanm",
+        "duration": 2.44
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0120_00_ba20_buturi01.gfbanm",
+        "duration": 1.64
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0120_00_kw32_happyB01.gfbanm",
+        "duration": 2.44
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0120_00_kw20_drowseB01.gfbanm",
+        "duration": 2.44
+      }
+    ],
+    "source": "pm0120_00.blend",
+    "fps": 25.0,
+    "bytes": 522188
+  },
+  "121": {
+    "model": "models/121/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0121_00_kw01_wait01.gfbanm",
+        "duration": 2.32
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0121_00_fi20_walk01.gfbanm",
+        "duration": 2.44
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0121_00_fi21_run01.gfbanm",
+        "duration": 2.44
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0121_00_ba20_buturi01.gfbanm",
+        "duration": 2.12
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0121_00_kw32_happyB01.gfbanm",
+        "duration": 1.84
+      }
+    ],
+    "source": "pm0121_00.blend",
+    "fps": 25.0,
+    "bytes": 660408
+  },
+  "122": {
+    "model": "models/122/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0122_00_kw01_wait01.gfbanm",
+        "duration": 3.08
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0122_00_fi20_walk01.gfbanm",
+        "duration": 2.44
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0122_00_fi21_run01.gfbanm",
+        "duration": 1.64
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0122_00_ba20_buturi01.gfbanm",
+        "duration": 3.24
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0122_00_kw32_happyB01.gfbanm",
+        "duration": 2.44
+      }
+    ],
+    "source": "pm0122_00.blend",
+    "fps": 25.0,
+    "bytes": 1031384
+  },
+  "123": {
+    "model": "models/123/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0123_00_00_00000_defaultwait01_loop",
+        "duration": 1.8666666666666667
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0123_00_00_00030_walk01_loop",
+        "duration": 1.0
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0123_00_00_00100_run01_loop",
+        "duration": 0.6666666666666666
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0123_00_00_00400_attack01",
+        "duration": 1.8333333333333333
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0123_00_00_00550_glad01",
+        "duration": 2.0
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0123_00_00_00281_sleep01_loop",
+        "duration": 2.3333333333333335
+      }
+    ],
+    "source": "pm0123.blend",
+    "fps": 60.0,
+    "bytes": 3290148
+  },
+  "124": {
+    "model": "models/124/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0124_00_kw01_wait01.gfbanm",
+        "duration": 2.92
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0124_00_fi20_walk01.gfbanm",
+        "duration": 4.68
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0124_00_fi21_run01.gfbanm",
+        "duration": 2.36
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0124_00_ba20_buturi01.gfbanm",
+        "duration": 2.76
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0124_00_kw32_happyB01.gfbanm",
+        "duration": 2.04
+      }
+    ],
+    "source": "pm0124_00.blend",
+    "fps": 25.0,
+    "bytes": 1490500
+  },
+  "125": {
+    "model": "models/125/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0125_00_00_00000_defaultwait01_loop.gfbanm",
+        "duration": 3.375
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0125_00_00_00030_walk01_loop.gfbanm",
+        "duration": 2.9583333333333335
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0125_00_00_00100_run01_loop.gfbanm",
+        "duration": 1.7083333333333333
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0125_00_00_00400_attack01.gfbanm",
+        "duration": 3.7916666666666665
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0125_00_00_00550_glad01.gfbanm",
+        "duration": 4.208333333333333
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0125_00_00_00281_sleep01_loop.gfbanm",
+        "duration": 5.041666666666667
+      }
+    ],
+    "source": "pm0125_00.blend",
+    "fps": 24.0,
+    "bytes": 5377068
+  },
+  "126": {
+    "model": "models/126/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0126_00_00_00000_defaultwait01_loop.gfbanm",
+        "duration": 5.041666666666667
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0126_00_00_00030_walk01_loop.gfbanm",
+        "duration": 2.5416666666666665
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0126_00_00_00100_run01_loop.gfbanm",
+        "duration": 1.375
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0126_00_00_00400_attack01.gfbanm",
+        "duration": 3.7916666666666665
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0126_00_00_00550_glad01.gfbanm",
+        "duration": 4.208333333333333
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0126_00_00_00281_sleep01_loop.gfbanm",
+        "duration": 5.041666666666667
+      }
+    ],
+    "source": "pm0126_00.blend",
+    "fps": 24.0,
+    "bytes": 6276216
+  },
+  "127": {
+    "model": "models/127/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0127_00_kw01_wait01.gfbanm",
+        "duration": 1.64
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0127_00_fi20_walk01.gfbanm",
+        "duration": 2.44
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0127_00_fi21_run01.gfbanm",
+        "duration": 1.24
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0127_00_ba20_buturi01.gfbanm",
+        "duration": 2.44
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0127_00_kw32_happyB01.gfbanm",
+        "duration": 2.12
+      }
+    ],
+    "source": "pm0127_00.blend",
+    "fps": 25.0,
+    "bytes": 895864
+  },
+  "128": {
+    "model": "models/128/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0128_00_00_00000_defaultwait01_loop.gfbanm",
+        "duration": 4.708333333333333
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0128_00_00_00030_walk01_loop.gfbanm",
+        "duration": 3.375
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0128_00_00_00100_run01_loop.gfbanm",
+        "duration": 1.2083333333333333
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0128_00_00_00400_attack01.gfbanm",
+        "duration": 5.458333333333333
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0128_00_00_00550_glad01.gfbanm",
+        "duration": 4.625
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0128_00_00_00281_sleep01_loop.gfbanm",
+        "duration": 3.375
+      }
+    ],
+    "source": "pm0128_00.blend",
+    "fps": 24.0,
+    "bytes": 4534388
+  },
+  "129": {
+    "model": "models/129/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0129_00_00_00000_defaultwait01_loop",
+        "duration": 1.0
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0129_00_00_00030_walk01_loop",
+        "duration": 0.9333333333333333
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0129_00_00_00100_run01_loop",
+        "duration": 1.3333333333333333
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0129_00_00_00400_attack01",
+        "duration": 1.5
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0129_00_00_10550_glad01",
+        "duration": 1.6666666666666667
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0129_00_00_10281_sleep01_loop",
+        "duration": 2.0
+      }
+    ],
+    "source": "pm0129.blend",
+    "fps": 60.0,
+    "bytes": 2332536
+  },
+  "130": {
+    "model": "models/130/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0130_00_00_10000_defaultwait01_loop",
+        "duration": 3.0
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0130_00_00_10030_walk01_loop",
+        "duration": 2.0
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0130_00_00_10100_run01_loop",
+        "duration": 1.5
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0130_00_00_10400_attack01",
+        "duration": 2.1666666666666665
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0130_00_00_10550_glad01",
+        "duration": 1.6666666666666667
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0130_00_00_10281_sleep01_loop",
+        "duration": 2.0
+      }
+    ],
+    "source": "pm0130.blend",
+    "fps": 60.0,
+    "bytes": 5668360
+  },
+  "131": {
+    "model": "models/131/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0131_00_00_00000_defaultwait01_loop.gfbanm",
+        "duration": 7.541666666666667
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0131_00_00_00030_walk01_loop.gfbanm",
+        "duration": 5.041666666666667
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0131_00_00_00100_run01_loop.gfbanm",
+        "duration": 5.041666666666667
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0131_00_00_00400_attack01.gfbanm",
+        "duration": 5.458333333333333
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0131_00_00_00550_glad01.gfbanm",
+        "duration": 4.625
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0131_00_00_00281_sleep01_loop.gfbanm",
+        "duration": 5.041666666666667
+      }
+    ],
+    "source": "pm0131_00.blend",
+    "fps": 24.0,
+    "bytes": 4806472
+  },
+  "132": {
+    "model": "models/132/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0132_00_00_00000_defaultwait01_loop.gfbanm",
+        "duration": 5.041666666666667
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0132_00_00_00030_walk01_loop.gfbanm",
+        "duration": 3.0416666666666665
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0132_00_00_00100_run01_loop.gfbanm",
+        "duration": 1.9583333333333333
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0132_00_00_00400_attack01.gfbanm",
+        "duration": 5.458333333333333
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0132_00_00_00550_glad01.gfbanm",
+        "duration": 4.208333333333333
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0132_00_00_00281_sleep01_loop.gfbanm",
+        "duration": 5.041666666666667
+      }
+    ],
+    "source": "pm0132_00.blend",
+    "fps": 24.0,
+    "bytes": 1577336
+  },
+  "133": {
+    "model": "models/133/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0133_00_00_00000_defaultwait01_loop.gfbanm",
+        "duration": 2.5416666666666665
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0133_00_00_00030_walk01_loop.gfbanm",
+        "duration": 2.5416666666666665
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0133_00_00_00100_run01_loop.gfbanm",
+        "duration": 0.875
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0133_00_00_00400_attack01.gfbanm",
+        "duration": 3.7916666666666665
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0133_00_00_00550_glad01.gfbanm",
+        "duration": 5.041666666666667
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0133_00_00_00281_sleep01_loop.gfbanm",
+        "duration": 6.708333333333333
+      }
+    ],
+    "source": "pm0133_00.blend",
+    "fps": 24.0,
+    "bytes": 3344216
+  },
+  "134": {
+    "model": "models/134/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0134_00_00_00000_defaultwait01_loop.gfbanm",
+        "duration": 5.375
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0134_00_00_00030_walk01_loop.gfbanm",
+        "duration": 2.5416666666666665
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0134_00_00_00100_run01_loop.gfbanm",
+        "duration": 1.125
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0134_00_00_00400_attack01.gfbanm",
+        "duration": 4.625
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0134_00_00_00550_glad01.gfbanm",
+        "duration": 4.041666666666667
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0134_00_00_00281_sleep01_loop.gfbanm",
+        "duration": 5.375
+      }
+    ],
+    "source": "pm0134_00.blend",
+    "fps": 24.0,
+    "bytes": 4825716
+  },
+  "135": {
+    "model": "models/135/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0135_00_00_00000_defaultwait01_loop.gfbanm",
+        "duration": 5.041666666666667
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0135_00_00_00030_walk01_loop.gfbanm",
+        "duration": 2.0416666666666665
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0135_00_00_00100_run01_loop.gfbanm",
+        "duration": 0.875
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0135_00_00_00400_attack01.gfbanm",
+        "duration": 3.7916666666666665
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0135_00_00_00550_glad01.gfbanm",
+        "duration": 4.708333333333333
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0135_00_00_00281_sleep01_loop.gfbanm",
+        "duration": 10.041666666666666
+      }
+    ],
+    "source": "pm0135_00.blend",
+    "fps": 24.0,
+    "bytes": 5929108
+  },
+  "136": {
+    "model": "models/136/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0136_00_00_00000_defaultwait01_loop.gfbanm",
+        "duration": 4.208333333333333
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0136_00_00_00030_walk01_loop.gfbanm",
+        "duration": 1.9583333333333333
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0136_00_00_00100_run01_loop.gfbanm",
+        "duration": 0.875
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0136_00_00_00400_attack01.gfbanm",
+        "duration": 4.625
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0136_00_00_00550_glad01.gfbanm",
+        "duration": 5.041666666666667
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0136_00_00_00281_sleep01_loop.gfbanm",
+        "duration": 8.375
+      }
+    ],
+    "source": "pm0136_00.blend",
+    "fps": 24.0,
+    "bytes": 5507192
+  },
+  "137": {
+    "model": "models/137/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0137_00_00_20000_defaultwait01_loop.gfbanm",
+        "duration": 4.041666666666667
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0137_00_00_20030_walk01_loop.gfbanm",
+        "duration": 2.5416666666666665
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0137_00_00_20100_run01_loop.gfbanm",
+        "duration": 2.9583333333333335
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0137_00_00_20400_attack01.gfbanm",
+        "duration": 4.625
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0137_00_00_20550_glad01.gfbanm",
+        "duration": 4.208333333333333
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0137_00_00_20281_sleep01_loop.gfbanm",
+        "duration": 5.875
+      }
+    ],
+    "source": "pm0137_00.blend",
+    "fps": 24.0,
+    "bytes": 1088924
+  },
+  "138": {
+    "model": "models/138/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0138_00_kw01_wait01.gfbanm",
+        "duration": 3.24
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0138_00_fi20_walk01.gfbanm",
+        "duration": 2.44
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0138_00_fi21_run01.gfbanm",
+        "duration": 1.24
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0138_00_ba20_buturi01.gfbanm",
+        "duration": 2.44
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0138_00_kw32_happyB01.gfbanm",
+        "duration": 2.44
+      }
+    ],
+    "source": "pm0138_00.blend",
+    "fps": 25.0,
+    "bytes": 603412
+  },
+  "139": {
+    "model": "models/139/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0139_00_kw01_wait01.gfbanm",
+        "duration": 3.24
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0139_00_fi20_walk01.gfbanm",
+        "duration": 2.44
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0139_00_fi21_run01.gfbanm",
+        "duration": 1.24
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0139_00_ba20_buturi01.gfbanm",
+        "duration": 2.44
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0139_00_kw32_happyB01.gfbanm",
+        "duration": 2.2
+      }
+    ],
+    "source": "pm0139_00.blend",
+    "fps": 25.0,
+    "bytes": 1300644
+  },
+  "140": {
+    "model": "models/140/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0140_00_kw01_wait01.gfbanm",
+        "duration": 2.44
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0140_00_fi20_walk01.gfbanm",
+        "duration": 1.16
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0140_00_fi21_run01.gfbanm",
+        "duration": 1.24
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0140_00_ba21_tokusyu01.gfbanm",
+        "duration": 2.44
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0140_00_kw32_happyB01.gfbanm",
+        "duration": 2.2
+      }
+    ],
+    "source": "pm0140_00.blend",
+    "fps": 25.0,
+    "bytes": 391492
+  },
+  "141": {
+    "model": "models/141/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0141_00_kw01_wait01.gfbanm",
+        "duration": 2.04
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0141_00_fi20_walk01.gfbanm",
+        "duration": 3.24
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0141_00_fi21_run01.gfbanm",
+        "duration": 1.24
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0141_00_ba20_buturi01.gfbanm",
+        "duration": 2.68
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0141_00_kw32_happyB01.gfbanm",
+        "duration": 2.04
+      }
+    ],
+    "source": "pm0141_00.blend",
+    "fps": 25.0,
+    "bytes": 894500
+  },
+  "142": {
+    "model": "models/142/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0142_00_kw01_wait01.gfbanm",
+        "duration": 1.64
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0142_00_fi20_walk01.gfbanm",
+        "duration": 3.24
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0142_00_fi21_run01.gfbanm",
+        "duration": 2.44
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0142_00_ba20_buturi01.gfbanm",
+        "duration": 2.64
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0142_00_kw32_happyB01.gfbanm",
+        "duration": 2.04
+      }
+    ],
+    "source": "pm0142_00.blend",
+    "fps": 25.0,
+    "bytes": 965400
+  },
+  "143": {
+    "model": "models/143/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0143_00_00_00000_defaultwait01_loop.gfbanm",
+        "duration": 6.291666666666667
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0143_00_00_00030_walk01_loop.gfbanm",
+        "duration": 6.291666666666667
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0143_00_00_00100_run01_loop.gfbanm",
+        "duration": 2.0416666666666665
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0143_00_00_00400_attack01.gfbanm",
+        "duration": 5.458333333333333
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0143_00_00_00550_glad01.gfbanm",
+        "duration": 4.791666666666667
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0143_00_00_00281_sleep01_loop.gfbanm",
+        "duration": 5.041666666666667
+      }
+    ],
+    "source": "pm0143_00.blend",
+    "fps": 24.0,
+    "bytes": 2963412
+  },
+  "144": {
+    "model": "models/144/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0144_00_00_00000_defaultwait01_loop.gfbanm",
+        "duration": 5.041666666666667
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0144_00_00_00030_walk01_loop.gfbanm",
+        "duration": 3.375
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0144_00_00_00100_run01_loop.gfbanm",
+        "duration": 1.7083333333333333
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0144_00_00_20400_attack01.gfbanm",
+        "duration": 5.458333333333333
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0144_00_00_00550_glad01.gfbanm",
+        "duration": 5.041666666666667
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0144_00_00_00281_sleep01_loop.gfbanm",
+        "duration": 10.041666666666666
+      }
+    ],
+    "source": "pm0144_00.blend",
+    "fps": 24.0,
+    "bytes": 7081264
+  },
+  "145": {
+    "model": "models/145/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0145_00_00_00000_defaultwait01_loop.gfbanm",
+        "duration": 3.7916666666666665
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0145_00_00_00030_walk01_loop.gfbanm",
+        "duration": 3.375
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0145_00_00_00100_run01_loop.gfbanm",
+        "duration": 1.7083333333333333
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0145_00_00_20400_attack01.gfbanm",
+        "duration": 5.458333333333333
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0145_00_00_00550_glad01.gfbanm",
+        "duration": 4.208333333333333
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0145_00_00_00281_sleep01_loop.gfbanm",
+        "duration": 5.041666666666667
+      }
+    ],
+    "source": "pm0145_00.blend",
+    "fps": 24.0,
+    "bytes": 5613104
+  },
+  "146": {
+    "model": "models/146/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0146_00_00_00000_defaultwait01_loop.gfbanm",
+        "duration": 6.041666666666667
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0146_00_00_00030_walk01_loop.gfbanm",
+        "duration": 3.375
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0146_00_00_00100_run01_loop.gfbanm",
+        "duration": 1.7083333333333333
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0146_00_00_20400_attack01.gfbanm",
+        "duration": 5.458333333333333
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0146_00_00_00550_glad01.gfbanm",
+        "duration": 5.041666666666667
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0146_00_00_00281_sleep01_loop.gfbanm",
+        "duration": 8.375
+      }
+    ],
+    "source": "pm0146_00.blend",
+    "fps": 24.0,
+    "bytes": 7254332
+  },
+  "147": {
+    "model": "models/147/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0147_00_00_00000_defaultwait01_loop.gfbanm",
+        "duration": 4.041666666666667
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0147_00_00_00030_walk01_loop.gfbanm",
+        "duration": 2.5416666666666665
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0147_00_00_00100_run01_loop.gfbanm",
+        "duration": 1.2916666666666667
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0147_00_00_00400_attack01.gfbanm",
+        "duration": 4.625
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0147_00_00_00550_glad01.gfbanm",
+        "duration": 4.208333333333333
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0147_00_00_00281_sleep01_loop.gfbanm",
+        "duration": 10.041666666666666
+      }
+    ],
+    "source": "pm0147_00.blend",
+    "fps": 24.0,
+    "bytes": 2380260
+  },
+  "148": {
+    "model": "models/148/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0148_00_00_00000_defaultwait01_loop.gfbanm",
+        "duration": 5.041666666666667
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0148_00_00_00030_walk01_loop.gfbanm",
+        "duration": 5.041666666666667
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0148_00_00_00100_run01_loop.gfbanm",
+        "duration": 2.9583333333333335
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0148_00_00_00400_attack01.gfbanm",
+        "duration": 3.7916666666666665
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0148_00_00_00550_glad01.gfbanm",
+        "duration": 5.041666666666667
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0148_00_00_00281_sleep01_loop.gfbanm",
+        "duration": 8.375
+      }
+    ],
+    "source": "pm0148_00.blend",
+    "fps": 24.0,
+    "bytes": 2649576
+  },
+  "149": {
+    "model": "models/149/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0149_00_00_00000_defaultwait01_loop.gfbanm",
+        "duration": 6.291666666666667
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0149_00_00_00030_walk01_loop.gfbanm",
+        "duration": 3.9583333333333335
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0149_00_00_00100_run01_loop.gfbanm",
+        "duration": 1.7083333333333333
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0149_00_00_20400_attack01.gfbanm",
+        "duration": 5.458333333333333
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0149_00_00_00550_glad01.gfbanm",
+        "duration": 4.208333333333333
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0149_00_00_00281_sleep01_loop.gfbanm",
+        "duration": 6.708333333333333
+      }
+    ],
+    "source": "pm0149_00.blend",
+    "fps": 24.0,
+    "bytes": 6089268
+  },
+  "150": {
+    "model": "models/150/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0150_00_00_00000_defaultwait01_loop.gfbanm",
+        "duration": 7.541666666666667
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0150_00_00_00030_walk01_loop.gfbanm",
+        "duration": 4.041666666666667
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0150_00_00_00100_run01_loop.gfbanm",
+        "duration": 1.7083333333333333
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0150_00_00_00400_attack01.gfbanm",
+        "duration": 5.458333333333333
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0150_00_00_00550_glad01.gfbanm",
+        "duration": 4.208333333333333
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0150_00_00_00281_sleep01_loop.gfbanm",
+        "duration": 5.875
+      }
+    ],
+    "source": "pm0150_00.blend",
+    "fps": 24.0,
+    "bytes": 3707764
+  },
+  "151": {
+    "model": "models/151/model.glb",
+    "exportVersion": 4,
+    "idleAnimation": "idle",
+    "animations": [
+      {
+        "name": "idle",
+        "label": "待机",
+        "sourceAction": "pm0151_00_00_20000_defaultwait01_loop.gfbanm",
+        "duration": 4.208333333333333
+      },
+      {
+        "name": "walk",
+        "label": "行走",
+        "sourceAction": "pm0151_00_00_20030_walk01_loop.gfbanm",
+        "duration": 2.5416666666666665
+      },
+      {
+        "name": "run",
+        "label": "奔跑",
+        "sourceAction": "pm0151_00_00_20100_run01_loop.gfbanm",
+        "duration": 1.2916666666666667
+      },
+      {
+        "name": "attack",
+        "label": "攻击",
+        "sourceAction": "pm0151_00_00_20400_attack01.gfbanm",
+        "duration": 3.7916666666666665
+      },
+      {
+        "name": "happy",
+        "label": "开心",
+        "sourceAction": "pm0151_00_00_20550_glad01.gfbanm",
+        "duration": 4.208333333333333
+      },
+      {
+        "name": "sleep",
+        "label": "睡眠",
+        "sourceAction": "pm0151_00_00_20281_sleep01_loop.gfbanm",
+        "duration": 7.541666666666667
+      }
+    ],
+    "source": "pm0151_00.blend",
+    "fps": 24.0,
+    "bytes": 2336332
+  }
+}
