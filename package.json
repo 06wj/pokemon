@@ -1,0 +1,29 @@
+{
+  "name": "pokemon",
+  "description": "pokemon viewer",
+  "version": "0.1.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/06wj/pokemon.git"
+  },
+  "keywords": [
+    "pokemon",
+    "3d"
+  ],
+  "author": "06wj",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/06wj/pokemon/issues"
+  },
+  "homepage": "https://github.com/06wj/pokemon#readme",
+  "devDependencies": {
+    "colors": "^1.3.2",
+    "download": "^7.1.0",
+    "fs-extra": "^7.0.1"
+  },
+  "dependencies": {}
+}
