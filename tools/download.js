@@ -26,7 +26,7 @@ async function loadModel(modelInfo) {
     const nameResult = name.match(/#([\d]+)\s([\w\.\s♀♂]+)/);
     const realName = nameResult[2];
     const modelNum = nameResult[1];
-    const finalModelPath = `models/${name}/`;
+    const finalModelPath = `origin_models/${name}/`;
     
     const iconExist = await fs.pathExists(`${finalModelPath}icon.png`);
     if (!iconExist) {
