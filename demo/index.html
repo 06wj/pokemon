@@ -4,14 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <link rel="stylesheet" href="./css/index.css">
-    <title>Pokemon Viewer</title>
+    <title>Pokémon Viewer</title>
 </head>
 <body>
-    <div id='listContainer'>
-        
+    <div class='titleContainer'>Pokémon Viewer</div>
+    <div class='mainContainer'>
+        <div id='listContainer' class='floatfix'></div>
+        <div id='modelViewerContainer'>
+            <div id='stageContainer'></div>
+            <div id='closeBtn'>返回列表</div>
+        </div>
     </div>
     <script src='//g.alicdn.com/hilo/Hilo3d/1.11.2/Hilo3d.js'></script>
     <script src='./js/models.js'></script>
+    <script src='./js/OrbitControls.js'></script>
+    <script src='./js/utils.js'></script>
     <script src='./js/index.js'></script>
 </body>
 </html>

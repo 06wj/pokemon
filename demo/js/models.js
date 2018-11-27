@@ -1,3 +1,4 @@
+var errorIds = ['001', '005', '008', '009', '083', '012', '092', '097'];
 var models = [{
     id: '001',
     name: '妙蛙种子'
@@ -455,5 +456,5 @@ var models = [{
 
 models = models.filter(function(modelInfo){
     var id = modelInfo.id;
-    return ['092', '097'].indexOf(id) < 0;
+    return errorIds.indexOf(id) < 0;
 });
