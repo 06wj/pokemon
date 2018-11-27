@@ -3,6 +3,7 @@ var listContainerElem = document.querySelector('#listContainer');
 var stageContainerElem = document.querySelector('#stageContainer');
 var modelViewerContainerElem = document.querySelector('#modelViewerContainer');
 var closeBtnElem = document.querySelector('#closeBtn');
+var loadingElem = document.querySelector('#loading');
 
 var camera, stage, ticker, orbitControls, glTFLoader;
 
@@ -80,11 +81,13 @@ function showStage(){
 
 function showModel(id){
     showStage();
+    loadingElem.style.display = 'block';
     var glTFUrl = `../models/${id}/glTF/model.gltf`;
     glTFLoader.load({
         src: glTFUrl,
         isUnQuantizeInShader:false
     }).then(function(model) {
+        loadingElem.style.display = 'none';
         try{
             initModel(model);
         } catch(e){
