@@ -1,3 +1,4 @@
+var mainContainerElem = document.querySelector('.mainContainer');
 var listContainerElem = document.querySelector('#listContainer');
 var stageContainerElem = document.querySelector('#stageContainer');
 var modelViewerContainerElem = document.querySelector('#modelViewerContainer');
@@ -64,7 +65,7 @@ function initStage(){
 
 function hideStage(){
     modelViewerContainerElem.style.display = 'none';
-    listContainerElem.style.display = 'flex';
+    mainContainerElem.appendChild(listContainerElem);
 
     // reset resource
     Hilo3d.BasicLoader.cache.clear();
@@ -74,7 +75,7 @@ function hideStage(){
 
 function showStage(){
     modelViewerContainerElem.style.display = 'block';
-    listContainerElem.style.display = 'none';
+    mainContainerElem.removeChild(listContainer);
 }
 
 function showModel(id){
@@ -137,10 +138,12 @@ function initModel(model){
     });
 }
 
-initList();
-initStage();
-
 
 if (location.hash.split('#')[1]){
+    initStage();
     showModel(location.hash.split('#')[1]);
+    initList();
+} else {
+    initList();
+    initStage();
 }
