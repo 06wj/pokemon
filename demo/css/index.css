@@ -1,0 +1,32 @@
+html, body{
+    margin: 0;
+    padding: 0;
+}
+
+body{
+    background-color: #ddd;
+}
+
+#listContainer:after{
+    content:""; 
+    display:table; 
+    clear:both;
+}
+#listContainer{
+    padding-top: 5px;
+}
+
+.modelContainer{
+    display: block;
+    float: left;
+    padding: 5px;
+    width: 74px;
+    border: 1px solid #fff;
+}
+
+.modelInfo{
+    text-align: center;
+    font-size: 12px;
+    height: 15px;
+    line-height: 15px;
+}
