@@ -1,6 +1,7 @@
 const fs = require('fs-extra')
 const execa = require('execa');
 const models = require('./model.json');
+const amcFaildData = require('./amcFaildData.json');
 const colors = require('colors');
 colors.setTheme({
     silly: 'rainbow',
@@ -84,6 +85,9 @@ async function convertModel(modelInfo){
             } else {
                 console.log(`amcFaild: ${modelNum}`.warn);
             }
+        } else {
+            amcFaildData[modelNum] = 1;
+            await fs.copy(`${exportGLTFPath}/origin.gltf`, `${exportGLTFPath}/model.gltf`);
         }
     }
 }
@@ -98,6 +102,9 @@ async function convertModels(){
         }
     }
 
+    await fs.writeJson('tools/amcFaildData.json', amcFaildData, {
+        spaces:' '
+    });
     console.log('All models convert complete!');
 }
 
