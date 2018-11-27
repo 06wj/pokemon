@@ -458,3 +458,8 @@ models = models.filter(function(modelInfo){
     var id = modelInfo.id;
     return errorIds.indexOf(id) < 0;
 });
+
+var modelDict = {};
+models.forEach(function(model){
+    modelDict[model.id] = model;
+});

@@ -4,6 +4,7 @@ var stageContainerElem = document.querySelector('#stageContainer');
 var modelViewerContainerElem = document.querySelector('#modelViewerContainer');
 var closeBtnElem = document.querySelector('#closeBtn');
 var loadingElem = document.querySelector('#loading');
+var titleElem = document.querySelector('#title');
 
 var camera, stage, ticker, orbitControls, glTFLoader;
 
@@ -72,6 +73,8 @@ function hideStage(){
     Hilo3d.BasicLoader.cache.clear();
     stage.destroy();
     stage.matrix.identity();
+
+    titleElem.innerHTML = 'Pokémon Viewer';
 }
 
 function showStage(){
@@ -79,9 +82,15 @@ function showStage(){
     mainContainerElem.removeChild(listContainer);
 }
 
+function onShowModelError(){
+    alert('Someting Error!');
+    hideStage();
+}
+
 function showModel(id){
     showStage();
     loadingElem.style.display = 'block';
+    titleElem.innerHTML = `${id} ${modelDict[id].name}`;
     var glTFUrl = `../models/${id}/glTF/model.gltf`;
     glTFLoader.load({
         src: glTFUrl,
@@ -91,9 +100,9 @@ function showModel(id){
         try{
             initModel(model);
         } catch(e){
-
+            onShowModelError();
         }
-    });
+    }, onShowModelError);
     location.hash = id;
 }
 
