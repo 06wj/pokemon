@@ -90,6 +90,7 @@ function showModel(id){
 
         }
     });
+    location.hash = id;
 }
 
 function initModel(model){
@@ -138,3 +139,8 @@ function initModel(model){
 
 initList();
 initStage();
+
+
+if (location.hash.split('#')[1]){
+    showModel(location.hash.split('#')[1]);
+}
