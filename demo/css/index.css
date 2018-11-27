@@ -7,13 +7,11 @@ body{
     background-color: #ddd;
 }
 
-#listContainer:after{
-    content:""; 
-    display:table; 
-    clear:both;
-}
+
 #listContainer{
-    padding-top: 5px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
 }
 
 .modelContainer{
