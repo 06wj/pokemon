@@ -122,7 +122,6 @@ function initModel(model, modelInfo){
 
     model.materials.forEach(function(material){
         material.depthMask = true;
-        material.transparent = false;
         material.isDirty = true;
     });
 
