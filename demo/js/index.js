@@ -122,7 +122,13 @@ function initModel(model, modelInfo){
 
     model.materials.forEach(function(material){
         material.depthMask = true;
-        material.isDirty = true;
+        if (utils.keys.roughness) {
+            material.roughness = parseFloat(utils.keys.roughness);
+        }
+
+        if (utils.keys.metallic) {
+            material.metallic = parseFloat(utils.keys.metallic);
+        }
     });
 
     var bounds = model.node.getBounds();
@@ -153,8 +159,11 @@ function initModel(model, modelInfo){
         skyBox.setScale(20);
 
         var directionLight = new Hilo3d.DirectionalLight({
+            x:1,
+            y:1,
+            z:5,
             color:new Hilo3d.Color(1, 1, 1),
-            direction:new Hilo3d.Vector3(0, -1, 0)
+            direction:new Hilo3d.Vector3(-1, -1, 0)
         }).addTo(stage);
     });
 }
