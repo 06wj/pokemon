@@ -9,10 +9,12 @@ var titleElem = document.querySelector('#title');
 var camera, stage, ticker, orbitControls, glTFLoader;
 
 function initList(){
-    models.forEach(function(modelInfo){
+    models.forEach(function(modelInfo, index){
+        if (modelInfo.disable) {
+            return;
+        }
         var name = modelInfo.name;
         var id = modelInfo.id;
-        var index = parseInt(id) - 1;
         var elem = document.createElement('div');
         var modelPath = `../models/${id}/`;
         elem.className = 'modelContainer';
@@ -100,7 +102,7 @@ function showModel(id){
     }).then(function(model) {
         loadingElem.style.display = 'none';
         try{
-            initModel(model);
+            initModel(model, modelDict[id]);
         } catch(e){
             onShowModelError();
         }
@@ -108,9 +110,15 @@ function showModel(id){
     location.hash = id;
 }
 
-function initModel(model){
+function initModel(model, modelInfo){
     window.model = model;
     stage.addChild(model.node);
+
+    if (modelInfo.rotation) {
+        model.node.rotationX = modelInfo.rotation;
+    }
+
+    model.node.rotationY = 20;
 
     model.materials.forEach(function(material){
         material.depthMask = true;

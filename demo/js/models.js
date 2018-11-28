@@ -46,31 +46,39 @@ var models = [{
     name: '大针蜂'
 }, {
     id: '016',
-    name: '波波'
+    name: '波波',
+    rotation:-90
 }, {
     id: '017',
-    name: '比比鸟'
+    name: '比比鸟',
+    rotation:-90
 }, {
     id: '018',
-    name: '大比鸟'
+    name: '大比鸟',
+    rotation:-90
 }, {
     id: '019',
-    name: '小拉达'
+    name: '小拉达',
+    rotation:-90
 }, {
     id: '020',
-    name: '拉达'
+    name: '拉达',
+    rotation:-90
 }, {
     id: '021',
-    name: '烈雀'
+    name: '烈雀',
+    rotation:-90
 }, {
     id: '022',
-    name: '大嘴雀'
+    name: '大嘴雀',
+    rotation:-90
 }, {
     id: '023',
     name: '阿柏蛇'
 }, {
     id: '024',
-    name: '阿柏怪'
+    name: '阿柏怪',
+    rotation:-90
 }, {
     id: '025',
     name: '皮卡丘'
@@ -79,10 +87,12 @@ var models = [{
     name: '雷丘'
 }, {
     id: '027',
-    name: '穿山鼠'
+    name: '穿山鼠',
+    rotation:-90
 }, {
     id: '028',
-    name: '穿山王'
+    name: '穿山王',
+    rotation:-90
 }, {
     id: '029',
     name: '尼多兰'
@@ -106,19 +116,23 @@ var models = [{
     name: '皮皮'
 }, {
     id: '036',
-    name: '皮可西'
+    name: '皮可西',
+    rotation:-90
 }, {
     id: '037',
-    name: '六尾'
+    name: '六尾',
+    rotation:-90
 }, {
     id: '038',
-    name: '九尾'
+    name: '九尾',
+    rotation:-80
 }, {
     id: '039',
     name: '胖丁'
 }, {
     id: '040',
-    name: '胖可丁'
+    name: '胖可丁',
+    rotation:-90
 }, {
     id: '041',
     name: '超音蝠'
@@ -133,7 +147,8 @@ var models = [{
     name: '臭臭花'
 }, {
     id: '045',
-    name: '霸王花'
+    name: '霸王花',
+    rotation:-90
 }, {
     id: '046',
     name: '派拉斯'
@@ -142,7 +157,8 @@ var models = [{
     name: '派拉斯特'
 }, {
     id: '048',
-    name: '毛球'
+    name: '毛球',
+    rotation:-90
 }, {
     id: '049',
     name: '摩鲁蛾'
@@ -151,19 +167,24 @@ var models = [{
     name: '地鼠'
 }, {
     id: '051',
-    name: '三地鼠'
+    name: '三地鼠',
+    rotation:-90
 }, {
     id: '052',
-    name: '喵喵'
+    name: '喵喵',
+    rotation:-90
 }, {
     id: '053',
-    name: '猫老大'
+    name: '猫老大',
+    rotation:-90
 }, {
     id: '054',
-    name: '可达鸭'
+    name: '可达鸭',
+    rotation:-90
 }, {
     id: '055',
-    name: '哥达鸭'
+    name: '哥达鸭',
+    rotation:-90
 }, {
     id: '056',
     name: '猴怪'
@@ -172,25 +193,31 @@ var models = [{
     name: '火暴猴'
 }, {
     id: '058',
-    name: '卡蒂狗'
+    name: '卡蒂狗',
+    rotation:-90
 }, {
     id: '059',
-    name: '风速狗'
+    name: '风速狗',
+    rotation:-90
 }, {
     id: '060',
     name: '蚊香蝌蚪'
 }, {
     id: '061',
-    name: '蚊香君'
+    name: '蚊香君',
+    rotation:-90
 }, {
     id: '062',
-    name: '蚊香泳士'
+    name: '蚊香泳士',
+    rotation:-90
 }, {
     id: '063',
-    name: '凯西'
+    name: '凯西',
+    rotation:-90
 }, {
     id: '064',
-    name: '勇基拉'
+    name: '勇基拉',
+    rotation:-90
 }, {
     id: '065',
     name: '胡地'
@@ -205,13 +232,15 @@ var models = [{
     name: '怪力'
 }, {
     id: '069',
-    name: '喇叭芽'
+    name: '喇叭芽',
+    rotation:-90
 }, {
     id: '070',
     name: '口呆花'
 }, {
     id: '071',
-    name: '大食花'
+    name: '大食花',
+    rotation:-90
 }, {
     id: '072',
     name: '玛瑙水母'
@@ -229,10 +258,12 @@ var models = [{
     name: '隆隆岩'
 }, {
     id: '077',
-    name: '小火马'
+    name: '小火马',
+    rotation:-90
 }, {
     id: '078',
-    name: '烈焰马'
+    name: '烈焰马',
+    rotation:-90
 }, {
     id: '079',
     name: '呆呆兽'
@@ -256,10 +287,12 @@ var models = [{
     name: '嘟嘟利'
 }, {
     id: '086',
-    name: '小海狮'
+    name: '小海狮',
+    rotation:-90
 }, {
     id: '087',
-    name: '白海狮'
+    name: '白海狮',
+    rotation:-90
 }, {
     id: '088',
     name: '臭泥'
@@ -334,7 +367,8 @@ var models = [{
     name: '独角犀牛'
 }, {
     id: '112',
-    name: '钻角犀兽'
+    name: '钻角犀兽',
+    rotation:-90
 }, {
     id: '113',
     name: '吉利蛋'
@@ -385,10 +419,12 @@ var models = [{
     name: '肯泰罗'
 }, {
     id: '129',
-    name: '鲤鱼王'
+    name: '鲤鱼王',
+    rotation:-90
 }, {
     id: '130',
-    name: '暴鲤龙'
+    name: '暴鲤龙',
+    rotation:-90
 }, {
     id: '131',
     name: '拉普拉斯'
@@ -439,13 +475,16 @@ var models = [{
     name: '火焰鸟'
 }, {
     id: '147',
-    name: '迷你龙'
+    name: '迷你龙',
+    rotation:-90
 }, {
     id: '148',
-    name: '哈克龙'
+    name: '哈克龙',
+    rotation:-90
 }, {
     id: '149',
-    name: '快龙'
+    name: '快龙',
+    rotation:-90
 }, {
     id: '150',
     name: '超梦'
@@ -454,12 +493,11 @@ var models = [{
     name: '梦幻'
 }];
 
-models = models.filter(function(modelInfo){
-    var id = modelInfo.id;
-    return errorIds.indexOf(id) < 0;
-});
 
 var modelDict = {};
 models.forEach(function(model){
+    if (errorIds.indexOf(model.id) > -1) {
+        model.disable = true;
+    }
     modelDict[model.id] = model;
 });
