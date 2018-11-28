@@ -1,7 +1,6 @@
 const fs = require('fs-extra')
 const execa = require('execa');
 const models = require('./model.json');
-const amcFaildData = require('./amcFaildData.json');
 const colors = require('colors');
 colors.setTheme({
     silly: 'rainbow',
@@ -41,8 +40,6 @@ async function getModelPath(name) {
     return '';
 }
 
-const error_num = ['015', '051', '081', '093', '111', '120'];
-
 async function convertModel(modelInfo){
     const {
         name,
@@ -53,62 +50,59 @@ async function convertModel(modelInfo){
     const nameResult = name.match(/#([\d]+)\s([\w\.\s♀♂]+)/);
     const realName = nameResult[2];
     const modelNum = nameResult[1];
-
-    const modelPath = (await getModelPath(name)).replace(/#/g, '\\#').replace(/ /g, '\\ ');
-    if (!modelPath) {
-        console.log(name);
-    } 
     
     const exportPath = `models/${modelNum}/`;
-    await fs.copy(`origin_models/${name}/icon.png`, `${exportPath}icon.png`);
+    // copy icon
+    if (! await fs.pathExists(`${exportPath}icon.png`)){
+        await fs.copy(`origin_models/${name}/icon.png`, `${exportPath}icon.png`);
+    }
 
     const exportGLTFPath = `models/${modelNum}/glTF/`;
+    await fs.ensureDir(`${exportGLTFPath}`);
+    
     if (! await fs.pathExists(`${exportGLTFPath}model.gltf`)){
-        fs.ensureDir(`${exportGLTFPath}`);
         const convertPath = `${exportGLTFPath}origin.gltf`;
+        const amcPath = `${exportGLTFPath}model.gltf`;
         
-        if (!await fs.pathExists(convertPath)) {
+        // blender convert
+        if (! await fs.pathExists(convertPath)) {
+            const modelPath = (await getModelPath(name)).replace(/#/g, '\\#').replace(/ /g, '\\ ');
+            if (!modelPath) {
+                console.log(`No model called ${name}`.warn);
+                return;
+            } 
+
             const cmd = `${blenderPath} -b -P ${pythonPath} -- ${modelPath} ${convertPath}`;
             console.log(`convertStart: ${modelNum}`);
             await execa.shell(cmd);
+        }
 
-
+        // amc convert
+        if (! await fs.pathExists(amcPath)){
             // amc start
-            if (error_num.indexOf(modelNum) < 0) {
-                console.log(`amcStart: ${modelNum}`);
-                await execa.shell(`amc-glTF -i ${convertPath} -o ${exportGLTFPath}model.gltf`);
-            }
+            console.log(`amcStart: ${modelNum}`);
+            await execa.shell(`amc-glTF -i ${convertPath} -o ${amcPath}`);
             
-            if (await fs.pathExists(`${exportGLTFPath}model.gltf`)){
+            if (await fs.pathExists(`${amcPath}`)){
                 await fs.remove(`${exportGLTFPath}/origin.gltf`);
                 await fs.remove(`${exportGLTFPath}/origin.bin`);
             } else {
                 console.log(`amcFaild: ${modelNum}`.warn);
             }
-        } else {
-            amcFaildData[modelNum] = 1;
-            await fs.copy(`${exportGLTFPath}/origin.gltf`, `${exportGLTFPath}/model.gltf`);
         }
     }
 }
-
 
 async function convertModels(){
     for (let i = 0; i < models.length; i++) {
         try{
             await convertModel(models[i]);
         } catch(e) {
-            console.log(`convertError: ${i}`.error);
+            console.log(`convertError: ${i} ${e.message}`.error);
         }
     }
 
-    await fs.writeJson('tools/amcFaildData.json', amcFaildData, {
-        spaces:' '
-    });
     console.log('All models convert complete!');
 }
 
 convertModels();
-
-// 13 14
-
