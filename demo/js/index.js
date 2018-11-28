@@ -12,12 +12,13 @@ function initList(){
     models.forEach(function(modelInfo){
         var name = modelInfo.name;
         var id = modelInfo.id;
+        var index = parseInt(id) - 1;
         var elem = document.createElement('div');
         var modelPath = `../models/${id}/`;
         elem.className = 'modelContainer';
         elem.setAttribute('data-id', id);
         elem.innerHTML = `
-            <div data-id='${id}' class='modelIcon' style='background-size:74px 63px;background-image:url(./${modelPath}icon.png);width:74px;height:63px;'></div>
+            <div data-id='${id}' class='modelIcon' style='background-position:${-(148 + 4)/2*(index%13)}px ${-(125 + 4)/2*(Math.floor(index/13)) + 0.5}px;background-size:988px 838px;background-image:url(//wx4.sinaimg.cn/mw1024/6a4fa2d0ly1fxo333fivdj20rg0na0wo.jpg);width:74px;height:63px;'></div>
             <div data-id='${id}' class='modelInfo'>${id} ${name}</div>
         `;
         listContainerElem.appendChild(elem);
@@ -55,42 +56,43 @@ function initStage(){
 
     orbitControls = new OrbitControls(stage, {
         isLockMove:true,
-        isLockZ:true
+        isLockZ:true,
+        rotationXLimit:true
     });
 
     glTFLoader = new Hilo3d.GLTFLoader();
 
     closeBtnElem.onclick = function(){
-        hideStage();
+        hideModel();
     }
 }
 
-function hideStage(){
+function hideModel(){
     modelViewerContainerElem.style.display = 'none';
-    mainContainerElem.appendChild(listContainerElem);
+    listContainerElem.style.display = 'flex';
 
     // reset resource
     Hilo3d.BasicLoader.cache.clear();
     stage.destroy();
     stage.matrix.identity();
+    orbitControls.reset();
 
     titleElem.innerHTML = 'Pokémon Viewer';
-}
-
-function showStage(){
-    modelViewerContainerElem.style.display = 'block';
-    mainContainerElem.removeChild(listContainer);
+    location.hash = '';
 }
 
 function onShowModelError(){
     alert('Someting Error!');
-    hideStage();
+    hideModel();
 }
 
 function showModel(id){
-    showStage();
+    modelViewerContainerElem.style.display = 'block';
+    listContainerElem.style.display = 'none';
+
     loadingElem.style.display = 'block';
     titleElem.innerHTML = `${id} ${modelDict[id].name}`;
+
     var glTFUrl = `../models/${id}/glTF/model.gltf`;
     glTFLoader.load({
         src: glTFUrl,

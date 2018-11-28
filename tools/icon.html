@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>icon</title>
+</head>
+<body>
+    <canvas id='canvas'></canvas>
+    <script>
+        const canvasElem = document.querySelector('canvas');
+        const ctx = canvasElem.getContext('2d');
+        const createImage = async (src) => {
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+                img.onload = function(){
+                    resolve(img);
+                };
+
+                img.onerror = function(e){
+                    reject(e);
+                };
+
+                img.src = src;
+            });
+        };
+
+        const createImages = async () => {
+            const w = 148;
+            const h = 125;
+            const gap = 4;
+            canvasElem.width = (w + gap) * 13;
+            canvasElem.height = (h + gap) * 13;
+            ctx.fillStyle = '#aaa';
+            ctx.fillRect(0, 0, canvasElem.width, canvasElem.height);
+            for(let i = 1;i <= 151;i ++) {
+                const col = (i-1) % 13;
+                const row = Math.floor((i-1) / 13);
+                const id = i < 10 ? ('00' + i) : i < 100 ? ('0' + i) : i;
+                try{
+                    const img = await createImage(`../models/${id}/icon.png`);
+                    ctx.drawImage(img, col * (w + gap), row * (h + gap));
+                } catch(e){
+                    console.warn(`${id} has no model!`);
+                }
+            }
+        };
+
+        createImages().then(() => {
+            console.log('haha~');
+        });
+    </script>
+</body>
+</html>

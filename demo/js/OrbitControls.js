@@ -57,6 +57,9 @@
         this.enable();
     }
 
+    OrbitControls.prototype.reset = function(){
+        tempEuler.set(0, 0, 0);
+    };
     OrbitControls.prototype.enable = function(){
         if(!this.isEnabled){
             this.isEnabled = true;
