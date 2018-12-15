@@ -5,8 +5,8 @@ var modelViewerContainerElem = document.querySelector('#modelViewerContainer');
 var closeBtnElem = document.querySelector('#closeBtn');
 var loadingElem = document.querySelector('#loading');
 var titleElem = document.querySelector('#title');
-
-var camera, stage, ticker, orbitControls, glTFLoader;
+var camera, stage, ticker, orbitControls, glTFLoader, model;
+var gui;
 
 function initList(){
     models.forEach(function(modelInfo, index){
@@ -67,6 +67,8 @@ function initStage(){
     closeBtnElem.onclick = function(){
         hideModel();
     }
+
+    initGui();
 }
 
 function hideModel(){
@@ -110,6 +112,16 @@ function showModel(id){
     location.hash = id;
 }
 
+var defaultRoughness = 0.1;
+if (utils.keys.roughness) {
+    defaultRoughness = parseFloat(utils.keys.roughness);
+}
+
+var defaultMetallic = 0.1;
+if (utils.keys.metallic) {
+    defaultMetallic = parseFloat(utils.keys.metallic);
+}
+
 function initModel(model, modelInfo){
     window.model = model;
     stage.addChild(model.node);
@@ -122,13 +134,6 @@ function initModel(model, modelInfo){
 
     model.materials.forEach(function(material){
         material.depthMask = true;
-        if (utils.keys.roughness) {
-            material.roughness = parseFloat(utils.keys.roughness);
-        }
-
-        if (utils.keys.metallic) {
-            material.metallic = parseFloat(utils.keys.metallic);
-        }
     });
 
     var bounds = model.node.getBounds();
@@ -166,8 +171,31 @@ function initModel(model, modelInfo){
             direction:new Hilo3d.Vector3(-1, -1, 0)
         }).addTo(stage);
     });
+
+    resetMaterial();
 }
 
+function resetMaterial(){
+    if (model && gui) {
+        model.materials.forEach(function(material){
+            material.metallic = gui.material.metallic;
+            material.roughness = gui.material.roughness;
+        });
+    }
+}
+
+function initGui(){
+    gui = new dat.GUI({
+        autoPlace: false
+    });
+    gui.material = {
+        metallic: defaultMetallic,
+        roughness: defaultRoughness
+    };
+    gui.add(gui.material, 'metallic', 0, 1).onChange(resetMaterial);
+    gui.add(gui.material, 'roughness', 0, 1).onChange(resetMaterial);
+    modelViewerContainerElem.appendChild(gui.domElement);
+}
 
 if (location.hash.split('#')[1]){
     initStage();
