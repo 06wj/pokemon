@@ -20,7 +20,7 @@ function initList(){
         elem.className = 'modelContainer';
         elem.setAttribute('data-id', id);
         elem.innerHTML = `
-            <div data-id='${id}' class='modelIcon' style='background-position:${-(148 + 4)/2*(index%13)}px ${-(125 + 4)/2*(Math.floor(index/13)) + 0.5}px;background-size:988px 838px;background-image:url(//wx4.sinaimg.cn/mw1024/6a4fa2d0ly1fxo333fivdj20rg0na0wo.jpg);width:74px;height:63px;'></div>
+            <div data-id='${id}' class='modelIcon' style='background-position:${-(148 + 4)/2*(index%13)}px ${-(125 + 4)/2*(Math.floor(index/13)) + 0.5}px;background-size:988px 838px;background-image:url(./img/icon.jpg);width:74px;height:63px;'></div>
             <div data-id='${id}' class='modelInfo'>${id} ${name}</div>
         `;
         listContainerElem.appendChild(elem);
