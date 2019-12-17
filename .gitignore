@@ -1,3 +1,4 @@
 node_modules
 origin_models
 package-lock.json
+.DS_Store
