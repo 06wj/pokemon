@@ -26,5 +26,7 @@
     "execa": "^1.0.0",
     "fs-extra": "^7.0.1"
   },
-  "dependencies": {}
+  "dependencies": {
+    "hilo3d": "^1.13.44"
+  }
 }
