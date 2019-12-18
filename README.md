@@ -1,5 +1,5 @@
 # Pokémon Viewer
-Online 3D pokemon viewer rendered by [Hilo3d](https://github.com/hiloteam/Hilo3d).
+Online 3D Pokémon Viewer rendered by [Hilo3d](https://github.com/hiloteam/Hilo3d).
 
 [![index](https://user-images.githubusercontent.com/800043/71094648-49a58380-21e6-11ea-8e32-28e3bb9cc71d.png)][index-url]
 [![025](https://user-images.githubusercontent.com/800043/71094664-4f02ce00-21e6-11ea-9d20-add07cf60498.png)][pikachu-url]
