@@ -5,17 +5,17 @@ Online 3D pokemon viewer rendered by [Hilo3d](https://github.com/hiloteam/Hilo3d
 [![025](https://user-images.githubusercontent.com/800043/71094664-4f02ce00-21e6-11ea-9d20-add07cf60498.png)][pikachu-url]
 
 
-### demo
+### Demos
 * [pikachu][pikachu-url]
 * [index][index-url]
 
-### tools
+### Tools
 * [download.js](./tools/download.js)  
   Download models from [models-resource](https://www.models-resource.com/3ds/pokemonxy)
 * [convert.js](./tools/convert.js)  
   Use ```Blender``` to convert from ```COLLADA``` to ```glTF```
 
-### models
+### glTF Models
 * [models](./models/)
 
 
