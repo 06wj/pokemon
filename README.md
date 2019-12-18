@@ -19,5 +19,5 @@ Online 3D pokemon viewer rendered by [Hilo3d](https://github.com/hiloteam/Hilo3d
 * [models](./models/)
 
 
-[index-url]:https://06wj.github.io/pokemon/demo/index.html#025
+[index-url]:https://06wj.github.io/pokemon/demo/index.html
 [pikachu-url]:https://06wj.github.io/pokemon/demo/index.html#025
