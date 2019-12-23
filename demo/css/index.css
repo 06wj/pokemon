@@ -26,13 +26,27 @@ body{
 
 #closeBtn{
     position: absolute;
-    top: 15px;
+    top: 10px;
     right: 10px;
     background-color: #333;
     border-radius: 5px;
     width: 90px;
-    height: 30px;
-    line-height: 30px;
+    height: 28px;
+    line-height: 28px;
+    font-size: 16px;
+    text-align: center;
+    color: #fff;
+}
+
+#nextBtn{
+    position: absolute;
+    top: 45px;
+    right: 10px;
+    background-color: #333;
+    border-radius: 5px;
+    width: 90px;
+    height: 28px;
+    line-height: 28px;
     font-size: 16px;
     text-align: center;
     color: #fff;

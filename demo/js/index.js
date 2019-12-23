@@ -3,6 +3,7 @@ var listContainerElem = document.querySelector('#listContainer');
 var stageContainerElem = document.querySelector('#stageContainer');
 var modelViewerContainerElem = document.querySelector('#modelViewerContainer');
 var closeBtnElem = document.querySelector('#closeBtn');
+var nextBtnElem = document.querySelector('#nextBtn');
 var loadingElem = document.querySelector('#loading');
 var titleElem = document.querySelector('#title');
 var camera, stage, ticker, orbitControls, glTFLoader, model;
@@ -66,6 +67,10 @@ function initStage(){
 
     closeBtnElem.onclick = function(){
         hideModel();
+    }
+
+    nextBtnElem.onclick = function(){
+        showNext();
     }
 
     initGui();
@@ -207,7 +212,27 @@ if (location.hash.split('#')[1]){
 }
 
 function showNext(){
-    var num = parseInt(location.hash.split('#')[1]) + 1;
+    var id = parseInt(location.hash.split('#')[1]) + 1;
+    if (id > models.length) {
+        id = 1;
+    }
+
+    if (id < 10) {
+        id = '00' + id;
+    } else if (id < 100) {
+        id = '0' + id;
+    }
+
+    var info = modelDict[id];
+    console.log(info);
+    if (!info || info.disable) {
+        location.hash = "#" + id;
+        setTimeout(() => {
+            showNext();
+        }, 0);
+        return;
+    }
+
     hideModel();
-    showModel(num < 100?("0" + num):(num));
+    showModel(id);
 }
