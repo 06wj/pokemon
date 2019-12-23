@@ -10,13 +10,16 @@ var models = [{
     name: '妙蛙花'
 }, {
     id: '004',
-    name: '小火龙'
+    name: '小火龙',
+    fire:true
 }, {
     id: '005',
-    name: '火恐龙'
+    name: '火恐龙',
+    fire:true
 }, {
     id: '006',
-    name: '喷火龙'
+    name: '喷火龙',
+    fire:true
 }, {
     id: '007',
     name: '杰尼龟'
@@ -260,11 +263,13 @@ var models = [{
 }, {
     id: '077',
     name: '小火马',
-    rotation:-90
+    rotation:-90,
+    fire:true
 }, {
     id: '078',
     name: '烈焰马',
-    rotation:-90
+    rotation:-90,
+    fire:true
 }, {
     id: '079',
     name: '呆呆兽'
@@ -473,7 +478,8 @@ var models = [{
     name: '闪电鸟'
 }, {
     id: '146',
-    name: '火焰鸟'
+    name: '火焰鸟',
+    fire:true
 }, {
     id: '147',
     name: '迷你龙',
