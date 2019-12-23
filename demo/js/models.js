@@ -151,7 +151,8 @@ var models = [{
     rotation:-90
 }, {
     id: '046',
-    name: '派拉斯'
+    name: '派拉斯',
+    rotation:-90
 }, {
     id: '047',
     name: '派拉斯特'
