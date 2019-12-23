@@ -205,3 +205,9 @@ if (location.hash.split('#')[1]){
     initList();
     initStage();
 }
+
+function showNext(){
+    var num = parseInt(location.hash.split('#')[1]) + 1;
+    hideModel();
+    showModel(num < 100?("0" + num):(num));
+}
