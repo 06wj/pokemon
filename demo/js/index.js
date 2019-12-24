@@ -170,6 +170,7 @@ function initModel(model, modelInfo){
                             needBasicUnifroms: false,
                             needBasicAttributes: false,
                             fireCoreTexture: baseColorMap,
+                            side:Hilo3d.constants.FRONT_AND_BACK,
                             uniforms:{
                                 u_modelViewProjectionMatrix:'MODELVIEWPROJECTION',
                                 u_fireCoreTexture:{
@@ -247,15 +248,13 @@ function initModel(model, modelInfo){
                                 uniform sampler2D u_fireSten;
                                 uniform float u_time;
                                 void main(void) {
-                                    float uOffset = sin(u_time * 0.001);
-                                    float vOffset = cos(u_time * 0.001);
                                     float gradient_start = 1.0;
                                     vec2 gradient = vec2(0, -1.0);
                                     vec4 fireSten = texture2D(u_fireSten, v_texcoord0);
                                     vec3 col1 = vec3(1.0, 0.0, 0.0);
                                     vec3 col2 = vec3(1.0, 1.0, 0.0);
                                     vec3 col = col1 + (col2 - col1) * max(0.0, min(gradient_start+dot(v_texcoord0, gradient)+(fireSten.x-0.5)*0.1, 1.0));
-                                    gl_FragColor = vec4(col, .8);
+                                    gl_FragColor = vec4(col, .2);
                                 }
                             `,
                             vs:`
