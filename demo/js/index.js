@@ -46,7 +46,7 @@ function initStage(){
     stage = new Hilo3d.Stage({
         container: stageContainer,
         camera: camera,
-        clearColor: new Hilo3d.Color(0.4, 0.4, 0.4),
+        clearColor: new Hilo3d.Color(0, 0, 0),
         width: innerWidth,
         height: innerHeight
     });
@@ -166,6 +166,7 @@ function initModel(model, modelInfo){
                     src = baseColorMap.src || '';
                     if (src.indexOf('FireCore') > -1) {
                         mesh.material = new Hilo3d.ShaderMaterial({
+                            renderOrder:-2,
                             shaderCacheId: "FireCore",
                             needBasicUnifroms: false,
                             needBasicAttributes: false,
@@ -224,7 +225,8 @@ function initModel(model, modelInfo){
                             needBasicUnifroms: false,
                             needBasicAttributes: false,
                             fireCoreTexture: baseColorMap,
-                            transparent:true,
+                            renderOrder:-1,
+                            depthMask:false,
                             uniforms:{
                                 u_modelViewProjectionMatrix:'MODELVIEWPROJECTION',
                                 u_fireSten:{
@@ -254,7 +256,7 @@ function initModel(model, modelInfo){
                                     vec3 col1 = vec3(1.0, 0.0, 0.0);
                                     vec3 col2 = vec3(1.0, 1.0, 0.0);
                                     vec3 col = col1 + (col2 - col1) * max(0.0, min(gradient_start+dot(v_texcoord0, gradient)+(fireSten.x-0.5)*0.1, 1.0));
-                                    gl_FragColor = vec4(col, .2);
+                                    gl_FragColor = vec4(col, 1);
                                 }
                             `,
                             vs:`
