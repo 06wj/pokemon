@@ -124,12 +124,12 @@ function showModel(id){
     location.hash = id;
 }
 
-var defaultRoughness = 0.1;
+var defaultRoughness = 0.64;
 if (utils.keys.roughness) {
     defaultRoughness = parseFloat(utils.keys.roughness);
 }
 
-var defaultMetallic = 0.1;
+var defaultMetallic = 1;
 if (utils.keys.metallic) {
     defaultMetallic = parseFloat(utils.keys.metallic);
 }
