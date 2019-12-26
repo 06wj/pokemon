@@ -36,6 +36,12 @@ function initList(){
 }
 
 function initStage(){
+    Hilo3d.semantic.TIME = {
+        get:function(){
+            return new Date().getTime() - 1577099833000;
+        }
+    }
+
     camera = new Hilo3d.PerspectiveCamera({
         aspect: innerWidth / innerHeight,
         far: 100,
@@ -105,7 +111,8 @@ function showModel(id){
     var glTFUrl = `../models/${id}/glTF/model.gltf`;
     glTFLoader.load({
         src: glTFUrl,
-        isUnQuantizeInShader:false
+        isUnQuantizeInShader:false,
+        isLoadAllTextures: true
     }).then(function(model) {
         loadingElem.style.display = 'none';
         try{
@@ -160,120 +167,12 @@ function initModel(model, modelInfo){
 
         if (modelInfo.fire) {
             model.meshes.forEach(function(mesh){
-                var src;
-                if(mesh.material.baseColorMap) {
-                    var baseColorMap = mesh.material.baseColorMap;
-                    src = baseColorMap.src || '';
-                    if (src.indexOf('FireCore') > -1) {
-                        mesh.material = new Hilo3d.ShaderMaterial({
-                            renderOrder:-2,
-                            shaderCacheId: "FireCore",
-                            needBasicUnifroms: false,
-                            needBasicAttributes: false,
-                            fireCoreTexture: baseColorMap,
-                            side:Hilo3d.constants.FRONT_AND_BACK,
-                            uniforms:{
-                                u_modelViewProjectionMatrix:'MODELVIEWPROJECTION',
-                                u_fireCoreTexture:{
-                                    get(mesh, material, programInfo) {
-                                        return Hilo3d.semantic.handlerTexture(material.fireCoreTexture, programInfo.textureIndex);
-                                    }
-                                },
-                                u_time:{
-                                    get:function(mesh, material, programInfo){
-                                        return new Date().getTime() - 1577099833000;
-                                    }
-                                }
-                            },
-                            attributes:{
-                                a_position: 'POSITION',
-                                a_texcoord0:'TEXCOORD_0'
-                            },
-                            fs:`
-                                precision HILO_MAX_FRAGMENT_PRECISION float;
-                                varying vec2 v_texcoord0;
-                                uniform sampler2D u_fireCoreTexture;
-                                uniform float u_time;
-                             
-                                void main(void) {
-                                    float uOffset = u_time * 0.00;
-                                    float vOffset = u_time * 0.001;
-                                    vec4 fireCore = texture2D(u_fireCoreTexture, vec2(v_texcoord0.x + uOffset, v_texcoord0.y + vOffset));
-                                    if (fireCore.r < 0.5) {
-                                        discard;
-                                    }
-                                    gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
-                                }
-                            `,
-                            vs:`
-                                precision HILO_MAX_VERTEX_PRECISION float;
-                                attribute vec3 a_position;
-                                attribute vec2 a_texcoord0;
-                                uniform mat4 u_modelViewProjectionMatrix;
-                                varying vec2 v_texcoord0;
-
-                                void main(void) {
-                                    vec4 pos = vec4(a_position, 1.0);
-                                    gl_Position = u_modelViewProjectionMatrix * pos;
-                                    v_texcoord0 = a_texcoord0;
-                                }
-                            `
-                        });
-                    } else if (src.indexOf('FireSten') > -1) {
-                        mesh.material = mesh.material = new Hilo3d.ShaderMaterial({
-                            shaderCacheId: "FireSten",
-                            needBasicUnifroms: false,
-                            needBasicAttributes: false,
-                            fireCoreTexture: baseColorMap,
-                            renderOrder:-1,
-                            depthMask:false,
-                            uniforms:{
-                                u_modelViewProjectionMatrix:'MODELVIEWPROJECTION',
-                                u_fireSten:{
-                                    get(mesh, material, programInfo) {
-                                        return Hilo3d.semantic.handlerTexture(material.fireCoreTexture, programInfo.textureIndex);
-                                    }
-                                },
-                                u_time:{
-                                    get:function(mesh, material, programInfo){
-                                        return new Date().getTime() - 1577099833000;
-                                    }
-                                }
-                            },
-                            attributes:{
-                                a_position: 'POSITION',
-                                a_texcoord0:'TEXCOORD_0'
-                            },
-                            fs:`
-                                precision HILO_MAX_FRAGMENT_PRECISION float;
-                                varying vec2 v_texcoord0;
-                                uniform sampler2D u_fireSten;
-                                uniform float u_time;
-                                void main(void) {
-                                    float gradient_start = 1.0;
-                                    vec2 gradient = vec2(0, -1.0);
-                                    vec4 fireSten = texture2D(u_fireSten, v_texcoord0);
-                                    vec3 col1 = vec3(1.0, 0.0, 0.0);
-                                    vec3 col2 = vec3(1.0, 1.0, 0.0);
-                                    vec3 col = col1 + (col2 - col1) * max(0.0, min(gradient_start+dot(v_texcoord0, gradient)+(fireSten.x-0.5)*0.1, 1.0));
-                                    gl_FragColor = vec4(col, 1);
-                                }
-                            `,
-                            vs:`
-                                precision HILO_MAX_VERTEX_PRECISION float;
-                                attribute vec3 a_position;
-                                attribute vec2 a_texcoord0;
-                                uniform mat4 u_modelViewProjectionMatrix;
-                                varying vec2 v_texcoord0;
-
-                                void main(void) {
-                                    vec4 pos = vec4(a_position, 1.0);
-                                    gl_Position = u_modelViewProjectionMatrix * pos;
-                                    v_texcoord0 = a_texcoord0;
-                                }
-                            `
-                        });
-                    }
+                var material = mesh.material;
+                if (material.name.indexOf('fireCore') > -1){
+                    material.renderOrder = -2;
+                } else if(material.name.indexOf('fireSten') > -1){
+                    material.depthMask = false;
+                    material.renderOrder = -1;
                 }
             });      
         }
