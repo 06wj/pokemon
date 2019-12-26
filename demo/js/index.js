@@ -157,6 +157,16 @@ function initModel(model, modelInfo){
     model.node.setPosition(-bounds.x * scale, -bounds.y * scale, -bounds.z * scale);
     model.node.setScale(scale);
 
+    var skyBox = new Hilo3d.Mesh({
+        geometry: new Hilo3d.BoxGeometry(),
+        material: new Hilo3d.BasicMaterial({
+            lightType: 'NONE',
+            side: Hilo3d.constants.BACK,
+            diffuse: new Hilo3d.Color(1, 1, 1)
+        })
+    }).addTo(stage);
+    skyBox.setScale(20);
+
     utils.loadEnvMap(function(data) {
         model.materials.forEach(function(material) {
             material.brdfLUT = data.brdfLUT;
@@ -177,15 +187,8 @@ function initModel(model, modelInfo){
             });      
         }
 
-        var skyBox = new Hilo3d.Mesh({
-            geometry: new Hilo3d.BoxGeometry(),
-            material: new Hilo3d.BasicMaterial({
-                lightType: 'NONE',
-                side: Hilo3d.constants.BACK,
-                diffuse: data.specularEnvMap
-            })
-        }).addTo(stage);
-        skyBox.setScale(20);
+        skyBox.material.diffuse = data.specularEnvMap;
+        skyBox.material.isDirty = true;
 
         var directionLight = new Hilo3d.DirectionalLight({
             x:1,
