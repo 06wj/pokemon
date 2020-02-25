@@ -37,8 +37,9 @@ function initList(){
 
 function initStage(){
     Hilo3d.semantic.TIME = {
+        startTime:new Date().getTime(),
         get:function(){
-            return new Date().getTime() - 1577099833000;
+            return new Date().getTime() - this.startTime;
         }
     }
 
