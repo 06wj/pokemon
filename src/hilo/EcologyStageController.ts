@@ -96,7 +96,8 @@ export class EcologyStageController {
       color: new Hilo3d.Color(1, 0.87, 0.66), amount: 2.3,
       x: -12, y: 20, z: 8, direction: new Hilo3d.Vector3(0.65, -1.4, -0.6),
       shadow: { width: 2048, height: 2048, minBias: 0.002, maxBias: 0.015,
-        shadowStrength: 0.6, cameraInfo: { near: 0.1, far: 80, left: -21, right: 21, top: 19, bottom: -19 } },
+        shadowStrength: 0.6, cascadeCount: 3, cascadeSplitLambda: 0.62,
+        cascadeMaxDistance: 80, cascadeBlend: 0.12, stabilizeCascades: true },
     }).addTo(stage);
     this.fill = new Hilo3d.DirectionalLight({ color: new Hilo3d.Color(0.57, 0.77, 1), amount: 0.7,
       direction: new Hilo3d.Vector3(-0.5, -0.7, 1) }).addTo(stage);

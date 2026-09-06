@@ -70,13 +70,6 @@ vec3 skyColor(vec2 uv, vec3 ray) {
   float haze = exp(-h * 6.0);
   morning += vec3(0.04, 0.035, 0.02) * haze;
 
-  vec2 sunPosition = vec2(0.26 - sin(uFraming.y * 0.65) * 0.085, horizon + 0.032);
-  vec2 sunVector = (uv - sunPosition) * vec2(uWeather.z, 1.0);
-  float sunDistance = length(sunVector);
-  float sun = 1.0 - smoothstep(0.017, 0.020, sunDistance);
-  morning += vec3(0.24, 0.12, 0.025) * exp(-sunDistance * 12.0);
-  morning = mix(morning, vec3(1.0, 0.93, 0.72), sun * 0.94);
-
   vec3 night = mix(vec3(0.30, 0.29, 0.39), vec3(0.055, 0.10, 0.22), smoothstep(0.0, 0.62, h));
   night = mix(night, vec3(0.025, 0.048, 0.115), smoothstep(0.30, 1.0, h) * 0.7);
   vec2 stars = vec2(azimuth * 0.39, h * 0.56 + ray.y * 0.14);
@@ -117,12 +110,6 @@ vec3 seaColor(vec2 uv, vec3 ray, vec3 sky) {
   float nearVisibility = 1.0 - smoothstep(45.0, 170.0, distanceFromEye);
   water += mix(vec3(0.23, 0.29, 0.20), vec3(0.16, 0.25, 0.34), dusk) * stroke * 0.33 * nearVisibility;
 
-  // Broken warm/cool glints form a quiet reflection trail, rather than a metallic sheet.
-  float sunX = 0.26 - sin(uFraming.y * 0.65) * 0.085;
-  float corridor = exp(-pow((uv.x - sunX) * 11.0, 2.0));
-  float glitter = pow(max(0.0, fineRipple * ripple), 12.0) * smoothstep(0.46, 0.68, broken);
-  water += mix(vec3(0.76, 0.53, 0.24), vec3(0.35, 0.53, 0.64), dusk)
-    * glitter * corridor * 0.35 * nearVisibility;
   float starGlint = starLayer(p * vec2(0.075, 0.28), 4.4, 36.1);
   water += vec3(0.46, 0.68, 0.73) * starGlint * dusk * 0.24 * nearVisibility;
 
