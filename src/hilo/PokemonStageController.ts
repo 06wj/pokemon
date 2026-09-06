@@ -93,12 +93,14 @@ export class PokemonStageController {
     new Hilo3d.AmbientLight({
       color: new Hilo3d.Color(0.8, 0.9, 1), amount: 0.1,
     }).addTo(stage);
+    // Touch-first phones/tablets use smaller shadows, independent of viewport orientation.
+    const shadowMapSize = window.matchMedia('(hover: none) and (pointer: coarse)').matches ? 1024 : 2048;
     this.keyLight = new Hilo3d.DirectionalLight({
       color: new Hilo3d.Color(1, 0.91, 0.79), amount: 1.6,
       x: 6, y: 10, z: 4,
       direction: new Hilo3d.Vector3(-3, -5, -2),
       shadow: {
-        width: 2048, height: 2048, minBias: 0.005, maxBias: 0.03,
+        width: shadowMapSize, height: shadowMapSize, minBias: 0.005, maxBias: 0.03,
         cameraInfo: { near: 0.1, far: 35, left: -6, right: 6, top: 6, bottom: -6 },
         shadowStrength: 0.85,
       },

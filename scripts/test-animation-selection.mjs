@@ -131,8 +131,8 @@ try {
   ];
   const petals = petalMaterials.map((material) => new Hilo3d.Mesh({ geometry: new Hilo3d.BoxGeometry(), material }));
   const grouped = new ToonModel(petals);
-  assert.equal(grouped.surfaces.length, 2, 'Identical pigment shares a pass, while different UV transforms remain separate');
-  assert.equal(grouped.surfaces[0].meshes.size, 2, 'Separate petal geometry can share pigment rendering');
+  assert.equal(grouped.surfaces.length, 3, 'MRT keeps different roughness and UV transforms in separate material groups');
+  assert.ok(grouped.surfaces.every((surface) => surface.meshes.size === 1), 'Matching pigment cannot replace distinct surface attributes');
   petals.forEach((mesh, index) => assert.equal(mesh.material, petalMaterials[index], 'Grouping preserves original material responses'));
   grouped.dispose();
   assert.equal(grouped.meshes.size, 0);

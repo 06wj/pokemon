@@ -5,12 +5,15 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "postinstall": "node scripts/patch-hilo-shadow-updates.mjs",
     "dev": "vite",
     "build": "npm run typecheck && vite build",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "assets:optimize": "python3 scripts/optimize-assets.py",
-    "models:validate": "node scripts/test-animated-models.mjs"
+    "models:validate": "node scripts/test-animated-models.mjs",
+    "test:shadows": "node scripts/test-hilo-shadow-updates.mjs",
+    "test:toon": "node scripts/test-toon-mesh-selection.mjs && node scripts/test-toon-rendering.mjs"
   },
   "repository": {
     "type": "git",

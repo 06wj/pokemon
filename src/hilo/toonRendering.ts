@@ -1,17 +1,17 @@
 import * as Hilo3d from 'hilo3d';
-
-function textureSignature(slot: Hilo3d.MaterialTextureSlotBinding | null): unknown {
-  return slot ? [slot.texture.id, slot.uvSet, slot.transform ? Array.from(slot.transform.elements) : null,
-    slot.encoding, slot.channels] : null;
-}
+import { ToonMeshSelection } from './toonMeshSelection';
+import { createToonGeometryMaterial, getToonGeometryUnsupportedReason, type ToonGeometryMaterial } from './toonGeometry';
 
 /** Alternate pass materials measure pigment using the original geometry and animation. */
 export class ToonModel {
-  readonly surfaces: { meshes: Set<Hilo3d.Mesh>; material: Hilo3d.PBRMaterial; excluded: Hilo3d.Mesh[] }[] = [];
+  readonly surfaces: {
+    meshes: Set<Hilo3d.Mesh>; material: Hilo3d.PBRMaterial;
+    geometryMaterial: ToonGeometryMaterial | null; excluded: Hilo3d.Mesh[];
+  }[] = [];
   readonly meshes = new Set<Hilo3d.Mesh>();
 
   constructor(meshes: readonly Hilo3d.Mesh[]) {
-    const groups = new Map<string, (typeof this.surfaces)[number]>();
+    const groups = new Map<Hilo3d.PBRMaterial, (typeof this.surfaces)[number]>();
     for (const source of meshes) {
       const material = source.material;
       // Transparent lenses, ghost vapor and fire retain their authored optical effects.
@@ -20,17 +20,17 @@ export class ToonModel {
       const base = material.getTextureSlot('baseColor');
       const opacityMap = material.getTextureSlot('opacity');
       const state = Hilo3d.resolveMaterialPassState(material, 'forward') ?? undefined;
-      // Flower petals and other separate skinned parts can share one pigment pass.
-      // UV transforms, alpha coverage and raster state remain part of the grouping key.
-      const signature = JSON.stringify([material.baseColor.r, material.baseColor.g, material.baseColor.b, material.baseColor.a,
-        material.opacity, material.coverage, material.compositing, state, textureSignature(base), textureSignature(opacityMap)]);
-      const existing = groups.get(signature);
+      // MRT also writes normal maps, roughness and metallic. Equal pigment alone
+      // no longer makes two different source materials interchangeable.
+      const existing = groups.get(material);
       this.meshes.add(source);
       if (existing) { existing.meshes.add(source); continue; }
       const pigment = new Hilo3d.PBRMaterial({
         name: `anime pigment / ${source.name}`,
-        // Emission carries the linear pigment without scene lighting. A black conductor
-        // contributes no diffuse/specular energy and uses the standard animated vertex path.
+        // Keep the lit PBR vertex variant used by material-attributes: that pass
+        // compares depth with 'equal'. Unlit can round clip positions differently,
+        // leaving normal-buffer holes that become broken ink at oblique views.
+        // Emission carries pigment; the black conductor removes diffuse lighting.
         baseColor: new Hilo3d.Color(0, 0, 0, material.baseColor.a), baseColorMap: base,
         metallic: 1, roughness: 1, diffuseEnvIntensity: 0, specularEnvIntensity: 0,
         emission: base ?? new Hilo3d.Color(material.baseColor.r, material.baseColor.g, material.baseColor.b),
@@ -39,9 +39,11 @@ export class ToonModel {
         coverage: material.coverage, compositing: material.compositing,
         state,
       });
-      const group = { meshes: new Set([source]), material: pigment, excluded: [] };
+      const group = { meshes: new Set([source]), material: pigment,
+        geometryMaterial: getToonGeometryUnsupportedReason(source) ? null
+          : createToonGeometryMaterial(material, `anime geometry / ${source.name}`), excluded: [] };
       this.surfaces.push(group);
-      groups.set(signature, group);
+      groups.set(material, group);
     }
   }
 
@@ -82,9 +84,9 @@ float luma(vec3 c) { return dot(c, vec3(0.2126, 0.7152, 0.0722)); }
 ivec2 pixel(ivec2 p) { return clamp(p, ivec2(0), ivec2(sizeInk.xy) - 1); }
 vec4 pigment(ivec2 p) { return texelFetch(pigmentColor, pixel(p), 0); }
 vec4 surface(ivec2 p) { return texelFetch(surfaceData, pixel(p), 0); }
-vec3 normalAt(ivec2 p) {
+vec3 decodeNormal(vec4 data) {
   // Hilo3D alpha.5 stores octahedral normals in unsigned normalized RG channels.
-  vec2 xy = surface(p).xy * 2.0 - 1.0;
+  vec2 xy = data.xy * 2.0 - 1.0;
   vec3 n = vec3(xy, 1.0 - abs(xy.x) - abs(xy.y));
   float fold = clamp(-n.z, 0.0, 1.0);
   n.xy += mix(vec2(fold), vec2(-fold), step(vec2(0.0), n.xy));
@@ -104,7 +106,11 @@ void main() {
   float nearby = 0.0;
   float inner = 0.0;
   float z = depthAt(p);
-  vec3 normal = normalAt(p);
+  vec4 centerSurface = surface(p);
+  vec3 normal = decodeNormal(centerSurface);
+  // Compute derivatives before any mask-dependent control flow on both backends.
+  float diffuse = dot(normal, normalize(lightNear.xyz));
+  float feather = max(fwidth(diffuse) * 0.8, 0.012);
   vec3 inkPigment = base.rgb;
   float inkSamples = mask;
   int radius = max(1, int(floor(sizeInk.z)));
@@ -114,21 +120,23 @@ void main() {
     ivec2 q = p + directions[i] * radius;
     vec4 neighbor = pigment(q);
     float neighborMask = step(0.5, neighbor.a);
+    // Empty pigment never contributes ink or creases. In particular, the painted
+    // backdrop can skip all eight neighboring depth/normal reads without losing detail.
+    if (neighborMask < 0.5) continue;
     float qz = depthAt(q);
-    // A nearer piece of scenery must occlude the silhouette ink as well as the model.
-    float visible = step(qz - 0.025, z);
-    nearby += neighborMask * visible;
-    inkPigment += neighbor.rgb * neighborMask;
-    inkSamples += neighborMask;
-    float crease = smoothstep(0.35, 0.62, 1.0 - dot(normal, normalAt(q)));
-    float separation = smoothstep(0.045, 0.11, abs(z - qz));
-    inner = max(inner, neighborMask * (crease * 0.6 + separation * 0.75));
+    inkPigment += neighbor.rgb;
+    inkSamples += 1.0;
+    if (mask > 0.5) {
+      float crease = smoothstep(0.35, 0.62, 1.0 - dot(normal, decodeNormal(surface(q))));
+      float separation = smoothstep(0.045, 0.11, abs(z - qz));
+      inner = max(inner, crease * 0.6 + separation * 0.75);
+    } else {
+      // A nearer piece of scenery must occlude the silhouette ink as well as the model.
+      nearby += step(qz - 0.025, z);
+    }
   }
 
   vec3 color = original.rgb;
-  // Derivatives must execute uniformly, including the pixels outside the painted mask.
-  float diffuse = dot(normal, normalize(lightNear.xyz));
-  float feather = max(fwidth(diffuse) * 0.8, 0.012);
   if (mask > 0.5) {
     float lit = smoothstep(0.23 - feather, 0.23 + feather, diffuse);
     float shade = smoothstep(-0.42 - feather, -0.42 + feather, diffuse);
@@ -138,7 +146,7 @@ void main() {
     // Keep cast shadows and authored material response without posterizing texture colors.
     cel *= mix(0.72, 1.0, smoothstep(0.24, 0.85, illumination));
     // Alpha packs a receiver flag in bit 0 and seven metallic bits above it.
-    float metallic = floor(floor(surface(p).a * 255.0 + 0.5) * 0.5) / 127.0;
+    float metallic = floor(floor(centerSurface.a * 255.0 + 0.5) * 0.5) / 127.0;
     color = mix(cel, original.rgb, mix(0.08, 0.5, metallic));
     color += min(max(original.rgb - base.rgb * 2.5, vec3(0.0)), base.rgb * 0.08);
   }
@@ -150,7 +158,7 @@ void main() {
 }`;
 
 type SceneParameters = {
-  rendererList: Hilo3d.RendererListHandle;
+  rendererLists: Hilo3d.RendererListHandle[];
   colorAttachments: Hilo3d.RenderPipelineColorAttachment[];
   depthStencilAttachment?: Hilo3d.RenderPipelineDepthStencilAttachment;
 };
@@ -177,19 +185,28 @@ export class ToonRendering implements Hilo3d.ForwardRenderPipelineFeature {
       name: 'Anime / cel paint and contour', shader, uniformBuffers: [buffer],
       pipelineState: { ...Hilo3d.DEFAULT_MATERIAL_PIPELINE_STATE, depthTest: false, depthWrite: false, cullMode: 'none' },
     });
-    const albedo = new Hilo3d.SceneRenderPass('Anime / original pigment');
-    const normals = new Hilo3d.SceneRenderPass('Anime / surface normals');
+    const albedo: Hilo3d.ScriptableRenderPass<SceneParameters> = {
+      name: 'Anime / original pigment',
+      setup(builder, parameters) {
+        for (const attachment of parameters.colorAttachments) builder.useColorAttachment(attachment);
+        if (parameters.depthStencilAttachment) builder.useDepthStencilAttachment(parameters.depthStencilAttachment);
+        for (const list of parameters.rendererLists) builder.useRendererList(list);
+      },
+      execute({ commands }, parameters) {
+        for (const list of parameters.rendererLists) commands.drawRendererList(list);
+      },
+    };
+    const geometry: typeof albedo = { ...albedo, name: 'Anime / pigment and surface' };
+    const normals: typeof albedo = { ...albedo, name: 'Anime / surface normals' };
     const scenePool = new Hilo3d.RenderPassParameterPool<SceneParameters>(
-      () => ({ rendererList: 0 as Hilo3d.RendererListHandle, colorAttachments: [] }),
-      (p) => { p.colorAttachments.length = 0; delete p.depthStencilAttachment; },
+      () => ({ rendererLists: [], colorAttachments: [] }),
+      (p) => { p.rendererLists.length = 0; p.colorAttachments.length = 0; delete p.depthStencilAttachment; },
     );
     const screenPool = new Hilo3d.RenderPassParameterPool<ScreenParameters>(
       () => ({ inputTextures: [], colorAttachments: [] }),
       (p) => { p.inputTextures.length = 0; p.colorAttachments.length = 0; },
     );
-    const allMeshes: Hilo3d.Mesh[] = [];
-    const excluded: Hilo3d.Mesh[] = [];
-    const surfaces: ToonModel['surfaces'] = [];
+    const selection = new ToonMeshSelection<ToonModel['surfaces'][number]>();
     const light = new Hilo3d.Vector3();
     const sizeInk = new Float32Array(4);
     const lightNear = new Float32Array(4);
@@ -198,45 +215,49 @@ export class ToonRendering implements Hilo3d.ForwardRenderPipelineFeature {
       record({ pipeline, resources, cullingResults }) {
         const model = owner.model;
         const habitat = owner.habitat;
-        surfaces.length = 0;
-        allMeshes.length = 0;
-        excluded.length = 0;
-        if (!owner.enabled || !resources.color) return;
-        if (model) surfaces.push(...model.surfaces);
-        if (habitat) surfaces.push(...habitat.surfaces);
+        if (!owner.enabled || !resources.color) { selection.clear(); return; }
+        const { surfaces, excluded } = selection.update(pipeline.scene, model, habitat);
         if (!surfaces.length) return;
-        const view = pipeline.camera as Hilo3d.PerspectiveCamera;
-        pipeline.scene.traverse((node) => {
-          if (node instanceof Hilo3d.Mesh) {
-            allMeshes.push(node);
-            if (!model?.meshes.has(node) && !habitat?.meshes.has(node)) excluded.push(node);
+        let useMrt = true;
+        for (const surface of surfaces) {
+          if (!surface.geometryMaterial) { useMrt = false; break; }
+          for (const mesh of surface.meshes) {
+            if (getToonGeometryUnsupportedReason(mesh)) { useMrt = false; break; }
           }
-        });
+          if (!useMrt) break;
+        }
+        const view = pipeline.camera as Hilo3d.PerspectiveCamera;
         const { graph, output } = pipeline;
         const extent = { width: output.width, height: output.height };
-        const pigmentTarget = graph.createTexture('anime pigment', { format: 'rgba16float', extent });
+        // sRGB storage preserves dark pigment precision while halving this target's bytes per pixel.
+        const pigmentTarget = graph.createTexture('anime pigment', { format: 'rgba8unorm-srgb', extent });
         const normalTarget = graph.createTexture('anime normals', { format: 'rgba8unorm', extent });
         const target = graph.createTexture('anime painted scene', { format: 'rgba16float', extent });
         // Pigment draws also build the contour depth, avoiding another geometry pass.
         const depthTarget = graph.createTexture('anime depth', { format: 'depth32float', extent });
-        for (let index = 0; index < surfaces.length; index++) {
-          const surface = surfaces[index]!;
-          surface.excluded.length = 0;
-          for (const mesh of allMeshes) if (!surface.meshes.has(mesh)) surface.excluded.push(mesh);
-          const p = pipeline.acquirePassParameters(scenePool);
-          p.rendererList = pipeline.createRendererList({ cullingResults, queue: 'opaque', sorting: 'material-front-to-back',
-            overrideMaterial: surface.material, excludeMeshes: surface.excluded, castShadowsOnly: true });
-          p.colorAttachments.push({ texture: pigmentTarget, loadOp: index === 0 ? 'clear' : 'load', storeOp: 'store', clearValue: { r: 0, g: 0, b: 0, a: 0 } });
-          p.depthStencilAttachment = { texture: depthTarget, depthLoadOp: index === 0 ? 'clear' : 'load', depthStoreOp: 'store',
-            depthClearValue: view.depthMode === 'reversed' ? 0 : 1 };
-          graph.addPass(albedo, p);
+        const pigmentParameters = pipeline.acquirePassParameters(scenePool);
+        for (const surface of surfaces) {
+          if (useMrt) surface.geometryMaterial!.sync();
+          pigmentParameters.rendererLists.push(pipeline.createRendererList({ cullingResults, queue: 'opaque', sorting: 'material-front-to-back',
+            overrideMaterial: useMrt ? surface.geometryMaterial! : surface.material,
+            excludeMeshes: surface.excluded, castShadowsOnly: true }));
         }
-        const normalParameters = pipeline.acquirePassParameters(scenePool);
-        normalParameters.rendererList = pipeline.createRendererList({ cullingResults, queue: 'opaque', sorting: 'material-front-to-back',
-          materialPass: 'material-attributes', excludeMeshes: excluded, castShadowsOnly: true });
-        normalParameters.colorAttachments.push({ texture: normalTarget, loadOp: 'clear', storeOp: 'store', clearValue: { r: 0, g: 0, b: 0, a: 0 } });
-        normalParameters.depthStencilAttachment = { texture: depthTarget, depthLoadOp: 'load', depthStoreOp: 'store' };
-        graph.addPass(normals, normalParameters);
+        // Keep every material draw in one render pass so tile GPUs retain color/depth
+        // attachments on-chip instead of loading and storing them for each material.
+        pigmentParameters.colorAttachments.push({ texture: pigmentTarget, loadOp: 'clear', storeOp: 'store', clearValue: { r: 0, g: 0, b: 0, a: 0 } });
+        if (useMrt) pigmentParameters.colorAttachments.push({ texture: normalTarget, loadOp: 'clear', storeOp: 'store', clearValue: { r: 0, g: 0, b: 0, a: 0 } });
+        pigmentParameters.depthStencilAttachment = { texture: depthTarget, depthLoadOp: 'clear', depthStoreOp: 'store',
+          depthClearValue: view.depthMode === 'reversed' ? 0 : 1 };
+        graph.addPass(useMrt ? geometry : albedo, pigmentParameters);
+        if (!useMrt) {
+          // Preserve the established path for explicit instancing or unusual raster state.
+          const normalParameters = pipeline.acquirePassParameters(scenePool);
+          normalParameters.rendererLists.push(pipeline.createRendererList({ cullingResults, queue: 'opaque', sorting: 'material-front-to-back',
+            materialPass: 'material-attributes', excludeMeshes: excluded, castShadowsOnly: true }));
+          normalParameters.colorAttachments.push({ texture: normalTarget, loadOp: 'clear', storeOp: 'store', clearValue: { r: 0, g: 0, b: 0, a: 0 } });
+          normalParameters.depthStencilAttachment = { texture: depthTarget, depthReadOnly: true };
+          graph.addPass(normals, normalParameters);
+        }
         const m = view.viewMatrix.elements;
         light.set(m[0]! * 3 + m[4]! * 5 + m[8]! * 2,
           m[1]! * 3 + m[5]! * 5 + m[9]! * 2,
@@ -253,7 +274,7 @@ export class ToonRendering implements Hilo3d.ForwardRenderPipelineFeature {
         graph.addPass(screen, p);
         resources.replaceColor(target, 'linear');
       },
-      destroy() { shader.destroy(); },
+      destroy() { selection.clear(); shader.destroy(); },
     };
   }
 }
