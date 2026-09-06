@@ -23,7 +23,7 @@ interface LoadedPokemon {
   prepareFaceBackings(): void;
   bounds?: Hilo3d.Bounds;
   updateFaceBackings: (() => void)[];
-  skinMaterials: Map<Exclude<MaterialKey, 'original' | 'toon'>, Hilo3d.PBRMaterial[]>;
+  skinMaterials: Map<Exclude<MaterialKey, 'original' | 'toon' | 'glass'>, Hilo3d.PBRMaterial[]>;
   toon?: ToonModel;
   destroy(): void;
 }
@@ -238,29 +238,30 @@ export class PokemonStageController {
     this.material = key;
     this.options.container.dataset.material = key;
     if (this.current) this.applyMaterial(this.current, key, this.environment);
-    this.toonRendering.enabled = key === 'toon' && this.current !== null;
-    this.toonRendering.model = key === 'toon' ? this.current?.toon ?? null : null;
+    this.toonRendering.style = key === 'glass' ? 'pixel' : 'toon';
+    this.toonRendering.enabled = (key === 'toon' || key === 'glass') && this.current !== null;
+    this.toonRendering.model = this.toonRendering.enabled ? this.current?.toon ?? null : null;
     this.updateHabitatMaterial();
   }
 
   private updateHabitatMaterial(): void {
-    const toon = this.material === 'toon';
+    const toon = this.material === 'toon' || this.material === 'glass';
     if (toon && this.habitatMeshes.length) this.habitatToon ??= new ToonModel(this.habitatMeshes);
     this.toonRendering.habitat = toon ? this.habitatToon : null;
     this.lagoonWater?.setToon(toon);
   }
 
   private applyMaterial(model: LoadedPokemon, key: MaterialKey, environment: EnvironmentLighting | undefined): void {
-    if (key === 'original' || key === 'toon') {
+    if (key === 'original' || key === 'toon' || key === 'glass') {
       model.faceBackings.forEach((mesh) => { mesh.visible = false; });
       model.meshes.forEach((mesh, index) => {
         mesh.material = model.originalMaterials[index] ?? null;
       });
-      if (key === 'toon') {
+      if (key === 'toon' || key === 'glass') {
         model.toon ??= new ToonModel(model.meshes);
       }
     } else {
-      model.prepareFaceBackings();
+      if (key !== 'silver') model.prepareFaceBackings();
       let materials = model.skinMaterials.get(key);
       if (!materials) {
         materials = model.originalMaterials.map((source, index) => createMaterial(
@@ -271,6 +272,10 @@ export class PokemonStageController {
       model.meshes.forEach((mesh, index) => {
         mesh.material = materials?.[index] ?? null;
       });
+      if (key === 'silver') {
+        model.faceBackings.forEach((mesh) => { mesh.visible = false; });
+        return;
+      }
       const backingMaterial = materials.find((item) => !item.name?.startsWith('facial pigment'))
         ?? createMaterial(key, null, environment);
       model.faceBackings.forEach((mesh) => {
@@ -495,23 +500,20 @@ export class PokemonStageController {
     this.current?.node.removeFromParent();
     this.current?.destroy();
     this.current = next;
-    this.toonRendering.enabled = this.material === 'toon';
-    this.toonRendering.model = this.material === 'toon' ? next.toon ?? null : null;
+    this.toonRendering.style = this.material === 'glass' ? 'pixel' : 'toon';
+    this.toonRendering.enabled = this.material === 'toon' || this.material === 'glass';
+    this.toonRendering.model = this.toonRendering.enabled ? next.toon ?? null : null;
     this.rig.setScale(1);
     this.rig.rotationY = 0;
     this.rig.y = 0;
     next.node.addTo(this.rig);
     const bounds = next.bounds;
-    let modelScale = 1;
     if (bounds) {
       next.node.x += -bounds.x;
       next.node.y += -bounds.yMin;
       next.node.z += -bounds.z;
-      modelScale = Math.min(
-        2.5 / Math.max(0.01, bounds.height),
-        3.75 / Math.max(0.01, bounds.width),
-        3.2 / Math.max(0.01, bounds.depth),
-      );
+      // Normalize idle-pose height; wide wings and long tails must not shrink the body.
+      const modelScale = 2.5 / Math.max(0.01, bounds.height);
       this.rig.setScale(modelScale);
     } else this.rig.setScale(1);
     this.rig.rotationY = 8;

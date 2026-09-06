@@ -1,4 +1,5 @@
 import * as Hilo3d from 'hilo3d';
+import { pixelBlockSize, pixelExpandFragment, pixelFragment, pixelResolveFragment } from './pixelRendering';
 import { ToonMeshSelection } from './toonMeshSelection';
 import { createToonGeometryMaterial, getToonGeometryUnsupportedReason, type ToonGeometryMaterial } from './toonGeometry';
 
@@ -68,6 +69,8 @@ void main() {
 
 Hilo3d.registerUniformBlockBinding('AnimeInkBlock');
 const layout = Hilo3d.createStd140Layout({ sizeInk: 'vec4', lightNear: 'vec4', farDepth: 'vec4' });
+Hilo3d.registerUniformBlockBinding('PixelGridBlock');
+const pixelGridLayout = Hilo3d.createStd140Layout({ grid: 'vec4' });
 
 const fragment = `#version 300 es
 precision highp float;
@@ -173,6 +176,7 @@ export class ToonRendering implements Hilo3d.ForwardRenderPipelineFeature {
   readonly injectionPoint = 'before-post-process' as const;
   readonly requirements = { sampledSceneColor: true, sampledDepth: false };
   enabled = false;
+  style: 'toon' | 'pixel' = 'toon';
   model: ToonModel | null = null;
   habitat: ToonModel | null = null;
   pixelRatio = 1;
@@ -183,6 +187,16 @@ export class ToonRendering implements Hilo3d.ForwardRenderPipelineFeature {
     const shader = new Hilo3d.Shader({ vs: vertex, fs: fragment });
     const screen = new Hilo3d.FullscreenRenderPass({
       name: 'Anime / cel paint and contour', shader, uniformBuffers: [buffer],
+      pipelineState: { ...Hilo3d.DEFAULT_MATERIAL_PIPELINE_STATE, depthTest: false, depthWrite: false, cullMode: 'none' },
+    });
+    const pixelShader = new Hilo3d.Shader({ vs: vertex, fs: pixelFragment });
+    const pixelScreen = new Hilo3d.FullscreenRenderPass({
+      name: 'Pixel / palette, dither and block contours', shader: pixelShader, uniformBuffers: [buffer],
+      pipelineState: { ...Hilo3d.DEFAULT_MATERIAL_PIPELINE_STATE, depthTest: false, depthWrite: false, cullMode: 'none' },
+    });
+    const pixelExpandShader = new Hilo3d.Shader({ vs: vertex, fs: pixelExpandFragment });
+    const pixelExpandScreen = new Hilo3d.FullscreenRenderPass({
+      name: 'Pixel / expand filtered grid', shader: pixelExpandShader, uniformBuffers: [buffer],
       pipelineState: { ...Hilo3d.DEFAULT_MATERIAL_PIPELINE_STATE, depthTest: false, depthWrite: false, cullMode: 'none' },
     });
     const albedo: Hilo3d.ScriptableRenderPass<SceneParameters> = {
@@ -233,6 +247,12 @@ export class ToonRendering implements Hilo3d.ForwardRenderPipelineFeature {
         const pigmentTarget = graph.createTexture('anime pigment', { format: 'rgba8unorm-srgb', extent });
         const normalTarget = graph.createTexture('anime normals', { format: 'rgba8unorm', extent });
         const target = graph.createTexture('anime painted scene', { format: 'rgba16float', extent });
+        const pixelBlock = pixelBlockSize(output.width, owner.pixelRatio);
+        const paintTarget = owner.style === 'pixel' ? graph.createTexture('pixel sampled grid', {
+          format: 'rgba16float', extent: {
+            width: Math.ceil(output.width / pixelBlock), height: Math.ceil(output.height / pixelBlock),
+          },
+        }) : target;
         // Pigment draws also build the contour depth, avoiding another geometry pass.
         const depthTarget = graph.createTexture('anime depth', { format: 'depth32float', extent });
         const pigmentParameters = pipeline.acquirePassParameters(scenePool);
@@ -262,7 +282,8 @@ export class ToonRendering implements Hilo3d.ForwardRenderPipelineFeature {
         light.set(m[0]! * 3 + m[4]! * 5 + m[8]! * 2,
           m[1]! * 3 + m[5]! * 5 + m[9]! * 2,
           m[2]! * 3 + m[6]! * 5 + m[10]! * 2).normalize();
-        sizeInk.set([output.width, output.height, Math.max(1, owner.pixelRatio * 1.1), 0]);
+        sizeInk.set([output.width, output.height, owner.style === 'pixel'
+          ? pixelBlockSize(output.width, owner.pixelRatio) : Math.max(1, owner.pixelRatio * 1.1), owner.pixelRatio]);
         lightNear.set([light.x, light.y, light.z, view.near]);
         farDepth.set([view.far ?? 120, view.depthMode === 'reversed' ? 1 : 0, 0, 0]);
         buffer.set('sizeInk', sizeInk);
@@ -270,11 +291,17 @@ export class ToonRendering implements Hilo3d.ForwardRenderPipelineFeature {
         buffer.set('farDepth', farDepth);
         const p = pipeline.acquirePassParameters(screenPool);
         p.inputTextures.push(resources.color, pigmentTarget, normalTarget, depthTarget);
-        p.colorAttachments.push({ texture: target, loadOp: 'clear', storeOp: 'store', clearValue: { r: 0, g: 0, b: 0, a: 1 } });
-        graph.addPass(screen, p);
+        p.colorAttachments.push({ texture: paintTarget, loadOp: 'clear', storeOp: 'store', clearValue: { r: 0, g: 0, b: 0, a: 1 } });
+        graph.addPass(owner.style === 'pixel' ? pixelScreen : screen, p);
+        if (owner.style === 'pixel') {
+          const expand = pipeline.acquirePassParameters(screenPool);
+          expand.inputTextures.push(paintTarget);
+          expand.colorAttachments.push({ texture: target, loadOp: 'clear', storeOp: 'store', clearValue: { r: 0, g: 0, b: 0, a: 1 } });
+          graph.addPass(pixelExpandScreen, expand);
+        }
         resources.replaceColor(target, 'linear');
       },
-      destroy() { selection.clear(); shader.destroy(); },
+      destroy() { selection.clear(); shader.destroy(); pixelShader.destroy(); pixelExpandShader.destroy(); },
     };
   }
 }
@@ -308,7 +335,7 @@ void main() {
   outputColor = vec4(wideLight < low || wideLight > high ? narrow : wide, center.a);
 }`;
 
-/** Smooth the ink after tone mapping, so thin dark contours keep their intended weight. */
+/** Resolve after tone mapping: smooth toon contours, or preserve sharp pixel-art blocks. */
 export function toonAntialias(owner: ToonRendering): Hilo3d.ForwardRenderPipelineFeature {
   return {
     name: 'anime contour antialias', injectionPoint: 'before-output',
@@ -316,6 +343,12 @@ export function toonAntialias(owner: ToonRendering): Hilo3d.ForwardRenderPipelin
     create() {
       const shader = new Hilo3d.Shader({ vs: vertex, fs: antialiasFragment });
       const pass = new Hilo3d.FullscreenRenderPass({ name: 'Anime / smooth ink', shader,
+        pipelineState: { ...Hilo3d.DEFAULT_MATERIAL_PIPELINE_STATE, depthTest: false, depthWrite: false, cullMode: 'none' } });
+      const pixelShader = new Hilo3d.Shader({ vs: vertex, fs: pixelResolveFragment });
+      const pixelBuffer = new Hilo3d.UniformBuffer(pixelGridLayout);
+      const grid = new Float32Array(4);
+      const pixelPass = new Hilo3d.FullscreenRenderPass({ name: 'Pixel / nearest-neighbor resolve', shader: pixelShader,
+        uniformBuffers: [pixelBuffer],
         pipelineState: { ...Hilo3d.DEFAULT_MATERIAL_PIPELINE_STATE, depthTest: false, depthWrite: false, cullMode: 'none' } });
       const pool = new Hilo3d.RenderPassParameterPool<ScreenParameters>(
         () => ({ inputTextures: [], colorAttachments: [] }),
@@ -330,10 +363,14 @@ export function toonAntialias(owner: ToonRendering): Hilo3d.ForwardRenderPipelin
           const p = pipeline.acquirePassParameters(pool);
           p.inputTextures.push(resources.color);
           p.colorAttachments.push({ texture: target, loadOp: 'clear', storeOp: 'store', clearValue: { r: 0, g: 0, b: 0, a: 1 } });
-          pipeline.graph.addPass(pass, p);
+          if (owner.style === 'pixel') {
+            grid[0] = pixelBlockSize(pipeline.output.width, owner.pixelRatio);
+            pixelBuffer.set('grid', grid);
+          }
+          pipeline.graph.addPass(owner.style === 'pixel' ? pixelPass : pass, p);
           resources.replaceColor(target, resources.colorEncoding);
         },
-        destroy() { shader.destroy(); },
+        destroy() { shader.destroy(); pixelShader.destroy(); },
       };
     },
   };

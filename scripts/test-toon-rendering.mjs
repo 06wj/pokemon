@@ -22,7 +22,7 @@ const server = await createServer({
 });
 
 try {
-  const { ToonModel, ToonRendering } = await server.ssrLoadModule('/src/hilo/toonRendering.ts');
+  const { ToonModel, ToonRendering, toonAntialias } = await server.ssrLoadModule('/src/hilo/toonRendering.ts');
   const { ToonGeometryMaterial, createToonGeometryMaterial, getToonGeometryUnsupportedReason } =
     await server.ssrLoadModule('/src/hilo/toonGeometry.ts');
   const geometry = new Hilo3d.BoxGeometry();
@@ -226,11 +226,11 @@ try {
   const runtime = feature.create();
   let nextHandle = 100;
 
-  function record() {
+  function record(recording = runtime) {
     const frame = { passes: [], lists: new Map(), textures: new Map(), replacement: null };
     const context = {
       cullingResults: 1,
-      resources: { color: 2, replaceColor: (texture, encoding) => { frame.replacement = { texture, encoding }; } },
+      resources: { color: 2, colorEncoding: 'linear', replaceColor: (texture, encoding) => { frame.replacement = { texture, encoding }; } },
       pipeline: {
         camera, scene, output: { width: 640, height: 480 },
         // Engine-owned pool allocation is outside this CPU fixture.
@@ -272,11 +272,11 @@ try {
         },
       },
     };
-    runtime.record(context);
+    recording.record(context);
     return frame;
   }
 
-  function assertFrame(frame, expectedGroups, expectedMeshes, clearDepth = 1, mrt = true) {
+  function assertFrame(frame, expectedGroups, expectedMeshes, clearDepth = 1, mrt = true, pixelated = false) {
     const pigmentPasses = frame.passes.filter((entry) => entry.declared.some((handle) => frame.lists.get(handle).overrideMaterial));
     assert.equal(pigmentPasses.length, 1, 'All pigment groups use exactly one render pass');
     const [pigmentPass] = pigmentPasses;
@@ -325,9 +325,19 @@ try {
     const screenPass = frame.passes.find((entry) => entry.pass instanceof Hilo3d.FullscreenRenderPass);
     assert.deepEqual(screenPass.parameters.inputTextures, [2, pigmentPass.colors[0].texture, normalTexture, pigmentPass.depths[0].texture],
       'Cel shading samples the matching current color, pigment, normal and depth textures');
-    assert.deepEqual(frame.replacement, { texture: screenPass.parameters.colorAttachments[0].texture, encoding: 'linear' });
-    assert.equal(frame.passes.length, mrt ? 2 : 3, 'Geometry and paint need two MRT passes or three fallback passes, independent of material count');
-    assert.equal(frame.textures.size, 4, 'Both paths allocate only pigment, normal, contour depth and painted scene');
+    let painted = screenPass.parameters.colorAttachments[0].texture;
+    if (pixelated) {
+      const expand = frame.passes.at(-1);
+      assert.deepEqual(frame.textures.get(painted).extent, { width: 214, height: 160 },
+        'Filtering runs at logical pixel resolution, rounding up partial viewport cells');
+      assert.deepEqual(expand.parameters.inputTextures, [painted], 'Expansion reads the filtered grid, not the original scene');
+      painted = expand.parameters.colorAttachments[0].texture;
+      assert.deepEqual(frame.textures.get(painted).extent, { width: 640, height: 480 },
+        'The expanded color returns to full resolution before post processing');
+    }
+    assert.deepEqual(frame.replacement, { texture: painted, encoding: 'linear' });
+    assert.equal(frame.passes.length, (mrt ? 2 : 3) + Number(pixelated), 'Pixel filtering adds only one expansion pass');
+    assert.equal(frame.textures.size, 4 + Number(pixelated), 'Only pixel mode allocates a small filtered grid');
   }
 
   try {
@@ -339,6 +349,32 @@ try {
     feature.enabled = true;
     assertFrame(record(), [...model.surfaces, ...habitat.surfaces], [...solids, rock]);
     const geometryRevisions = [...model.surfaces, ...habitat.surfaces].map((surface) => surface.geometryMaterial.revision);
+    const toonPaint = record().passes.find((entry) => entry.pass instanceof Hilo3d.FullscreenRenderPass).pass;
+    feature.pixelRatio = 1.6;
+    feature.style = 'pixel';
+    const pixelFrame = record();
+    assertFrame(pixelFrame, [...model.surfaces, ...habitat.surfaces], [...solids, rock], 1, true, true);
+    const pixelPaint = pixelFrame.passes.find((entry) => entry.pass instanceof Hilo3d.FullscreenRenderPass).pass;
+    assert.notEqual(pixelPaint, toonPaint, 'Pixel selects its own paint shader without a second geometry pipeline');
+    assert.deepEqual([...model.surfaces, ...habitat.surfaces].map((surface) => surface.geometryMaterial.revision), geometryRevisions,
+      'Changing paint style reuses the same source bindings and geometry data');
+    feature.style = 'toon';
+    feature.pixelRatio = 1;
+    assert.equal(record().passes.find((entry) => entry.pass instanceof Hilo3d.FullscreenRenderPass).pass, toonPaint,
+      'Switching back restores the existing toon pass');
+    const resolve = toonAntialias(feature).create();
+    try {
+      const smoothFrame = record(resolve);
+      feature.style = 'pixel';
+      const nearestFrame = record(resolve);
+      assert.equal(nearestFrame.passes.length, 1, 'Pixel resolve replaces, rather than follows, the smoothing pass');
+      assert.notEqual(nearestFrame.passes[0].pass, smoothFrame.passes[0].pass, 'Pixel mode cannot accidentally run contour smoothing');
+      assert.equal(nearestFrame.lists.size, 0, 'Final pixel resolve needs no geometry draws');
+      assert.deepEqual(nearestFrame.passes[0].parameters.inputTextures, [2]);
+      assert.equal(nearestFrame.replacement.encoding, 'linear', 'Nearest sampling preserves the pipeline color encoding');
+      feature.enabled = false;
+      assert.equal(record(resolve).textures.size, 0, 'Leaving stylized modes allocates no resolve targets');
+    } finally { resolve.destroy(); feature.enabled = true; feature.style = 'toon'; }
     assertFrame(record(), [...model.surfaces, ...habitat.surfaces], [...solids, rock]);
     assert.deepEqual([...model.surfaces, ...habitat.surfaces].map((surface) => surface.geometryMaterial.revision), geometryRevisions,
       'Unchanged frames preserve every MRT material revision');

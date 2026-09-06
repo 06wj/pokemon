@@ -42,13 +42,13 @@ function inheritSurface(source: Hilo3d.MaterialInstance | null): Partial<Hilo3d.
 }
 
 const facialMasks = new WeakMap<Hilo3d.MaterialTexture, Hilo3d.Texture | null>();
-const foamFilms = new WeakMap<Hilo3d.MaterialTexture, Hilo3d.Texture>();
-
-/** A gently varying film thickness gives soap surfaces several interference colors at once. */
-function foamFilm(source: Hilo3d.MaterialInstance | null): Hilo3d.Texture | null {
+const bubbleFilms = new WeakMap<Hilo3d.MaterialTexture, Hilo3d.Texture>();
+const bubbleEyeTransmissions = new WeakMap<Hilo3d.MaterialTexture, Hilo3d.Texture>();
+/** Broad optical thickness bands avoid the crumpled-film look of tightly spaced rainbow stripes. */
+function bubbleFilm(source: Hilo3d.MaterialInstance | null): Hilo3d.Texture | null {
   const owner = source?.getTextureSlot('baseColor')?.texture ?? source?.getTextureSlot('normal')?.texture;
   if (!owner) return null;
-  const existing = foamFilms.get(owner);
+  const existing = bubbleFilms.get(owner);
   if (existing) return existing;
   const size = 128;
   const pixels = new Uint8Array(size * size * 4);
@@ -56,19 +56,19 @@ function foamFilm(source: Hilo3d.MaterialInstance | null): Hilo3d.Texture | null
     for (let x = 0; x < size; x++) {
       const u = x / size * Math.PI * 2;
       const v = y / size * Math.PI * 2;
-      const value = Math.round(128 + 65 * Math.sin(u + 0.8 * Math.sin(v))
-        + 37 * Math.cos(v * 2 - u) + 16 * Math.sin(u * 3 + v * 2));
+      const value = Math.round(128 + 70 * Math.sin(u + 0.35 * Math.sin(v))
+        + 35 * Math.cos(v - u));
       const offset = (y * size + x) * 4;
       pixels[offset] = pixels[offset + 1] = pixels[offset + 2] = value;
       pixels[offset + 3] = 255;
     }
   }
   const texture = new Hilo3d.Texture({
-    name: 'soap film / varying optical thickness', width: size, height: size,
+    name: 'soap bubble / broad optical thickness bands', width: size, height: size,
     image: pixels, flipY: false, minFilter: Hilo3d.constants.LINEAR,
     wrapS: Hilo3d.constants.REPEAT, wrapT: Hilo3d.constants.REPEAT,
   });
-  foamFilms.set(owner, texture);
+  bubbleFilms.set(owner, texture);
   owner.on('destroy', () => texture.destroy());
   return texture;
 }
@@ -153,13 +153,71 @@ export function needsFacialBacking(source: Hilo3d.MaterialInstance | null, meshN
   return isFacialMaterial(source, meshName) && facialMask(source) !== null;
 }
 
+/** The eye stays a colored drawing on the film: whites transmit much more than dark/color pigment. */
+function bubbleEyeTransmission(source: Hilo3d.MaterialInstance | null): Hilo3d.MaterialTextureSlotInput | null {
+  const slot = source?.getTextureSlot('baseColor');
+  if (!slot || typeof document === 'undefined') return null;
+  const owner = slot.texture;
+  let texture = bubbleEyeTransmissions.get(owner);
+  if (!texture) {
+    const canvas = document.createElement('canvas');
+    canvas.width = owner.width; canvas.height = owner.height;
+    const context = canvas.getContext('2d', { willReadFrequently: true });
+    if (!context || !canvas.width || !canvas.height || !owner.image || ArrayBuffer.isView(owner.image)) return null;
+    try {
+      if (owner.image instanceof ImageData) context.putImageData(owner.image, 0, 0);
+      else context.drawImage(owner.image as CanvasImageSource, 0, 0);
+      const pixels = context.getImageData(0, 0, canvas.width, canvas.height);
+      for (let i = 0; i < pixels.data.length; i += 4) {
+        // The minimum channel separates neutral sclera/highlights from saturated irises.
+        const neutral = Math.min(pixels.data[i]!, pixels.data[i + 1]!, pixels.data[i + 2]!) / 255;
+        const white = Math.max(0, Math.min(1, (neutral - 0.45) / 0.5));
+        const smoothWhite = white * white * (3 - 2 * white);
+        const transmission = Math.round(255 * (0.2 + 0.5 * smoothWhite));
+        pixels.data[i] = pixels.data[i + 1] = pixels.data[i + 2] = transmission;
+        pixels.data[i + 3] = 255;
+      }
+      context.putImageData(pixels, 0, 0);
+      texture = new Hilo3d.Texture({
+        name: `bubble eye / pigment transmission / ${owner.name}`, image: canvas,
+        width: owner.width, height: owner.height,
+        minFilter: owner.minFilter, magFilter: owner.magFilter,
+        wrapS: owner.wrapS, wrapT: owner.wrapT, flipY: owner.flipY, uv: owner.uv,
+        premultiplyAlpha: false,
+      });
+      bubbleEyeTransmissions.set(owner, texture);
+      const ownedTexture = texture;
+      owner.on('destroy', () => ownedTexture.destroy());
+    } catch { return null; }
+  }
+  return { ...slot, texture, encoding: 'data', channels: ['r', 'r', 'r', 'r'] };
+}
+
+/** Shared by the body and painted eyes so their film highlights have the same optical response. */
+function bubbleSurface(source: Hilo3d.MaterialInstance | null): Hilo3d.PBRMaterialParameters {
+  return {
+    baseColor: color(0xffffff), metallic: 0, roughness: 0.09,
+    normalMap: null, parallaxMap: null,
+    transmissionFactor: 0.96, thicknessFactor: 0.025,
+    attenuationColor: color(0xffffff), attenuationDistance: Infinity, ior: 1.33,
+    specularEnvIntensity: 0.85,
+    clearcoatFactor: 0,
+    iridescenceFactor: 1, iridescenceIor: 1.55,
+    iridescenceThicknessMap: bubbleFilm(source),
+    iridescenceThicknessMinimum: 200, iridescenceThicknessMaximum: 580,
+    temporalReactiveFactor: 1,
+  };
+}
+
 function createFaceMaterial(
   source: Hilo3d.MaterialInstance | null,
   environment: EnvironmentLighting | undefined,
   meshName: string,
+  bubbleEye = false,
 ): Hilo3d.PBRMaterial {
   const mask = facialMask(source);
   const baseSlot = source?.getTextureSlot('baseColor');
+  const eyeTransmission = bubbleEye ? bubbleEyeTransmission(source) : null;
   return new Hilo3d.PBRMaterial({
     ...inheritSurface(source),
     ...environment?.material,
@@ -171,6 +229,11 @@ function createFaceMaterial(
       baseColorMap: { ...baseSlot, texture: mask },
       opacityMap: null,
     } as Hilo3d.PBRMaterialParameters : {}),
+    ...(bubbleEye ? {
+      ...bubbleSurface(source),
+      transmissionMap: eyeTransmission,
+      transmissionFactor: eyeTransmission ? 1 : 0.35,
+    } : {}),
   });
 }
 
@@ -179,6 +242,7 @@ export function createOriginalMaterial(
   source: Hilo3d.MaterialInstance | null,
   environment?: EnvironmentLighting,
   meshName = '',
+  overrides: Hilo3d.PBRMaterialParameters = {},
 ): Hilo3d.PBRMaterial {
   const original = source instanceof Hilo3d.PBRMaterial ? source : null;
   const parameters: Hilo3d.PBRMaterialParameters = {
@@ -234,18 +298,30 @@ export function createOriginalMaterial(
     isSpecularEnvMapIncludeMipmaps: original?.specularEnvMap
       ? original.isSpecularEnvMapIncludeMipmaps : environment?.material.isSpecularEnvMapIncludeMipmaps,
   };
-  return new Hilo3d.PBRMaterial(parameters);
+  return new Hilo3d.PBRMaterial({ ...parameters, ...overrides });
 }
 
 export function createMaterial(
-  key: Exclude<MaterialKey, 'original' | 'toon'>,
+  key: Exclude<MaterialKey, 'original' | 'toon' | 'glass'>,
   source: Hilo3d.MaterialInstance | null,
   environment?: EnvironmentLighting,
   meshName = '',
 ): Hilo3d.PBRMaterial {
-  // Eyes and mouths stay readable, with the original alpha masks and texture transforms.
-  // Removing cartoon body maps makes every finish read as a material instead of a tint filter.
-  if (isFacialMaterial(source, meshName)) return createFaceMaterial(source, environment, meshName);
+  // Keep the legacy key so existing links select the new glazed finish.
+  if (key === 'silver') {
+    if (/fire|flame/i.test(surfaceName(source, meshName))) return createOriginalMaterial(source, environment, meshName);
+    return createOriginalMaterial(source, environment, meshName, {
+      name: `crystal glaze / ${surfaceName(source, meshName)}`,
+      unlit: false,
+      clearcoatFactor: 1, clearcoatRoughnessFactor: 0.035,
+      clearcoatMap: null, clearcoatRoughnessMap: null, clearcoatNormalMap: null,
+    });
+  }
+  // Replacement finishes isolate eye/mouth pigment from the body color.
+  if (isFacialMaterial(source, meshName)) {
+    return createFaceMaterial(source, environment, meshName,
+      key === 'iridescent' && /eye|iris|pupil/i.test(surfaceName(source, meshName)));
+  }
   // Animated flame geometry belongs to the authored creature and keeps its luminous pigment.
   if (/fire|flame/i.test(surfaceName(source, meshName))) return createOriginalMaterial(source, environment, meshName);
   const common: Hilo3d.PBRMaterialParameters = {
@@ -264,15 +340,6 @@ export function createMaterial(
     metallic: 0,
   };
   switch (key) {
-    case 'glass':
-      return new Hilo3d.PBRMaterial({
-        ...common,
-        baseColor: color(0xf4fcff), roughness: 0.07,
-        transmissionFactor: 0.97, thicknessFactor: 0.85,
-        attenuationColor: color(0xd5edf2), attenuationDistance: 3.5, ior: 1.52,
-        clearcoatFactor: 0.1, clearcoatRoughnessFactor: 0.06,
-        temporalReactiveFactor: 1,
-      });
     case 'gold':
       return new Hilo3d.PBRMaterial({
         ...common,
@@ -280,25 +347,12 @@ export function createMaterial(
         anisotropyStrength: 0.38, anisotropyRotation: 0.45,
         specularEnvIntensity: 0.16,
       });
-    case 'silver':
-      return new Hilo3d.PBRMaterial({
-        ...common,
-        baseColor: color(0xc9dcf3), metallic: 1, roughness: 0.36,
-        anisotropyStrength: 0.22, anisotropyRotation: -0.3,
-        specularEnvIntensity: 0.2,
-      });
     case 'iridescent':
       return new Hilo3d.PBRMaterial({
         ...common,
-        baseColor: color(0xf1faff), metallic: 0, roughness: 0.18,
-        transmissionFactor: 0.9, thicknessFactor: 0.12,
-        attenuationColor: color(0xeef8ff), attenuationDistance: 3, ior: 1.33,
-        anisotropyStrength: 0.78, anisotropyRotation: 0.8,
-        clearcoatFactor: 0,
-        iridescenceFactor: 1, iridescenceIor: 1.5,
-        iridescenceThicknessMap: foamFilm(source),
-        iridescenceThicknessMinimum: 120, iridescenceThicknessMaximum: 720,
-        temporalReactiveFactor: 1,
+        // An almost weightless shell: little refraction, no metal or skin microrelief.
+        // Low surface IOR keeps the center clear; interference brightens grazing angles.
+        ...bubbleSurface(source),
       });
   }
 }

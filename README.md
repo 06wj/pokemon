@@ -9,7 +9,7 @@ A browser-based 3D Pokémon viewer built with [Hilo3D](https://hilo3d.js.org), R
 ![Full application interface showing Venusaur with its original material](docs/screenshots/venusaur-original.jpg)
 
 - 151 regular-form models and 869 animation clips, loaded on demand as GLB assets.
-- Six material presets: Original, Anime (toon), Glass, Gold, Silver and Bubble (iridescent).
+- Six material presets: Original, Anime (toon), Pixel, Gold, Glaze (original surfaces with clearcoat) and Bubble (iridescent). Pixel uses a fixed pixel grid, four lighting levels, ordered dithering and a limited color palette. Pixel and Glaze retain the `glass` and `silver` URL keys for existing links.
 - Six habitat scenes selected by Pokémon type, with environment lighting and particle effects.
 - WebGPU and WebGL2 rendering, with a manual backend switch.
 - Responsive controls for model selection, animation playback, orbit, zoom and fullscreen.
@@ -22,7 +22,7 @@ Venusaur rendered with three presets. These WebGPU captures use the same camera 
 | --- | --- | --- |
 | ![Venusaur with toon shading](docs/screenshots/venusaur-toon-detail.jpg) | ![Venusaur with gold material](docs/screenshots/venusaur-gold-detail.jpg) | ![Venusaur with iridescent material](docs/screenshots/venusaur-iridescent-detail.jpg) |
 
-Toon mode also applies cel shading and outlines to the habitat. Material changes preserve skeletal animation.
+Toon and Pixel also stylize the habitat. Both reuse the original pigment/normal/depth pass. Pixel filters nine depth-aware samples per cell on a small render target, with softened lighting thresholds and reduced ordered dithering to limit shimmer. It expands that grid with nearest-neighbor sampling and resolves it again after tone mapping so block edges stay sharp. Desktop blocks are about 4 CSS pixels; narrow viewports keep 2-pixel blocks. Models are scaled to the same idle-pose height, without shrinking wide wings or long tails to fit a width/depth limit. The DOM interface remains at full resolution. Material changes preserve skeletal animation and expression atlases.
 
 ## Controls and URL parameters
 
