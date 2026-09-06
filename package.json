@@ -9,6 +9,7 @@
     "build": "npm run typecheck && vite build",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
+    "test:ecology": "node scripts/test-ecology.mjs && node scripts/test-ecology-lifecycle.mjs && node scripts/test-ecology-toon.mjs && node scripts/test-ecology-picking.mjs",
     "assets:optimize": "python3 scripts/optimize-assets.py",
     "models:validate": "node scripts/test-animated-models.mjs",
     "test:toon": "node scripts/test-toon-mesh-selection.mjs && node scripts/test-toon-rendering.mjs"

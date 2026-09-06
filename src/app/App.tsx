@@ -8,6 +8,7 @@ import { pokemon } from '../content/pokemon';
 import { getHabitat } from '../content/habitats';
 import { typeThemes } from '../content/typeThemes';
 import type { PokemonStageController } from '../hilo/PokemonStageController';
+import { EcologyScene } from '../components/EcologyScene';
 
 const assetBase = import.meta.env.BASE_URL;
 
@@ -17,6 +18,20 @@ function initialIndex(): number {
 }
 
 export function App() {
+  const [scene, setScene] = useState(() => new URL(location.href).searchParams.get('scene') === 'ecology' ? 'ecology' : 'gallery');
+  const switchScene = (next: string): void => {
+    const url = new URL(location.href);
+    if (next === 'ecology') url.searchParams.set('scene', 'ecology');
+    else url.searchParams.delete('scene');
+    history.replaceState(null, '', url);
+    setScene(next);
+  };
+  return scene === 'ecology'
+    ? <EcologyScene assetBase={assetBase} onBack={() => switchScene('gallery')} />
+    : <Gallery onEcology={() => switchScene('ecology')} />;
+}
+
+function Gallery({ onEcology }: { onEcology(): void }) {
   const sceneRef = useRef<HTMLDivElement>(null);
   const controllerRef = useRef<PokemonStageController | null>(null);
   const [selectedIndex, setSelectedIndex] = useState(initialIndex);
@@ -121,6 +136,7 @@ export function App() {
   return (
     <div className={`app-root type-${primaryType}`} data-renderer={backend}>
       <Header onHome={() => setSelectedIndex(0)} />
+      <button className="ecology-entry" onClick={onEcology}><span>✧</span> 河谷生态园 <small>NEW</small><span>↗</span></button>
       <div className="gallery-layout">
         <DexPanel assetBase={assetBase} entries={pokemon} selectedIndex={selectedIndex} onSelect={setSelectedIndex} />
         <main className="exhibition" aria-label="宝可梦生态展示">
