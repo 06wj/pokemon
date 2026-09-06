@@ -1,7 +1,6 @@
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import * as Hilo3d from 'hilo3d';
-import { createPoseBaker } from '../src/hilo/bakePose.ts';
 
 const root = new URL('../', import.meta.url);
 const manifest = JSON.parse(await readFile(new URL('src/content/animatedModels.json', root), 'utf8'));
@@ -16,8 +15,6 @@ const poseTolerance = 1e-5;
 let failures = 0;
 let totalVertices = 0;
 let totalClips = 0;
-let totalSkinMilliseconds = 0;
-let totalFrames = 0;
 
 function assertClose(actual, expected, message, tolerance = poseTolerance) {
   assert.equal(actual.length, expected.length, `${message}: component count`);
@@ -139,58 +136,39 @@ for (const id of ids) {
     playClip(asset.idleAnimation);
     model.node.updateMatrixWorld(true);
     const sourceGeometry = model.meshes.map((mesh) => ({ geometry: mesh.geometry, stream: mesh.geometry.vertices.data, vertices: mesh.geometry.vertices.data.slice() }));
-    const bakers = model.meshes.map((mesh) => createPoseBaker(mesh));
-    const streams = bakers.map(({ mesh }) => ({
-      positions: mesh.geometry.vertices.data,
-      normals: mesh.geometry.normals?.data,
-      tangents: mesh.geometry.uvs ? mesh.geometry.tangents?.data : undefined,
-    }));
-    bakers.forEach(({ mesh }, index) => {
-      if (model.meshes[index] instanceof Hilo3d.SkinnedMesh) {
-        assert.notEqual(mesh.geometry, sourceGeometry[index].geometry, 'CPU skinning owns separate geometry');
-        assert.notEqual(mesh.geometry.vertices.data, sourceGeometry[index].stream, 'CPU skinning owns separate vertex storage');
-      }
-    });
-    let skinMilliseconds = 0;
-    let frames = 0;
     const updatePose = () => {
-      const start = performance.now();
-      for (const baker of bakers) baker.syncTransform();
       model.node.updateMatrixWorld(true);
-      for (const baker of bakers) baker.update();
-      skinMilliseconds += performance.now() - start;
-      frames++;
     };
     const snapshot = () => ({
-      positions: streams.map((stream) => stream.positions.slice()),
-      transforms: bakers.map(({ mesh }) => mesh.worldMatrix.elements.slice()),
+      palettes: model.meshes.map((mesh) => (
+        mesh instanceof Hilo3d.SkinnedMesh ? mesh.getJointMat().slice() : mesh.worldMatrix.elements.slice()
+      )),
+      transforms: model.meshes.map((mesh) => mesh.worldMatrix.elements.slice()),
       joints: restPose.map(({ node }) => node.matrix.elements.slice()),
     });
     const assertPoseMatches = (expected, message) => {
-      bakers.forEach(({ mesh }, index) => {
-        assertClose(mesh.geometry.vertices.data, expected.positions[index], `${message}: ${mesh.name} vertices`);
+      model.meshes.forEach((mesh, index) => {
+        const palette = mesh instanceof Hilo3d.SkinnedMesh ? mesh.getJointMat() : mesh.worldMatrix.elements;
+        assertClose(palette, expected.palettes[index], `${message}: ${mesh.name} GPU palette`);
         assertClose(mesh.worldMatrix.elements, expected.transforms[index], `${message}: ${mesh.name} transform`);
       });
       restPose.forEach(({ node }, index) => assertClose(node.matrix.elements, expected.joints[index], `${message}: ${node.name} local pose`));
     };
     const checkPose = (reference, name) => {
       let maxChange = 0;
-      bakers.forEach(({ mesh }, index) => {
-        const positions = mesh.geometry.vertices.data;
-        assert.equal(positions, streams[index].positions, `${name}: animation reuses vertex storage`);
-        assert.equal(mesh.geometry.normals?.data, streams[index].normals, `${name}: animation reuses normal storage`);
-        assert.equal(mesh.geometry.uvs ? mesh.geometry.tangents?.data : undefined, streams[index].tangents, `${name}: animation reuses tangent storage`);
-        for (let component = 0; component < positions.length; component++) {
-          const value = positions[component];
-          assert.ok(Number.isFinite(value), `${name}: non-finite animated vertex in ${mesh.name}`);
-          maxChange = Math.max(maxChange, Math.abs(value - reference.positions[index][component]));
+      model.meshes.forEach((mesh, index) => {
+        const palette = mesh instanceof Hilo3d.SkinnedMesh ? mesh.getJointMat() : mesh.worldMatrix.elements;
+        for (let component = 0; component < palette.length; component++) {
+          const value = palette[component];
+          assert.ok(Number.isFinite(value), `${name}: non-finite GPU palette in ${mesh.name}`);
+          maxChange = Math.max(maxChange, Math.abs(value - reference.palettes[index][component]));
         }
         for (let component = 0; component < 16; component++) {
           const value = mesh.worldMatrix.elements[component];
           assert.ok(Number.isFinite(value), `${name}: finite animated world matrix`);
           maxChange = Math.max(maxChange, Math.abs(value - reference.transforms[index][component]));
         }
-        for (const attribute of [mesh.geometry.normals, mesh.geometry.uvs ? mesh.geometry.tangents : null, mesh.geometry.uvs1 ? mesh.geometry.tangents1 : null]) {
+        for (const attribute of [mesh.geometry.vertices, mesh.geometry.normals, mesh.geometry.uvs ? mesh.geometry.tangents : null, mesh.geometry.uvs1 ? mesh.geometry.tangents1 : null]) {
           assert.ok(!attribute || attribute.data.every(Number.isFinite), `${name}: finite animated normals/tangents`);
         }
       });
@@ -247,12 +225,10 @@ for (const id of ids) {
       assert.equal(mesh.geometry.vertices.data, sourceGeometry[index].stream, 'Source vertex storage is preserved');
       assert.deepEqual(mesh.geometry.vertices.data, sourceGeometry[index].vertices, 'Source vertices stay unchanged');
     });
-    const vertices = bakers.reduce((sum, { mesh }) => sum + mesh.geometry.vertices.count, 0);
+    const vertices = model.meshes.reduce((sum, mesh) => sum + mesh.geometry.vertices.count, 0);
     totalVertices += vertices;
     totalClips += clipReports.length;
-    totalSkinMilliseconds += skinMilliseconds;
-    totalFrames += frames;
-    console.log(`${id}: ${vertices} vertices, ${bakers.length} meshes, ${clipReports.join(', ')}, CPU ${(skinMilliseconds / frames).toFixed(2)}ms/frame`);
+    console.log(`${id}: ${vertices} vertices, ${model.meshes.length} GPU-skinned meshes, ${clipReports.join(', ')}`);
   } catch (error) {
     failures++;
     console.error(`${id}: ${error instanceof Error ? error.stack : String(error)}`);
@@ -262,5 +238,5 @@ for (const id of ids) {
     // source meshes are garbage-collected once the animation leaves Hilo3D's global ticker.
   }
 }
-console.log(`${ids.length - failures}/${ids.length} animated models passed; ${totalClips} clips, ${totalVertices} vertices, mean CPU update ${(totalSkinMilliseconds / Math.max(1, totalFrames)).toFixed(2)}ms/frame. Texture rendering still requires browser verification.`);
+console.log(`${ids.length - failures}/${ids.length} animated models passed; ${totalClips} clips, ${totalVertices} vertices. GPU rendering still requires browser verification.`);
 if (failures) process.exitCode = 1;

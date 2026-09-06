@@ -10,7 +10,7 @@
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "assets:optimize": "python3 scripts/optimize-assets.py",
-    "models:validate": "node scripts/test-pose-baker.mjs && node scripts/test-animated-models.mjs"
+    "models:validate": "node scripts/test-animated-models.mjs"
   },
   "repository": {
     "type": "git",
@@ -38,7 +38,8 @@
     "vite": "8.2.2"
   },
   "dependencies": {
-    "hilo3d": "2.0.0-alpha.4",
+    "@hilo/addon-particle": "2.0.0-alpha.5",
+    "hilo3d": "2.0.0-alpha.5",
     "react": "19.2.8",
     "react-dom": "19.2.8"
   }

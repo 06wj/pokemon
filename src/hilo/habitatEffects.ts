@@ -1,4 +1,14 @@
 import * as Hilo3d from 'hilo3d';
+import {
+  ParticleCurve,
+  ParticleSystemDefinition,
+  type ParticleColor,
+  type ParticleEmitterDefinitionInput,
+  type ParticleModule,
+  type ParticleStageRuntime,
+  type ParticleSystem,
+  type ParticleVector3,
+} from '@hilo/addon-particle';
 import type { HabitatKey } from '../content/habitats';
 
 type SpriteKind = 'glow' | 'leaf' | 'bubble' | 'glint' | 'ember' | 'ash'
@@ -9,14 +19,14 @@ interface Layer {
   sprite: SpriteKind;
   capacity: number;
   rate: number;
-  color: Hilo3d.ParticleColor;
+  color: ParticleColor;
   size: Range;
   lifetime: Range;
-  position: Hilo3d.ParticleVector3;
-  spread: Hilo3d.ParticleVector3;
-  direction: Hilo3d.ParticleVector3;
+  position: ParticleVector3;
+  spread: ParticleVector3;
+  direction: ParticleVector3;
   speed: Range;
-  drift: Hilo3d.ParticleVector3;
+  drift: ParticleVector3;
   rotation?: Range;
   spin?: number;
   opaque?: boolean;
@@ -218,33 +228,32 @@ function paintSprite(kind: SpriteKind): HTMLCanvasElement {
 /** Owns one active, bounded effect and a reusable bank of procedural sprite textures. */
 export class HabitatEffects {
   private readonly textures = new Map<SpriteKind, Hilo3d.Texture>();
-  private readonly definitions = new Map<HabitatKey, Hilo3d.ParticleSystemDefinition>();
-  private active: Hilo3d.ParticleSystem | null = null;
+  private readonly definitions = new Map<HabitatKey, ParticleSystemDefinition>();
+  private active: ParticleSystem | null = null;
   private key: HabitatKey | null = null;
   private disposed = false;
 
-  constructor(private readonly parent: Hilo3d.Node, private readonly renderer: Hilo3d.Renderer) {}
+  constructor(private readonly parent: Hilo3d.Node, private readonly particles: ParticleStageRuntime) {}
 
   setHabitat(key: HabitatKey): void {
     if (this.disposed || key === this.key) return;
     let definition = this.definitions.get(key);
     if (!definition) {
-      definition = Hilo3d.ParticleSystemDefinition.create({
+      definition = ParticleSystemDefinition.create({
         emitters: layers[key].map((layer, index) => this.createLayer(layer, index)),
       });
       this.definitions.set(key, definition);
     }
-    this.active?.removeFromParent();
     // Sprite textures belong to this bank and survive scene changes.
-    this.active?.destroy(this.renderer, false);
-    this.active = new Hilo3d.ParticleSystem({
+    if (this.active) this.particles.release(this.active, false);
+    this.active = this.particles.createSystem({
       name: `habitat-effects-${key}`, definition, autoPlay: true,
       seed: [...key].reduce((total, letter) => total + letter.charCodeAt(0), 0),
-    }).addTo(this.parent);
+    }, this.parent);
     this.key = key;
   }
 
-  private createLayer(layer: Layer, index: number): Hilo3d.ParticleEmitterDefinitionInput {
+  private createLayer(layer: Layer, index: number): ParticleEmitterDefinitionInput {
     const waterLayer = layer.sprite === 'bubble' || layer.sprite === 'glint';
     const rotation: Range = layer.rotation ?? (waterLayer ? [-Math.PI, Math.PI] : [-0.2, 0.2]);
     let texture = this.textures.get(layer.sprite);
@@ -252,11 +261,11 @@ export class HabitatEffects {
       texture = new Hilo3d.Texture({ image: paintSprite(layer.sprite), flipY: false, premultiplyAlpha: false });
       this.textures.set(layer.sprite, texture);
     }
-    const fade = new Hilo3d.ParticleCurve([
+    const fade = new ParticleCurve([
       { time: 0, value: 0 }, { time: 0.12, value: 1 },
       { time: 0.65, value: 0.8 }, { time: 1, value: 0 },
     ], { interpolation: 'smooth' });
-    const modules: Hilo3d.ParticleModule[] = [
+    const modules: ParticleModule[] = [
       { type: 'alpha-over-lifetime', curve: fade },
       {
         type: 'noise', mode: 'position-offset', field: 'curl', strength: layer.drift,
@@ -265,12 +274,12 @@ export class HabitatEffects {
       },
     ];
     if (layer.spin) modules.push({
-      type: 'rotation-over-lifetime', curve: new Hilo3d.ParticleCurve([
+      type: 'rotation-over-lifetime', curve: new ParticleCurve([
         { time: 0, value: 0 }, { time: 1, value: layer.spin },
       ]),
     });
     if (layer.sprite === 'glow' || layer.sprite === 'star' || layer.sprite === 'glint') modules.push({
-      type: 'size-over-lifetime', curve: new Hilo3d.ParticleCurve([
+      type: 'size-over-lifetime', curve: new ParticleCurve([
         { time: 0, value: 0.55 }, { time: 0.4, value: 1 },
         { time: 0.7, value: 0.65 }, { time: 1, value: 0.35 },
       ], { interpolation: 'smooth' }),
@@ -300,8 +309,7 @@ export class HabitatEffects {
   dispose(): void {
     if (this.disposed) return;
     this.disposed = true;
-    this.active?.removeFromParent();
-    this.active?.destroy(this.renderer, false);
+    if (this.active) this.particles.release(this.active, false);
     this.active = null;
     for (const texture of this.textures.values()) texture.destroy();
     this.textures.clear();

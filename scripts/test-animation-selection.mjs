@@ -2,16 +2,31 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { createServer } from 'vite';
 import * as Hilo3d from 'hilo3d';
-import { createPoseBaker } from '../src/hilo/bakePose.ts';
 
-// Exercise the actual controller and GLB animation/CPU skinning code without a GPU.
+// Exercise the actual controller and GLB animation state without a GPU.
 // Vite resolves the application's TypeScript imports; the renderer owns no resources here.
 const server = await createServer({
   configFile: false, server: { middlewareMode: true, ws: false, watch: null }, appType: 'custom',
 });
 const { PokemonStageController } = await server.ssrLoadModule('/src/hilo/PokemonStageController.ts');
 const { ToonModel } = await server.ssrLoadModule('/src/hilo/toonRendering.ts');
+const { getPoseBounds } = await server.ssrLoadModule('/src/hilo/poseBounds.ts');
 const manifest = JSON.parse(await readFile(new URL('../src/content/animatedModels.json', import.meta.url), 'utf8'));
+// Idle-pose extents captured with the pre-upgrade pose baker (8e01bc7).
+// Bind-pose geometry bounds must never replace these when framing GPU-skinned models.
+const idleExtents = {
+  '001': [-0.27681974, -0.00047792, -0.37900862, 0.28330085, 0.70879155, 0.47972327],
+  '003': [-1.23013210, -0.01024606, -1.20529485, 1.21295989, 1.73659086, 1.31263983],
+  '006': [-1.07574797, -0.06543986, -2.10420609, 1.24017847, 1.68064952, 0.89614433],
+  '009': [-0.65622175, -0.05306508, -0.89875519, 0.69260198, 1.34143543, 0.72352958],
+  '038': [-0.73527986, -0.00078385, -1.05468547, 0.70284402, 1.22977865, 0.65995824],
+};
+function assertIdleBounds(bounds, id) {
+  ['xMin', 'yMin', 'zMin', 'xMax', 'yMax', 'zMax'].forEach((key, index) => {
+    assert.ok(Math.abs(bounds[key] - idleExtents[id][index]) < 1e-5,
+      `${id}: ${key} frames the animated silhouette, got ${bounds[key]}`);
+  });
+}
 const files = new Map();
 async function modelFor(id) {
   let file = files.get(id);
@@ -78,12 +93,9 @@ async function complete(controller, id) {
   await loading.promise;
 }
 function pose(meshes) {
-  return meshes.map((mesh) => {
-    const baker = createPoseBaker(mesh, false);
-    const positions = [...baker.mesh.geometry.vertices.data];
-    if (baker.mesh !== mesh) baker.mesh.destroy({ resourceManager: { destroyMesh() {} } });
-    return positions;
-  });
+  return meshes.map((mesh) => [...(
+    mesh instanceof Hilo3d.SkinnedMesh ? mesh.getJointMat() : mesh.worldMatrix.elements
+  )]);
 }
 function closePose(actual, expected) {
   assert.equal(actual.length, expected.length);
@@ -94,6 +106,21 @@ function closePose(actual, expected) {
 }
 
 try {
+  for (const id of Object.keys(idleExtents)) {
+    const model = await modelFor(id);
+    try {
+      model.anim.play('idle'); model.anim.stop(); model.anim.resume(); model.anim.updateAnimStates();
+      model.node.updateMatrixWorld(true);
+      const geometry = model.meshes.map((mesh) => mesh.geometry);
+      const vertices = geometry.map((item) => item.vertices.data.slice());
+      assertIdleBounds(getPoseBounds(model.meshes), id);
+      model.meshes.forEach((mesh, index) => {
+        assert.equal(mesh.geometry, geometry[index], 'Measuring the pose keeps the GPU geometry');
+        assert.deepEqual(mesh.geometry.vertices.data, vertices[index], 'Measuring the pose does not bake into source vertices');
+      });
+    } finally { model.anim.stop(); }
+  }
+  assert.equal(getPoseBounds([]), undefined, 'An empty model has no framing bounds');
   const sharedTexture = new Hilo3d.Texture({ width: 1, height: 1, image: new Uint8Array([120, 200, 160, 255]) });
   const shiftedUV = new Hilo3d.Matrix3();
   shiftedUV.elements[6] = 0.25;
@@ -113,13 +140,9 @@ try {
     const { controller, events, loading } = fixture(backend);
     for (const [id, maxJoints] of [['003', 33], ['038', 28]]) {
       await complete(controller, id);
-      if (backend === 'webgpu') {
-        assert.equal(controller.current.poseBakers.length, 0, `${id}: compact palettes use GPU skinning`);
-        assert.ok(controller.current.meshes.every((mesh) => mesh instanceof Hilo3d.SkinnedMesh));
-        assert.equal(Math.max(...controller.current.meshes.map((mesh) => mesh.skeleton.jointCount)), maxJoints);
-      } else {
-        assert.ok(controller.current.poseBakers.length > 0, `${id}: WebGL2 retains its compatibility path`);
-      }
+      assertIdleBounds(controller.current.bounds, id);
+      assert.ok(controller.current.meshes.every((mesh) => mesh instanceof Hilo3d.SkinnedMesh), `${id}: ${backend} keeps GPU-skinned meshes`);
+      assert.equal(Math.max(...controller.current.meshes.map((mesh) => mesh.skeleton.jointCount)), maxJoints);
       controller.setAnimation('attack');
       const expected = await modelFor(id);
       expected.anim.play('attack'); expected.anim.stop(); expected.anim.resume(); expected.anim.updateAnimStates();
@@ -128,6 +151,7 @@ try {
       expected.anim.stop();
     }
     await complete(controller, '001');
+    assertIdleBounds(controller.current.bounds, '001');
     controller.setAnimation('sleep');
     await complete(controller, '002');
     assert.equal(controller.current.animationName, 'sleep', 'A supported action survives a species change');

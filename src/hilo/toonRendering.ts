@@ -83,7 +83,8 @@ ivec2 pixel(ivec2 p) { return clamp(p, ivec2(0), ivec2(sizeInk.xy) - 1); }
 vec4 pigment(ivec2 p) { return texelFetch(pigmentColor, pixel(p), 0); }
 vec4 surface(ivec2 p) { return texelFetch(surfaceData, pixel(p), 0); }
 vec3 normalAt(ivec2 p) {
-  vec2 xy = surface(p).xy;
+  // Hilo3D alpha.5 stores octahedral normals in unsigned normalized RG channels.
+  vec2 xy = surface(p).xy * 2.0 - 1.0;
   vec3 n = vec3(xy, 1.0 - abs(xy.x) - abs(xy.y));
   float fold = clamp(-n.z, 0.0, 1.0);
   n.xy += mix(vec2(fold), vec2(-fold), step(vec2(0.0), n.xy));
@@ -136,7 +137,8 @@ void main() {
     float illumination = luma(original.rgb) / max(luma(base.rgb), 0.018);
     // Keep cast shadows and authored material response without posterizing texture colors.
     cel *= mix(0.72, 1.0, smoothstep(0.24, 0.85, illumination));
-    float metallic = floor(surface(p).a * 0.5) / 255.0;
+    // Alpha packs a receiver flag in bit 0 and seven metallic bits above it.
+    float metallic = floor(floor(surface(p).a * 255.0 + 0.5) * 0.5) / 127.0;
     color = mix(cel, original.rgb, mix(0.08, 0.5, metallic));
     color += min(max(original.rgb - base.rgb * 2.5, vec3(0.0)), base.rgb * 0.08);
   }
@@ -213,7 +215,7 @@ export class ToonRendering implements Hilo3d.ForwardRenderPipelineFeature {
         const { graph, output } = pipeline;
         const extent = { width: output.width, height: output.height };
         const pigmentTarget = graph.createTexture('anime pigment', { format: 'rgba16float', extent });
-        const normalTarget = graph.createTexture('anime normals', { format: 'rgba16float', extent });
+        const normalTarget = graph.createTexture('anime normals', { format: 'rgba8unorm', extent });
         const target = graph.createTexture('anime painted scene', { format: 'rgba16float', extent });
         // Pigment draws also build the contour depth, avoiding another geometry pass.
         const depthTarget = graph.createTexture('anime depth', { format: 'depth32float', extent });

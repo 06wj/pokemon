@@ -46,7 +46,7 @@ WebGPU support and output depend on the browser and GPU. If rendering is incorre
 
 - **Stack:** Hilo3D `2.0.0-alpha.4`, React 19, TypeScript 7 and Vite 8.
 - **Application:** React manages selection, controls and URL state; `PokemonStageController` manages the 3D scene and rendering lifecycle.
-- **Assets:** self-contained GLBs with skeletal animation and embedded textures. Per-mesh joint palettes are compacted; WebGL2 uses CPU skinning for compatibility.
+- **Assets:** self-contained GLBs with skeletal animation and embedded textures. Per-mesh joint palettes fit the 128-bone GPU path on WebGL2 and WebGPU.
 - **Materials and lighting:** material adapters, HDR environment lighting, toon shading, habitat-specific water and particle effects.
 - **Delivery:** eligible opaque color textures use JPEG without reducing resolution. Other PNGs, including normal/data maps and expression textures, retain their original bytes. Models and the WebGPU shader compiler load on demand.
 
@@ -113,7 +113,7 @@ npm run assets:optimize -- --ids 003
 
 The optimizer converts eligible opaque color maps to JPEG only when they meet error limits and become smaller. It preserves resolution, uses 4:4:4 sampling, leaves other PNGs/icons untouched, and deduplicates identical embedded image payloads without changing materials or geometry. JPEG is lossy: check new assets visually on both backends and on target devices.
 
-Originals are backed up under `source/asset-optimization/originals/`; the [per-file report](scripts/asset-optimization-report.json) records backup paths, sizes and output hashes. Keep a separate copy of these local backups. Matching output hashes are skipped on reruns to prevent repeated lossy compression. Legacy palette-quantized PNGs can be restored with `npm run assets:optimize -- --restore-quantized-pngs` when original backups are available. The skin-equivalence test (`node scripts/test-skin-equivalence.mjs /path/to/original/models`) also requires identical texture bytes, so use it before JPEG conversion, not across that conversion.
+Originals are backed up under `source/asset-optimization/originals/`; the [per-file report](scripts/asset-optimization-report.json) records backup paths, sizes and output hashes. Keep a separate copy of these local backups. Matching output hashes are skipped on reruns to prevent repeated lossy compression. Legacy palette-quantized PNGs can be restored with `npm run assets:optimize -- --restore-quantized-pngs` when original backups are available.
 
 ### Deploy
 

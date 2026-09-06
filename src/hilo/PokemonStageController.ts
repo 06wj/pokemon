@@ -1,14 +1,15 @@
 import * as Hilo3d from 'hilo3d';
+import { PARTICLE_STAGE_SERVICE, createParticleStageSystem } from '@hilo/addon-particle';
 import { type PokemonEntry } from '../content/pokemon';
 import type { MaterialKey } from '../content/materials';
 import { createMaterial, createOriginalMaterial, needsFacialBacking } from './createMaterial';
 import { getHabitat, type HabitatKey } from '../content/habitats';
 import { loadEnvironment, type EnvironmentLighting } from './environment';
-import { createPoseBaker, type PoseBaker } from './bakePose';
 import { HabitatBackdrop } from './habitatBackdrop';
 import { HabitatEffects } from './habitatEffects';
 import { LagoonWater, LagoonWaterResources } from './lagoonWater';
 import { ToonModel, ToonRendering, toonAntialias } from './toonRendering';
+import { getPoseBounds } from './poseBounds';
 
 interface LoadedPokemon {
   id: string;
@@ -21,7 +22,6 @@ interface LoadedPokemon {
   resetAnimationPose(): void;
   prepareFaceBackings(): void;
   bounds?: Hilo3d.Bounds;
-  poseBakers: PoseBaker[];
   updateFaceBackings: (() => void)[];
   skinMaterials: Map<Exclude<MaterialKey, 'original' | 'toon'>, Hilo3d.PBRMaterial[]>;
   toon?: ToonModel;
@@ -112,7 +112,7 @@ export class PokemonStageController {
       direction: new Hilo3d.Vector3(0.6, -0.6, 2.5),
     }).addTo(stage);
     this.world = new Hilo3d.Node({ name: 'habitat-diorama' }).addTo(stage);
-    this.habitatEffects = new HabitatEffects(this.world, stage.renderer);
+    this.habitatEffects = new HabitatEffects(this.world, stage.systems.get(PARTICLE_STAGE_SERVICE));
     this.backdrop = new HabitatBackdrop(stage, options.assetBase);
     this.rig = new Hilo3d.Node({ name: 'pokemon-rig' }).addTo(this.world);
     this.controls = new Hilo3d.OrbitControls(stage, {
@@ -160,6 +160,7 @@ export class PokemonStageController {
       fog: new Hilo3d.Fog({ mode: 'LINEAR', start: 13, end: 27, color: galleryColor(0x101d1c) }),
       width, height, pixelRatio: Math.min(devicePixelRatio || 1, 1.75),
       antialias: true, alpha: false, clearColor: galleryColor(0x101d1c),
+      systems: [createParticleStageSystem()],
       renderPipeline: new Hilo3d.PostProcessRenderPipelineFactory({
         opaqueTexture: true,
         groundTruthAmbientOcclusion: false,
@@ -208,13 +209,9 @@ export class PokemonStageController {
   }
 
   private updatePokemonPose(forceWorldUpdate = false): void {
-    const current = this.current;
-    if (current) for (const baker of current.poseBakers) baker.syncTransform();
-    // Water reads world matrices before stage.tick; share the CPU skin refresh.
-    if (forceWorldUpdate || this.lagoonWater || current?.poseBakers.length) this.stage.updateMatrixWorld(true);
-    if (!current) return;
-    for (const baker of current.poseBakers) baker.update();
-    for (const update of current.updateFaceBackings) update();
+    // Water reads world matrices before stage.tick.
+    if (forceWorldUpdate || this.lagoonWater) this.stage.updateMatrixWorld(true);
+    for (const update of this.current?.updateFaceBackings ?? []) update();
   }
 
   setHabitat(key: HabitatKey): void {
@@ -335,9 +332,7 @@ export class PokemonStageController {
     const environment = environmentResult.value;
     const sourceMaterials = result.meshes.map((mesh) => mesh.material);
     const scenerySourceMaterials = scenery?.meshes.map((mesh) => mesh.material) ?? [];
-    const detachedSkins: Hilo3d.Mesh[] = [];
     const faceBackings: Hilo3d.Mesh[] = [];
-    const poseBakers: PoseBaker[] = [];
     const updateFaceBackings: (() => void)[] = [];
     const disposeResources = (disposals: (() => unknown)[]): void => {
       for (const dispose of disposals) {
@@ -351,7 +346,7 @@ export class PokemonStageController {
         () => result.anim?.stop(),
         () => next?.toon?.dispose(),
         () => result.node.destroy(this.stage.renderer),
-        ...[...detachedSkins, ...faceBackings].map((mesh) => (
+        ...faceBackings.map((mesh) => (
           () => { if (!mesh.isDestroyed) mesh.destroy(this.stage.renderer); }
         )),
         ...[...new Set(sourceMaterials)].map((material) => () => material?.destroyTextures()),
@@ -396,23 +391,8 @@ export class PokemonStageController {
         playAnimationClip(animation, animationName);
       }
       result.node.updateMatrixWorld(true);
-      let bounds: Hilo3d.Bounds | undefined;
-      const displayMeshes = result.meshes.map((mesh) => {
-        const cpu = this.stage.renderer.backend === 'webgl2'
-          || (mesh instanceof Hilo3d.SkinnedMesh && (mesh.skeleton?.jointCount ?? 0) > 128);
-        const baker = createPoseBaker(mesh, cpu);
-        bounds = baker.mesh.geometry?.getBounds(mesh.worldMatrix, bounds) ?? bounds;
-        // Sample the initial skinned silhouette on both backends so framing is identical.
-        if (!cpu) {
-          if (baker.mesh !== mesh) baker.mesh.destroy(this.stage.renderer);
-          return mesh;
-        }
-        if (baker.mesh !== mesh) {
-          detachedSkins.push(mesh);
-          poseBakers.push(baker);
-        }
-        return baker.mesh;
-      });
+      const displayMeshes = result.meshes;
+      const bounds = getPoseBounds(displayMeshes);
       const originalMaterials = displayMeshes.map((mesh) => createOriginalMaterial(mesh.material, environment, mesh.name));
       displayMeshes.forEach((mesh, index) => {
         mesh.material = originalMaterials[index]!;
@@ -441,31 +421,12 @@ export class PokemonStageController {
               positions.set(index, vertex.subtract(normal));
             }
           }
-          const cpuFace = poseBakers.some((baker) => baker.mesh === mesh);
           const updateBacking = (): void => {
             backing.position.copy(mesh.position);
             backing.quaternion.copy(mesh.quaternion);
             backing.setScale(mesh.scaleX, mesh.scaleY, mesh.scaleZ);
-            // WebGL2 has already skinned the face; keep the inset shell on its moving surface.
-            if (cpuFace && backing.visible) {
-              const facePositions = mesh.geometry!.vertices!;
-              const faceNormals = mesh.geometry!.normals;
-              for (let index = 0; index < positions.count; index++) {
-                vertex.copy(facePositions.get(index) as Hilo3d.Vector3);
-                if (faceNormals) {
-                  normal.copy(faceNormals.get(index) as Hilo3d.Vector3).scale(inset);
-                  vertex.subtract(normal);
-                }
-                (positions.data as Float32Array).set(vertex.elements, index * 3);
-              }
-              positions.isDirty = true;
-              if (normals && faceNormals) {
-                (normals.data as Float32Array).set(faceNormals.data);
-                normals.isDirty = true;
-              }
-              geometry.isDirty = true;
-            }
           };
+          // The clone remains a SkinnedMesh, so Hilo updates both surfaces on the GPU.
           updateFaceBackings.push(updateBacking);
           backing.geometry = geometry;
           backing.visible = false;
@@ -476,7 +437,7 @@ export class PokemonStageController {
       };
       next = {
         id: data.id, node: result.node, meshes: displayMeshes, faceBackings, originalMaterials,
-        animation, animationName, resetAnimationPose, prepareFaceBackings, bounds, poseBakers, updateFaceBackings,
+        animation, animationName, resetAnimationPose, prepareFaceBackings, bounds, updateFaceBackings,
         skinMaterials: new Map(), destroy: destroyPreparedPokemon,
       };
       this.applyMaterial(next, this.material, environment);
@@ -487,9 +448,7 @@ export class PokemonStageController {
         resetAnimationPose();
         playAnimationClip(animation, preferredAnimation);
         next.animationName = preferredAnimation;
-        for (const baker of poseBakers) baker.syncTransform();
         result.node.updateMatrixWorld(true);
-        for (const baker of poseBakers) baker.update();
         for (const update of updateFaceBackings) update();
       }
     } catch (error) {
