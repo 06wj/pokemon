@@ -5,14 +5,12 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "postinstall": "node scripts/patch-hilo-shadow-updates.mjs",
     "dev": "vite",
     "build": "npm run typecheck && vite build",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "assets:optimize": "python3 scripts/optimize-assets.py",
     "models:validate": "node scripts/test-animated-models.mjs",
-    "test:shadows": "node scripts/test-hilo-shadow-updates.mjs",
     "test:toon": "node scripts/test-toon-mesh-selection.mjs && node scripts/test-toon-rendering.mjs"
   },
   "repository": {
@@ -41,8 +39,8 @@
     "vite": "8.2.2"
   },
   "dependencies": {
-    "@hilo/addon-particle": "2.0.0-alpha.5",
-    "hilo3d": "2.0.0-alpha.5",
+    "@hilo/addon-particle": "2.0.0-alpha.7",
+    "hilo3d": "2.0.0-alpha.7",
     "react": "19.2.8",
     "react-dom": "19.2.8"
   }

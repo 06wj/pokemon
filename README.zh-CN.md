@@ -73,7 +73,6 @@ npm run dev
 npm run typecheck
 node scripts/test-viewer-location.mjs
 node scripts/test-animation-selection.mjs
-npm run test:shadows
 npm run test:toon
 npm run build
 npm run preview
@@ -81,7 +80,7 @@ npm run preview
 
 构建产物写入 `dist/`，采用相对路径，可部署在仓库子目录下。部署时保留生成的 `.wasm` 文件，WebGPU 着色器编译器会按需加载。发布清单只包含运行所需的模型与动作信息，不输出 source map。README 截图位于 `public/` 之外，不增加演示页面的发布体积。
 
-`npm ci` 会为 Hilo3D `2.0.0-alpha.5` 应用带版本校验的兼容补丁：发生变化的阴影在同一帧完整刷新，避免引擎的分页更新预算让动画阴影混入多个时刻的姿态；静态阴影缓存和分辨率保持不变。如果安装时使用了 `--ignore-scripts`，需手动运行 `node scripts/patch-hilo-shadow-updates.mjs`，已有 Vite 服务需用 `npm run dev -- --force` 重启。升级 Hilo3D 时需重新审查或移除此补丁。
+查看器使用 Hilo3D `2.0.0-alpha.7` 的 `shadowUpdateMode: 'full'`，让动画阴影切片在同一帧内完整刷新，不再受分页更新预算延迟。
 
 卡通渲染缓存网格筛选结果，一次 MRT 绘制同时输出原色和原生表面属性。原色缓冲采用 sRGB 8 位存储，合成后的 HDR 场景和描边分辨率保持不变。适配器组合当前固定版本的 Hilo3D 公开着色器源码，升级引擎时需一并审查。显式实例化和不兼容的光栅状态保留独立的原色、法线绘制路径。触摸优先设备使用 1024 阴影，桌面设备使用 2048。
 

@@ -159,6 +159,7 @@ export class PokemonStageController {
     const backend = requested === 'webgl2' || requested === 'webgpu' ? requested : 'auto';
     const stage = await Hilo3d.Stage.create({
       backend, container: options.container, camera,
+      shadowUpdateMode: 'full',
       fog: new Hilo3d.Fog({ mode: 'LINEAR', start: 13, end: 27, color: galleryColor(0x101d1c) }),
       width, height, pixelRatio: Math.min(devicePixelRatio || 1, 1.75),
       antialias: true, alpha: false, clearColor: galleryColor(0x101d1c),

@@ -73,7 +73,6 @@ npm run dev
 npm run typecheck
 node scripts/test-viewer-location.mjs
 node scripts/test-animation-selection.mjs
-npm run test:shadows
 npm run test:toon
 npm run build
 npm run preview
@@ -81,7 +80,7 @@ npm run preview
 
 Builds write `dist/` with relative asset paths for subdirectory hosting. Keep the generated `.wasm` file: the WebGPU shader compiler loads it on demand. Runtime model metadata is trimmed during builds, and production source maps are disabled. Documentation screenshots live outside `public/`, so they do not increase the deployed gallery payload.
 
-`npm ci` applies a version-checked compatibility patch to Hilo3D `2.0.0-alpha.5`: dirty shadow slices refresh in one frame, preventing animated shadows from mixing poses across the engine's page-update budget. Static shadow caching and resolution are preserved. After installing with `--ignore-scripts`, run `node scripts/patch-hilo-shadow-updates.mjs` manually; restart an existing Vite server with `npm run dev -- --force`. Review or remove this patch when upgrading Hilo3D.
+The viewer uses Hilo3D `2.0.0-alpha.7` with `shadowUpdateMode: 'full'`, so animated shadow slices refresh completely within the same frame instead of being deferred by the page-update budget.
 
 Toon rendering caches mesh selection and writes pigment plus native surface attributes in one MRT draw. The pigment target uses sRGB 8-bit storage; the painted HDR scene and contour resolution remain unchanged. The adapter composes the public shader sources from the pinned Hilo3D version, so review it when upgrading. Explicit instancing and unsupported raster states retain the separate pigment/normal path. Touch-first devices use 1024px shadows; desktop devices use 2048px.
 

@@ -198,7 +198,7 @@ try {
       'Skinning, vertex color, normal-map UVs, cutout and fog use the original feature selection');
   }
   const futureModule = await server.ssrLoadModule('/src/hilo/toonGeometry.ts?incompatible-version');
-  assert.throws(() => futureModule.createToonGeometryMaterial(new Hilo3d.PBRMaterial()), /requires hilo3d 2\.0\.0-alpha\.5; found 2\.0\.0-alpha\.999/,
+  assert.throws(() => futureModule.createToonGeometryMaterial(new Hilo3d.PBRMaterial()), /requires hilo3d 2\.0\.0-alpha\.7; found 2\.0\.0-alpha\.999/,
     'An unreviewed dependency version fails explicitly before shader adaptation');
   const missingSourceModule = await server.ssrLoadModule('/src/hilo/toonGeometry.ts?missing-source-fixture');
   const nativePbrSource = Hilo3d.Shader.shaders['pbr.frag'];
