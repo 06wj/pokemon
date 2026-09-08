@@ -10,6 +10,8 @@ export function LivingIcon({ name }: { name: string }) {
     book: 'M12 5C8 2 3 3 3 3v16s5-1 9 2c4-3 9-2 9-2V3s-5-1-9 2Zm0 0v16',
     sun: 'M16 12a4 4 0 1 1-8 0 4 4 0 0 1 8 0ZM12 1v3m0 16v3M1 12h3m16 0h3M4 4l2 2m12 12 2 2M4 20l2-2M18 6l2-2',
     dusk: 'M3 17h18M6 21h12M6 14a6 6 0 0 1 12 0M12 2v3M3 6l2 2m14 0 2-2',
+    sound: 'M4 9h4l5-4v14l-5-4H4V9Zm12-1a6 6 0 0 1 0 8m3-11a10 10 0 0 1 0 14',
+    muted: 'M4 9h4l5-4v14l-5-4H4V9Zm13 0 5 6m0-6-5 6',
     close: 'm6 6 12 12M18 6 6 18', more: 'M4 12h1m6 0h1m6 0h1',
     reset: 'M3 10a9 9 0 1 1 2 8M3 4v6h6', pause: 'M8 5v14M16 5v14', play: 'm7 4 13 8-13 8V4Z',
     download: 'M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5', heart: 'M12 20C-5 10 5-3 12 7c7-10 17 3 0 13Z',

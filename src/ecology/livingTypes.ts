@@ -3,8 +3,8 @@ import type { EcologyPoint } from './layout.ts';
 export type LivingTool = 'observe' | 'fruit' | 'shake-tree' | 'prepare-fire' | 'rustle-flowers';
 export type LivingWeather = 'sunny' | 'rain' | 'snow';
 export type LivingAnimation = 'idle' | 'walk' | 'run' | 'attack' | 'happy' | 'sleep';
-export type LivingBubble = 'curious' | 'fruit' | 'eating' | 'water' | 'flower' | 'warm' | 'music' | 'happy' | 'surprised' | 'sleepy';
-export type LivingEffect = 'ignite' | 'drink' | 'splash' | 'pollen' | 'bite' | 'invite';
+export type LivingBubble = 'curious' | 'fruit' | 'eating' | 'water' | 'flower' | 'warm' | 'music' | 'happy' | 'surprised' | 'sleepy' | 'electric';
+export type LivingEffect = 'ignite' | 'drink' | 'splash' | 'pollen' | 'bite' | 'invite' | 'electric';
 
 /** Pure simulation output; presentation must not advance or complete actions. */
 export interface LivingPerformance {
@@ -14,6 +14,8 @@ export interface LivingPerformance {
   animation: LivingAnimation;
   bubble: LivingBubble | null;
   effect: LivingEffect | null;
+  /** Present only after the effect commits; 0..1 over its remaining step time. */
+  effectProgress?: number;
   progress: number;
   duration: number;
   target: EcologyPoint | null;
@@ -70,6 +72,9 @@ export interface LivingEffectResident extends EcologyPoint {
   radius: number;
   heading: number;
   performance: LivingPerformance | null;
+  state?: string;
+  speed?: number;
+  gait?: 'walk' | 'run';
 }
 
 export const LIVING_CAST = ['004', '007', '025', '001', '012', '143', '016', '035', '037', '039',
@@ -77,7 +82,7 @@ export const LIVING_CAST = ['004', '007', '025', '001', '012', '143', '016', '03
 
 export const LIVING_BUBBLES: Record<LivingBubble, string> = {
   curious: '?', fruit: '🍑', eating: '♥', water: '💧', flower: '✿', warm: '☀',
-  music: '♪', happy: '♥', surprised: '!', sleepy: 'zZ',
+  music: '♪', happy: '♥', surprised: '!', sleepy: 'zZ', electric: '⚡',
 };
 
 export function createLivingWorld(): LivingWorld {

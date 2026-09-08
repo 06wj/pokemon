@@ -10,7 +10,7 @@
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "test:ecology": "node scripts/test-ecology.mjs && node scripts/test-ecology-lifecycle.mjs && node scripts/test-ecology-toon.mjs && node scripts/test-ecology-picking.mjs",
-    "test:living": "node scripts/test-living-ecology.mjs && node scripts/test-living-weather.mjs && node scripts/test-living-journal.mjs && node scripts/test-living-picking.mjs && node scripts/test-viewer-location.mjs",
+    "test:living": "node scripts/test-living-ecology.mjs && node scripts/test-living-weather.mjs && node scripts/test-living-reactions.mjs && node scripts/test-living-motion.mjs && node scripts/test-living-audio.mjs && node scripts/test-living-journal.mjs && node scripts/test-living-picking.mjs && node scripts/test-viewer-location.mjs",
     "assets:optimize": "python3 scripts/optimize-assets.py",
     "models:validate": "node scripts/test-animated-models.mjs",
     "test:toon": "node scripts/test-toon-mesh-selection.mjs && node scripts/test-toon-rendering.mjs"

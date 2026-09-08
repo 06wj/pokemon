@@ -13,6 +13,8 @@ import { getPoseBounds } from './poseBounds';
 import { findAnimationClip, playAnimationClip } from './animationPlayback';
 import { loadEnvironment, type EnvironmentLighting } from './environment';
 import { LivingEffects } from './livingEffects';
+import { LivingAudio } from './livingAudio';
+import { createLivingMotion, livingBubbleEnvelope, updateLivingMotion, type LivingMotion } from './livingMotion';
 import { LIVING_POINTS } from '../ecology/livingContent';
 import { createLivingWorld, LIVING_BUBBLES, LIVING_CAST, type DiscoveryCandidate, type LivingEffectResident,
   type LivingPhoto, type LivingTool, type LivingWorld, type LivingWeather } from '../ecology/livingTypes';
@@ -57,6 +59,7 @@ interface ResidentView {
   marker: HTMLDivElement;
   markerX: number;
   markerY: number;
+  motion: LivingMotion;
 }
 
 function linearColor(hex: number): Hilo3d.Color {
@@ -82,6 +85,8 @@ export class EcologyStageController {
   private readonly point = new Hilo3d.Vector3();
   private readonly environment: EnvironmentLighting;
   private readonly livingEffects: LivingEffects;
+  private readonly livingAudio = new LivingAudio();
+  private readonly audioCamera = { x: 0, y: 0, z: 0, targetX: 0, targetZ: 0 };
   private readonly observedSpecies = new Map<string, DiscoveryCandidate>();
   private tool: LivingTool = 'observe';
   private livingReady = false;
@@ -146,6 +151,9 @@ export class EcologyStageController {
     stage.canvas.tabIndex = 0;
     stage.canvas.setAttribute('aria-label', '生态箱庭。拖动观察，投果模式下点击草地；按 Enter 可在花野旁投果。');
     document.addEventListener('visibilitychange', this.onVisibilityChange);
+    options.container.closest('.living-root')?.addEventListener('pointerdown', this.onAudioGesture, true);
+    options.container.closest('.living-root')?.addEventListener('keydown', this.onAudioGesture, true);
+    this.syncAudioPause();
     this.resize();
     this.ticker.addTick({ tick: (milliseconds): void => this.tick(milliseconds) });
     this.ticker.start();
@@ -241,15 +249,16 @@ export class EcologyStageController {
         marker.hidden = true;
         this.markerLayer.append(marker);
         const view: ResidentView = { rig, model, sources, width, height, depth, restorePose,
-          marker, markerX: 0, markerY: 0, state: '', clip: pokemon.idleAnimation };
+          marker, markerX: 0, markerY: 0, motion: createLivingMotion(), state: '', clip: pokemon.idleAnimation };
         this.residents.set(agent.uid, view);
+        this.livingEffects?.registerResidentRig(agent.uid, pokemon.id, rig);
         this.toonView.addResident(agent.uid, model.meshes);
         this.selectedId = this.followingId ?? agent.uid;
         this.options.onError('');
         this.updateResident(agent, view, 0);
         if (!this.initializingLiving) this.addEvent(`${pokemon.name}来到了河谷生态园`);
       } catch (error) {
-        if (candidateUid) { this.toonView.removeResident(candidateUid); this.simulation.remove(candidateUid); this.residents.delete(candidateUid); }
+        if (candidateUid) { this.livingEffects?.unregisterResidentRig(candidateUid); this.toonView.removeResident(candidateUid); this.simulation.remove(candidateUid); this.residents.delete(candidateUid); }
         if (candidateUid && this.selectedId === candidateUid) {
           this.selectedId = this.followingId ?? (previousSelection && this.residents.has(previousSelection) ? previousSelection : null);
         }
@@ -279,6 +288,7 @@ export class EcologyStageController {
     if (this.livingReady && this.residents.size >= LIVING_CAST.length) return Promise.resolve();
     const generation = this.livingGeneration;
     this.initializingLiving = true;
+    this.syncAudioPause();
     this.livingReady = false;
     const work = async (): Promise<void> => {
       await Promise.resolve();
@@ -300,6 +310,7 @@ export class EcologyStageController {
       } finally {
         if (generation === this.livingGeneration) {
           this.initializingLiving = false;
+          this.syncAudioPause();
           this.livingStart = null;
           this.publish();
         }
@@ -360,7 +371,7 @@ export class EcologyStageController {
       this.landscape.solidMeshes, this.stage.height, candidates));
     const visibleIds = new Set(subjects.map((subject) => subject.uid));
     const active = this.simulation.agents.filter((agent) => visibleIds.has(agent.uid));
-    const recent = this.discoverySnapshot().filter((record) => record.participantUids.length > 0
+    const recent = [...this.observedSpecies.values(), ...this.simulation.recentEvents].filter((record) => record.participantUids.length > 0
       && record.participantUids.every((id) => visibleIds.has(id))
       && (record.category === 'species' || this.simulation.elapsed - record.at < 25));
     const moment = [...recent].reverse().find((record) => record.category === 'moment');
@@ -371,7 +382,7 @@ export class EcologyStageController {
     return { id: `photo-${Date.now().toString(36)}-${++this.photoSequence}`, capturedAt: new Date().toISOString(), title,
       timeOfDay: this.simulation.timeOfDay, image: surface.toDataURL('image/jpeg', .86),
       weather: this.simulation.world.weather.kind, snow: this.simulation.world.weather.snow,
-      speciesIds: [...new Set(subjects.map((subject) => subject.pokemonId))], discoveryIds: recent.map((record) => record.id), labels };
+      speciesIds: [...new Set(subjects.map((subject) => subject.pokemonId))], discoveryIds: [...new Set(recent.map((record) => record.id))], labels };
   }
 
   setTimeOfDay(value: 'dawn' | 'dusk'): void {
@@ -390,7 +401,10 @@ export class EcologyStageController {
       ? '小小的雪花飘了下来，草地会渐渐披上白色' : '天空放晴，湿润的草地和积雪会慢慢恢复');
     this.publish();
   }
-  setPaused(value: boolean): void { this.paused = value; this.accumulator = 0; this.publish(); }
+  setPaused(value: boolean): void { this.paused = value; this.accumulator = 0; this.syncAudioPause(); this.publish(); }
+  setSoundEnabled(value: boolean): void { this.livingAudio?.setEnabled(value); }
+  resumeAudioFromGesture(event?: Pick<Event, 'isTrusted'>): void { void this.livingAudio?.resumeFromGesture(event); }
+  private syncAudioPause(): void { this.livingAudio?.setPaused(this.paused || this.initializingLiving || document.hidden); }
   setToon(value: boolean): void {
     if (this.destroyed || value === this.toon) return;
     this.toonView.setEnabled(value);
@@ -451,11 +465,13 @@ export class EcologyStageController {
     this.reservations.clear();
     this.toonView.clearResidents();
     this.visibleMarkerIds.clear();
-    for (const view of this.residents.values()) this.destroyResident(view);
+    for (const [uid, view] of this.residents) { this.livingEffects?.unregisterResidentRig(uid); this.destroyResident(view); }
     this.residents.clear(); this.simulation.reset();
+    this.livingAudio?.reset();
     this.livingEffects?.update(0, this.simulation.world ?? createLivingWorld(), [], 0);
     this.selectedId = null; this.followingId = null; this.events.length = 0; this.eventSequence = 0;
     this.accumulator = 0; this.paused = false;
+    this.syncAudioPause();
     this.options.onError(''); this.publish();
   }
 
@@ -475,9 +491,10 @@ export class EcologyStageController {
         while (this.accumulator >= 1 / 30) { this.simulation.update(1 / 30); this.accumulator -= 1 / 30; }
       }
       this.updateLight(dt);
+      const worldDt = this.paused || this.initializingLiving ? 0 : dt;
       for (const agent of this.simulation.agents) {
         const view = this.residents.get(agent.uid);
-        if (view) this.updateResident(agent, view, this.paused ? 0 : dt);
+        if (view) this.updateResident(agent, view, worldDt);
       }
       const effects = this.effectResidents;
       let effectIndex = 0;
@@ -489,16 +506,21 @@ export class EcologyStageController {
         resident.uid = agent.uid; resident.pokemonId = agent.pokemonId;
         resident.x = view.rig.x; resident.y = view.rig.y; resident.z = view.rig.z;
         resident.height = view.height; resident.radius = agent.radius;
-        resident.heading = agent.heading; resident.performance = agent.performance;
+        resident.heading = view.rig.rotationY * Math.PI / 180; resident.performance = agent.performance;
+        resident.state = agent.state; resident.speed = agent.speed; resident.gait = agent.gait;
         effects[effectIndex++] = resident;
       }
       effects.length = effectIndex;
       this.landscape.applyLivingWorld(this.simulation.world, this.simulation.elapsed);
-      this.livingEffects.update(this.paused ? 0 : dt, this.simulation.world, effects, this.simulation.elapsed);
+      this.livingEffects.update(worldDt, this.simulation.world, effects, this.simulation.elapsed);
       this.updateFollowCamera();
+      const audioCamera = this.audioCamera;
+      audioCamera.x = this.camera.x; audioCamera.y = this.camera.y; audioCamera.z = this.camera.z;
+      audioCamera.targetX = this.controls.target.x; audioCamera.targetZ = this.controls.target.z;
+      this.livingAudio.update(this.simulation.world, effects, this.simulation.elapsed, audioCamera);
       // The river reads camera matrices after tracking, including while time is paused.
-      this.landscape.update(this.paused ? 0 : dt);
-      this.atmosphere.update(this.paused ? 0 : dt);
+      this.landscape.update(worldDt);
+      this.atmosphere.update(worldDt);
       this.stage.tick(dt * 1000);
       this.updateMarkers();
       this.speciesScanIn -= dt;
@@ -510,6 +532,7 @@ export class EcologyStageController {
       if (this.broadcastTime > 0.35) { this.broadcastTime = 0; this.publish(); }
     } catch (error) {
       this.ticker.stop();
+      this.livingAudio?.setPaused(true);
       console.error('Ecology rendering failed', error);
       this.options.onError('场景渲染中断，请返回藏馆后重新进入生态园。');
     }
@@ -546,7 +569,9 @@ export class EcologyStageController {
       : performance.animation === 'attack' && hasClip('happy') ? 'happy' : clip;
     else if (agent.state === 'happy' || agent.state === 'socializing') clip = hasClip('happy') ? 'happy' : clip;
     else if (agent.state === 'sleeping') clip = hasClip('sleep') ? 'sleep' : clip;
-    this.setClip(view, clip, changed);
+    // Face / inspect / wait can share Idle; keep that loop continuous across
+    // authored steps instead of snapping the skeleton to frame zero each time.
+    this.setClip(view, clip, changed && (clip === 'attack' || clip === 'happy'));
     if (changed && agent.state === 'socializing' && agent.partnerUid && agent.uid < agent.partnerUid) {
       const other = this.simulation.agents.find((item) => item.uid === agent.partnerUid);
       if (other) this.addEvent(`${agent.pokemon.name}与${other.pokemon.name}停下来互相打招呼`);
@@ -561,8 +586,10 @@ export class EcologyStageController {
       }
       animation.update(dt);
     }
+    view.motion ??= createLivingMotion();
+    updateLivingMotion(agent, dt, view.motion);
     view.rig.x = agent.x; view.rig.z = agent.z;
-    view.rig.rotationY = agent.heading * 180 / Math.PI;
+    view.rig.rotationY = agent.heading * 180 / Math.PI + view.motion.yaw;
     const ground = terrainBaseHeight(agent.x, agent.z);
     const water = waterSurfaceHeight(agent.z);
     let y = isOnBridge(agent.x, agent.z) && agent.profile.locomotion !== 'aquatic' ? BRIDGE.surfaceY + 0.005 : ground + 0.025;
@@ -587,8 +614,9 @@ export class EcologyStageController {
     if ((agent.state === 'happy' || agent.state === 'socializing') && !hasClip('happy')) {
       y += Math.abs(Math.sin(agent.stateTime * 6)) * Math.min(0.18, view.height * 0.2);
       view.rig.rotationZ = Math.sin(agent.stateTime * 4) * 6;
-    } else view.rig.rotationZ = 0;
-    view.rig.rotationX = performance?.effect === 'drink' ? Math.sin(performance.progress * Math.PI) * 7 : 0;
+    } else view.rig.rotationZ = view.motion.roll;
+    view.rig.rotationX = view.motion.pitch;
+    view.rig.scaleY *= view.motion.breathing;
     view.rig.y = y;
   }
   private updateLight(dt: number): void {
@@ -648,7 +676,14 @@ export class EcologyStageController {
     for (const { agent, view } of shown) {
       this.visibleMarkerIds.add(agent.uid);
       view.marker.hidden = false;
-      view.marker.style.transform = `translate(${view.markerX}px, ${view.markerY}px) translate(-50%, -100%)`;
+      const performance = agent.performance;
+      const ephemeral = Boolean(performance?.bubble) || agent.uid !== this.selectedId;
+      const bubbleAge = performance ? performance.progress * performance.duration : agent.stateTime;
+      const bubbleLifetime = Math.min(performance && agent.state === 'walking' ? 1.8 : 3, performance?.duration ?? 3);
+      const envelope = ephemeral ? livingBubbleEnvelope(bubbleAge, bubbleLifetime)
+        : { opacity: 1, scale: 1, rise: 0 };
+      view.marker.style.opacity = String(envelope.opacity);
+      view.marker.style.transform = `translate(${view.markerX}px, ${view.markerY - envelope.rise}px) translate(-50%, -100%) scale(${envelope.scale})`;
       view.marker.dataset.state = agent.state;
       const bubble = agent.performance?.bubble;
       view.marker.dataset.bubble = bubble ?? '';
@@ -685,7 +720,10 @@ export class EcologyStageController {
       this.intervene('fruit', { x: LIVING_POINTS.flowers.x + 1.2, z: LIVING_POINTS.flowers.z + .6 });
     }
   };
-  private readonly onVisibilityChange = (): void => { this.accumulator = 0; };
+  private readonly onAudioGesture = (event: Event): void => {
+    if (event.isTrusted) this.resumeAudioFromGesture(event);
+  };
+  private readonly onVisibilityChange = (): void => { this.accumulator = 0; this.syncAudioPause(); };
   private addEvent(text: string): void {
     this.events.unshift({ id: ++this.eventSequence, text });
     this.events.length = Math.min(this.events.length, 12);
@@ -739,7 +777,7 @@ export class EcologyStageController {
       timeOfDay: this.simulation.timeOfDay, selectedId: this.selectedId, followingId: this.followingId, events: [...this.events],
       agents: this.simulation.agents.map((agent) => ({ uid: agent.uid, pokemonId: agent.pokemonId,
         name: agent.pokemon.name, state: agent.state,
-        label: agent.performance?.label || (agent.state === 'walking' && agent.gait === 'run'
+        label: agent.quietSteps ? '轻轻走过，不吵醒伙伴' : agent.performance?.label || (agent.state === 'walking' && agent.gait === 'run'
           ? agent.profile.locomotion === 'aquatic' ? '加快速度游弋' : agent.profile.locomotion === 'flying' ? '轻快地加速飞行'
             : agent.intent === 'social' ? '小跑着去找伙伴' : '轻快地小跑探索'
           : agent.behaviorLabel),
@@ -755,12 +793,15 @@ export class EcologyStageController {
     this.livingGeneration = (this.livingGeneration ?? 0) + 1;
     this.livingStart = null;
     this.livingEffects?.destroy();
+    this.livingAudio?.destroy();
     this.toonView.dispose();
     this.stage.canvas.removeEventListener('pointerdown', this.onPointerDown);
     this.stage.canvas.removeEventListener('pointerup', this.onPointerUp);
     this.stage.canvas.removeEventListener('pointercancel', this.onPointerCancel);
     this.stage.canvas.removeEventListener('keydown', this.onCanvasKeyDown);
     document.removeEventListener('visibilitychange', this.onVisibilityChange);
+    this.options.container.closest?.('.living-root')?.removeEventListener('pointerdown', this.onAudioGesture, true);
+    this.options.container.closest?.('.living-root')?.removeEventListener('keydown', this.onAudioGesture, true);
     for (const view of this.residents.values()) this.destroyResident(view);
     this.residents.clear(); this.markerLayer.remove(); this.atmosphere.destroy(); this.landscape.destroy(); this.environment.dispose();
     this.stage.destroy(); this.stage.canvas.remove();

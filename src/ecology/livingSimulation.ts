@@ -35,14 +35,19 @@ interface ResidentMemory {
   weatherAfter: number;
   weatherKind: LivingWeather;
   weatherChangedAt: number;
+  electricAfter: number;
+  reactionAfter: number;
   seen: Set<number>;
 }
 interface LivingSignal extends EcologyPoint {
   id: number;
-  kind: 'fire' | 'flowers' | 'sneeze' | 'food';
+  kind: 'fire' | 'flowers' | 'sneeze' | 'food' | 'fire-burst' | 'water-splash' | 'electric';
   at: number;
   sourceUid: string;
   radius: number;
+  expiresAt: number;
+  replies: number;
+  readyAt: Map<string, number>;
 }
 const dist = (a: EcologyPoint, b: EcologyPoint): number => Math.hypot(a.x - b.x, a.z - b.z);
 const clamp = (value: number): number => Math.max(0, Math.min(1, value));
@@ -58,6 +63,9 @@ const pose = (id: string, animation: LivingAnimation, duration: number, label: s
 export class LivingSimulation {
   readonly world: LivingWorld = createLivingWorld();
   readonly discoveries: DiscoveryCandidate[] = [];
+  /** Actual recent occurrences, including repeated discoveries. Collection
+   * deduplication must never make a new photograph use an old event timestamp. */
+  readonly recentEvents: DiscoveryCandidate[] = [];
   private readonly actions = new Map<string, ComposedAction>();
   private readonly memories = new Map<string, ResidentMemory>();
   private readonly waiters = new Map<number, string>();
@@ -82,7 +90,8 @@ export class LivingSimulation {
       nextThink: this.host.now() + 1.8 + this.host.random() * 2.4,
       eatAfter: 0, fireAfter: 0, flowerAfter: 0, waterAfter: 0, napAfter: 0,
       flowerVisits: 0, sleptAt: -1, sleepBubbleUntil: 0,
-      weatherAfter: 0, weatherKind: 'sunny', weatherChangedAt: -1, seen: new Set(),
+      weatherAfter: 0, weatherKind: 'sunny', weatherChangedAt: -1,
+      electricAfter: 0, reactionAfter: 0, seen: new Set(),
     });
     agent.needs.hunger = agent.profile.living.abilities.ignite || agent.profile.living.abilities.waterFlowers
       || agent.profile.living.abilities.smellFlowers ? .27 : .48 + this.host.random() * .25;
@@ -95,7 +104,7 @@ export class LivingSimulation {
     const selectedWeather = this.world.weather.kind;
     Object.assign(this.world, createLivingWorld());
     this.world.weather.kind = selectedWeather;
-    this.discoveries.length = 0; this.memories.clear(); this.actions.clear(); this.waiters.clear(); this.inviters.clear(); this.signals.length = 0;
+    this.discoveries.length = 0; this.recentEvents.length = 0; this.memories.clear(); this.actions.clear(); this.waiters.clear(); this.inviters.clear(); this.signals.length = 0;
     this.serial = 0; this.fruitSerial = 0; this.signalSerial = 0;
     this.nextDrop = 5; this.nextRipen = T.ripenSeconds; this.nextThrow = 0;
     this.igniterUid = null; this.gardenerUid = null;
@@ -127,6 +136,7 @@ export class LivingSimulation {
       if (action?.kind === 'lightFire' && !this.world.campfire.lit) memory.fireAfter = Math.min(memory.fireAfter, now + 8);
       if (action?.kind === 'waterFlowers' && this.world.flowers.moisture < .6) memory.waterAfter = Math.min(memory.waterAfter, now + 9);
       if (action?.kind === 'smellFlowers' && action.step < 2) memory.flowerAfter = Math.min(memory.flowerAfter, now + 8);
+      if (action?.kind === 'electricDisplay') memory.electricAfter = Math.max(memory.electricAfter, now + 8);
     }
   }
 
@@ -209,7 +219,8 @@ export class LivingSimulation {
     this.world.flowers.moisture = clamp(this.world.flowers.moisture + dt * (this.world.weather.kind === 'rain' ? .016 : -.0018) + meltedSnow * .6);
     this.world.flowers.bloom = clamp(this.world.flowers.bloom + dt * (this.world.flowers.moisture > .5 ? .01 : -.00065));
     for (const a of this.host.agents) a.needs.hunger = clamp(a.needs.hunger + dt * (a.state === 'sleeping' ? .00035 : .0032) * a.profile.living.appetite);
-    for (let i = this.signals.length - 1; i >= 0; i--) if (now - this.signals[i]!.at > 18) this.signals.splice(i, 1);
+    for (let i = this.signals.length - 1; i >= 0; i--) if (now > this.signals[i]!.expiresAt) this.signals.splice(i, 1);
+    for (let i = this.recentEvents.length - 1; i >= 0; i--) if (now - this.recentEvents[i]!.at > T.recentEventSeconds) this.recentEvents.splice(i, 1);
     const liveSignals = new Set(this.signals.map((signal) => signal.id));
     for (const memory of this.memories.values()) for (const id of memory.seen) if (!liveSignals.has(id)) memory.seen.delete(id);
   }
@@ -217,12 +228,16 @@ export class LivingSimulation {
   onSleep(agent: EcologyAgent): void {
     const memory = this.memories.get(agent.uid);
     if (!memory) return;
-    if (memory.sleptAt !== agent.age - agent.stateTime && agent.stateTime < .08) {
+    if (Math.abs(memory.sleptAt - (agent.age - agent.stateTime)) > .001 && agent.stateTime < .08) {
       memory.sleptAt = agent.age - agent.stateTime;
       this.discover('nap', 'behavior', '找一处舒服的地方睡觉', `${agent.pokemon.name}放慢脚步，安静睡着了。`, [agent]);
       if (dist(agent, P.tree) < 5) this.discover('shade-nap', 'moment', '树荫下的午觉', '树叶轻轻晃动，伙伴在安静的树荫里睡着。', [agent]);
     }
     if (this.host.now() >= memory.sleepBubbleUntil) agent.performance = null;
+    else if (agent.performance?.stepId === 'keep-sleeping') {
+      const duration = Math.max(.01, agent.performance.duration);
+      agent.performance.progress = clamp((this.host.now() - (memory.sleepBubbleUntil - duration)) / duration);
+    }
   }
 
   updateAgent(agent: EcologyAgent, dt: number): boolean {
@@ -234,6 +249,8 @@ export class LivingSimulation {
         pose: (a, label, animation) => this.host.stop(a, label, animation),
         effect: (a, current, step) => this.effect(a, current, step),
       });
+      if (status !== 'cancelled' && !action.meta.reactionRecorded && agent.performance?.stepId === 'reaction-turn'
+        && agent.performance.progress > 0) this.recordReaction(agent, action);
       if (status === 'cancelled') this.cancel(agent);
       else if (status === 'done') this.finish(agent, action);
       return true;
@@ -249,11 +266,16 @@ export class LivingSimulation {
     if ((this.host.wantsSleep(agent) || (agent.profile.living.restBias > .9 && agent.needs.sleep > .5 && agent.age > 18)) && this.nap(agent)) return true;
     for (const signal of this.signals) {
       if (signal.sourceUid === agent.uid || memory.seen.has(signal.id) || dist(agent, signal) > signal.radius) continue;
-      memory.seen.add(signal.id);
-      if (signal.kind === 'sneeze' && agent.needs.energy > .2) {
-        const surprise = agent.profile.living.caution > .5;
-        return this.start(agent, 'sneezeReply', false, [facing('look', signal, '咦，谁打了个喷嚏？'),
-          pose('reply', surprise ? 'idle' : 'happy', 2.2, surprise ? '被花粉轻轻惊了一下' : '看着伙伴忍不住开心', { point: signal, bubble: surprise ? 'surprised' : 'happy' })], { sourceUid: signal.sourceUid });
+      if (this.isInstantSignal(signal.kind)) {
+        const readyAt = signal.readyAt.get(agent.uid);
+        if (readyAt === undefined || now > signal.expiresAt || signal.replies >= T.elementalRepliesPerSignal) { memory.seen.add(signal.id); continue; }
+        if (now < readyAt) { memory.nextThink = Math.min(memory.nextThink, readyAt); continue; }
+        memory.seen.add(signal.id);
+        if (now >= memory.reactionAfter && agent.needs.sleep < .65 && agent.needs.energy > .25 && this.elementalReply(agent, signal)) {
+          signal.replies++; memory.reactionAfter = now + T.elementalReactionSeconds; return true;
+        }
+      } else {
+        memory.seen.add(signal.id);
       }
     }
     const nature = agent.profile.living;
@@ -263,6 +285,7 @@ export class LivingSimulation {
         && (this.host.dusk() || this.host.random() < .85) && this.lightFire(agent)) return true;
       if (nature.abilities.waterFlowers && this.world.flowers.moisture < .6 && now >= memory.waterAfter && this.waterFlowers(agent)) return true;
       if (nature.abilities.smellFlowers && this.world.flowers.bloom > .15 && now >= memory.flowerAfter && this.smellFlowers(agent)) return true;
+      if (nature.abilities.electric && now >= memory.electricAfter && (this.host.dusk() || memory.flowerVisits > 0) && this.electricDisplay(agent)) return true;
       if (nature.interests.fruit > .1 && agent.needs.hunger > .46 && now >= memory.eatAfter && this.findFruit(agent)) return true;
     }
     const warmth = clamp(nature.interests.warmth + (this.world.weather.kind === 'sunny' ? 0 : .22));
@@ -312,6 +335,46 @@ export class LivingSimulation {
     }
     memory.weatherAfter = now + 8;
     return false;
+  }
+
+  private isInstantSignal(kind: LivingSignal['kind']): boolean {
+    return ['sneeze', 'fire-burst', 'water-splash', 'electric'].includes(kind);
+  }
+
+  private elementalReply(agent: EcologyAgent, signal: LivingSignal): boolean {
+    if ([...this.actions.values()].filter((action) => ['elementReply', 'sneezeReply'].includes(action.kind)).length >= T.maxElementalReplies) return false;
+    const source = this.host.agents.find((other) => other.uid === signal.sourceUid);
+    if (!source) return false;
+    const nature = agent.profile.living, near = dist(agent, signal) < signal.radius * .72;
+    const wary = near && (nature.caution > .62 || (signal.kind === 'water-splash' && nature.interests.water < .25 && nature.interests.warmth > .7));
+    const affinity = signal.kind === 'fire-burst' ? nature.interests.warmth
+      : signal.kind === 'water-splash' ? Math.max(nature.interests.water, nature.interests.flowers)
+      : signal.kind === 'electric' ? nature.curiosity : nature.playfulness;
+    const smile = affinity > .65 || nature.playfulness > .65;
+    const label = signal.kind === 'fire-burst' ? '注意到旁边亮起的一小簇火光'
+      : signal.kind === 'water-splash' ? '听到水花，转头看向岸边'
+      : signal.kind === 'electric' ? '咦，伙伴身边闪过一点电光' : '咦，谁打了个喷嚏？';
+    const steps: LivingStep[] = [{ ...facing('reaction-turn', signal, label), duration: .2, bubble: 'curious' }];
+    let retreat: EcologyPoint | null = null;
+    if (wary) {
+      steps.push(pose('reaction-startle', 'idle', .55, '轻轻惊了一下，先站远一点', { point: signal, bubble: 'surprised' }));
+      const angle = Math.atan2(agent.x - signal.x, agent.z - signal.z);
+      for (const offset of [0, .5, -.5, .95, -.95]) {
+        const point = { x: agent.x + Math.sin(angle + offset) * (.65 + agent.radius * .3),
+          z: agent.z + Math.cos(angle + offset) * (.65 + agent.radius * .3) };
+        if (this.host.canStand(agent, point) && dist(point, signal) > dist(agent, signal) + .25) { retreat = point; break; }
+      }
+      if (retreat) steps.push(moving('reaction-give-space', retreat, '退开半步，给伙伴留点空间', false, 'surprised'));
+      steps.push({ ...facing('reaction-look-back', source, '站稳了，再看看伙伴'), duration: .35 });
+    }
+    steps.push(pose(smile ? 'reaction-smile' : 'reaction-settle', smile ? 'happy' : 'idle', smile ? 1.65 : 1.2,
+      smile ? '看懂了伙伴的小把戏，也跟着开心' : '好奇地看一眼，继续自己的小日子', { point: source, bubble: smile ? 'happy' : 'curious' }));
+    const kind = signal.kind === 'sneeze' ? 'sneezeReply' : 'elementReply';
+    const meta = { sourceUid: source.uid, reactionKind: signal.kind };
+    if (this.start(agent, kind, false, steps, meta)) return true;
+    // Crowded or disconnected retreat space means a stationary glance, not a
+    // forced shove, teleport or a reservation that waits forever.
+    return retreat !== null && this.start(agent, kind, false, steps.filter((step) => step.kind !== 'move'), meta);
   }
 
   private shelteredByTree(agent: EcologyAgent): boolean {
@@ -382,9 +445,20 @@ export class LivingSimulation {
     this.host.stop(agent, action.meta.ate ? '吃饱了，去别处看看' : '回味刚才的小小发现');
     agent.decisionIn = 3.5 + this.host.random() * 3;
     agent.needs.curiosity = Math.max(agent.needs.curiosity, .5);
+    if (['sneezeReply', 'elementReply'].includes(action.kind) && !action.meta.reactionRecorded) this.recordReaction(agent, action);
+  }
+
+  private recordReaction(agent: EcologyAgent, action: ComposedAction): void {
+    const source = this.host.agents.find((a) => a.uid === action.meta.sourceUid);
+    if (!source) return;
+    action.meta.reactionRecorded = true;
     if (action.kind === 'sneezeReply') {
-      const source = this.host.agents.find((a) => a.uid === action.meta.sourceUid);
-      if (source) this.discover('sneeze-company', 'moment', '一口喷嚏，两双眼睛', '花粉飘起来，旁边的伙伴也看了过来。', [source, agent]);
+      this.discover('sneeze-company', 'moment', '一口喷嚏，两双眼睛', '花粉飘起来，旁边的伙伴也看了过来。', [source, agent]);
+    } else if (action.kind === 'elementReply') {
+      const title = action.meta.reactionKind === 'electric' ? '一点电光，几双眼睛'
+        : action.meta.reactionKind === 'water-splash' ? '水花落下，伙伴停步' : '火光亮起，伙伴回头';
+      this.discover(`reply-${action.meta.reactionKind}`, 'moment', title,
+        '附近的伙伴停下来看看，按自己的性格回应这一点小动静。', [source, agent]);
     }
   }
 
@@ -408,18 +482,24 @@ export class LivingSimulation {
       }
       const point = this.near(agent, fruit, agent.radius + .2, agent.radius + .45);
       if (!point) continue;
-      const hungrier = this.host.agents.find((other) => other !== agent && other.state !== 'sleeping' && other.needs.hunger > agent.needs.hunger + .12 && dist(other, fruit) < 4);
+      const hungrier = this.host.agents.find((other) => other !== agent && other.state !== 'sleeping' && other.profile.living.interests.fruit > .1
+        && !this.host.wantsSleep(other) && other.needs.hunger > agent.needs.hunger + .12 && dist(other, fruit) < 4);
       if (hungrier && agent.needs.hunger < .72 && !this.inviters.has(fruit.id)) {
         const aside = this.near(agent, fruit, agent.radius + 1.5, agent.radius + 1.9) ?? point;
         if (this.start(agent, 'yieldFruit', true, [moving('notice-fruit', point, '发现一枚果子'), facing('offer', fruit, '这次让伙伴先吃'),
+          facing('look-at-hungry-friend', hungrier, '看看旁边是不是也有伙伴想吃'),
+          pose('offer-pause', 'idle', .6, '等伙伴注意到这枚果子', { point: hungrier, bubble: 'curious' }),
+          facing('offer-fruit', fruit, '把目光留在这枚香甜的果子上'),
           pose('invite', 'happy', 1.8, '让出果子，招呼旁边的伙伴', { point: fruit, effect: 'invite', reach: agent.radius + .8, bubble: 'happy' }),
-          moving('give-space', aside, '退到一旁，让伙伴先来')], { fruitId: fruit.id })) {
+          moving('give-space', aside, '退到一旁，让伙伴先来')], { fruitId: fruit.id, sourceUid: hungrier.uid })) {
           memory.eatAfter = now + 25; return true;
         }
       }
       const reach = agent.radius + .7;
       if (this.start(agent, 'eatFruit', true, [moving('approach-fruit', point, '去吃一枚香甜的水果', agent.needs.hunger > .7, 'fruit'), facing('smell-fruit', fruit, '闻到了水果的香气'),
+        pose('sniff-fruit', 'idle', .7, '凑近闻一闻，再慢慢吃', { point: fruit, bubble: 'fruit' }),
         pose('bite-one', 'idle', 2, '咔嚓，吃一小口', { point: fruit, effect: 'bite', reach, bubble: 'eating' }),
+        pose('chew-pause', 'idle', .6, '嚼一嚼，这一口真甜', { point: fruit }),
         pose('bite-two', 'idle', 2, '慢慢吃完，心满意足', { point: fruit, effect: 'bite', reach, bubble: 'eating' }),
         pose('satisfied', 'happy', 2, '吃饱了，心情真好', { bubble: 'happy' })], { fruitId: fruit.id })) {
         fruit.eaterUid = agent.uid; memory.eatAfter = now + 8; return true;
@@ -432,9 +512,14 @@ export class LivingSimulation {
     const point = this.near(agent, P.fire, P.fire.radius + agent.radius + .35, P.fire.radius + agent.radius + .7, true);
     if (!point) return false;
     const back = this.near(agent, P.fire, P.fire.radius + agent.radius + 1.5, P.fire.radius + agent.radius + 2, true) ?? point;
-    if (!this.start(agent, 'lightFire', true, [moving('approach-wood', point, '去看看备好的柴火'), facing('aim-fire', P.fire, '对准干燥的木堆'),
-      pose('kindle', 'attack', 2.2, '轻轻喷火，点亮木堆', { point: P.fire, effect: 'ignite', reach: P.fire.radius + agent.radius + 1, bubble: 'warm' }),
-      moving('step-away', back, '退到暖光外围'), pose('enjoy-fire', 'happy', 2, '第一簇火光亮起来了', { point: P.fire, bubble: 'happy' })])) return false;
+    if (!this.start(agent, 'lightFire', true, [moving('approach-wood', point, '去看看备好的柴火'),
+      pose('inspect-wood', 'idle', .8, '看看干柴，找一处合适的位置', { point: P.fire, bubble: 'curious' }),
+      facing('aim-fire', P.fire, '对准干燥的木堆'),
+      pose('prepare-breath', 'idle', .85, '吸一小口气，准备轻轻喷火', { point: P.fire, bubble: 'warm' }),
+      pose('kindle', 'attack', 2.2, '轻轻喷火，点亮木堆', { point: P.fire, effect: 'ignite', effectAt: .5, reach: P.fire.radius + agent.radius + 1, bubble: 'warm' }),
+      pose('settle-fire', 'idle', .7, '缓一口气，看看火光有没有亮起来', { point: P.fire }),
+      moving('step-away', back, '退到暖光外围'), facing('fire-look-back', P.fire, '回头看看，有没有伙伴也注意到了'),
+      pose('enjoy-fire', 'happy', 2, '第一簇火光亮起来了', { point: P.fire, bubble: 'happy' })])) return false;
     this.memories.get(agent.uid)!.fireAfter = this.host.now() + T.repeatFireSeconds;
     return true;
   }
@@ -460,10 +545,15 @@ export class LivingSimulation {
     const drink = this.near(agent, P.river, 0, .35);
     const bank = this.near(agent, P.garden, agent.radius + .35, agent.radius + 1.2, true);
     if (!drink || !bank || !isInRiver(drink.x, drink.z)) return false;
-    if (!this.start(agent, 'waterFlowers', true, [moving('enter-stream', drink, '到清凉的河里吸一口水'), facing('face-water', { x: drink.x + .05, z: drink.z + .5 }, '在水里停一会儿'),
+    if (!this.start(agent, 'waterFlowers', true, [moving('enter-stream', drink, '到清凉的河里吸一口水'),
+      pose('inspect-water', 'idle', .7, '先看看水面上的小涟漪', { point: { x: drink.x + .05, z: drink.z + .5 }, bubble: 'water' }),
+      facing('face-water', { x: drink.x + .05, z: drink.z + .5 }, '在水里停一会儿'),
       pose('drink', 'idle', 2.6, '吸一口清凉的河水', { point: drink, effect: 'drink', reach: .7, bubble: 'water' }),
+      pose('swallow-water', 'idle', .65, '吸好这一口，再把水带上岸', { point: drink }),
       moving('reach-bank', bank, '把水带到岸边的花丛'), facing('aim-flowers', P.garden, '对准岸边的小花'),
-      pose('water-garden', 'attack', 2.6, '给花朵一点水', { point: P.garden, effect: 'splash', reach: agent.radius + 2, bubble: 'water' }),
+      pose('prepare-splash', 'idle', .75, '鼓起一点点劲，瞄准花丛', { point: P.garden, bubble: 'water' }),
+      pose('water-garden', 'attack', 2.6, '给花朵一点水', { point: P.garden, effect: 'splash', effectAt: .5, reach: agent.radius + 2, bubble: 'water' }),
+      pose('settle-water', 'idle', .75, '水花落下，缓缓放松下来', { point: P.garden }),
       pose('admire-garden', 'happy', 2.5, '花朵舒展开了', { point: P.garden, bubble: 'flower' })])) return false;
     this.memories.get(agent.uid)!.waterAfter = this.host.now() + T.repeatWaterSeconds;
     return true;
@@ -488,9 +578,43 @@ export class LivingSimulation {
     if (sneeze) steps.push(pose('itchy-nose', 'idle', 1, '鼻子有一点点痒', { bubble: 'curious' }),
       pose('sneeze', 'attack', 1.6, '啊嚏！花粉轻轻飘起来', { point: P.flowers, effect: 'pollen', reach: agent.radius + 1.5, bubble: 'surprised' }));
     steps.push(pose('flower-delight', 'happy', 2, '这朵花真香', { point: P.flowers, effect: 'invite', reach: agent.radius + 1.5, bubble: 'happy' }));
+    if (sneeze && agent.profile.living.abilities.electric && this.host.now() >= memory.electricAfter && this.sparkSpace(agent, point)) {
+      steps.push(...this.electricSteps(agent, point));
+    }
     if (!this.start(agent, 'smellFlowers', true, steps)) return false;
     memory.flowerVisits++; memory.flowerAfter = this.host.now() + T.repeatFlowerSeconds;
     return true;
+  }
+
+  private sparkSpace(agent: EcologyAgent, point: EcologyPoint): boolean {
+    return isTraversable(point, agent.radius, 'land') && !isOnBridge(point.x, point.z)
+      && !this.host.agents.some((other) => other !== agent && other.state === 'sleeping'
+        && dist(other, point) < T.electricQuietRadius + other.radius);
+  }
+
+  private electricSteps(agent: EcologyAgent, point: EcologyPoint): LivingStep[] {
+    const angle = Math.atan2(point.x - P.flowers.x, point.z - P.flowers.z);
+    const gaze = { x: point.x + Math.sin(angle) * .9, z: point.z + Math.cos(angle) * .9 };
+    return [facing('electric-look-around', gaze, '看看周围，找一点空地'),
+      pose('electric-charge', 'idle', 1.05, '脸颊蓄起一点小小的电光', { point: gaze, bubble: 'electric' }),
+      pose('electric-flicker', 'attack', 1.6, '轻轻放出一圈小电火花', { point: gaze, effect: 'electric', effectAt: .4, reach: agent.radius + 1.5, bubble: 'electric' }),
+      pose('electric-settle', 'idle', .75, '呼，电火花散开了', { point: gaze }),
+      facing('electric-look-back', P.flowers, '回头看看，伙伴有没有注意到'),
+      pose('electric-delight', 'happy', 1.4, '只是一个小把戏，也很开心', { bubble: 'happy' })];
+  }
+
+  private electricDisplay(agent: EcologyAgent): boolean {
+    if (agent.needs.energy < .42 || agent.needs.sleep > .6 || agent.profile.locomotion === 'aquatic') return false;
+    const home = agent.profile.living.home;
+    for (const center of [home, { x: home.x + 1.4, z: home.z - 1.2 }, { x: home.x + .8, z: home.z + 1.2 }]) {
+      const point = this.near(agent, center, .2, 1.1, true);
+      if (!point || !this.sparkSpace(agent, point)) continue;
+      if (this.start(agent, 'electricDisplay', true, [moving('electric-open-space', point, '到空地上，试一个小把戏', false, 'electric'), ...this.electricSteps(agent, point)])) {
+        this.memories.get(agent.uid)!.electricAfter = this.host.now() + 8;
+        return true;
+      }
+    }
+    return false;
   }
 
   nap(agent: EcologyAgent): boolean {
@@ -506,6 +630,7 @@ export class LivingSimulation {
       if (!point || !this.host.canRest(agent, point)) continue;
       if (this.loudNoise && this.host.now() - this.loudNoise.at < 18 && dist(point, this.loudNoise) < 3.5) continue;
       if (this.start(agent, 'nap', false, [moving('quiet-place', point, '找一处安静的树荫'),
+        pose('settle-down', 'idle', .9, '换一个舒服的朝向，慢慢静下来'),
         pose('getting-sleepy', 'idle', 2.3, '这里很舒服，可以睡一会儿', { bubble: 'sleepy' })])) {
         memory.napAfter = this.host.now() + 45; return true;
       }
@@ -531,6 +656,7 @@ export class LivingSimulation {
       if (!agent.profile.living.abilities.ignite || !this.world.campfire.prepared || this.world.campfire.lit) return false;
       this.world.campfire.lit = true; this.world.campfire.heat = 1; this.world.campfire.litAt = now;
       this.igniterUid = agent.uid; this.signal('fire', agent, P.fire, T.firePerception);
+      this.signal('fire-burst', agent, P.fire, T.elementalRadius.fire);
       this.discover('first-fire', 'behavior', '第一簇火光', `${agent.pokemon.name}靠近木堆，轻轻点起了火。`, [agent]);
     } else if (step.effect === 'drink') {
       if (!isInRiver(agent.x, agent.z) || !agent.profile.living.abilities.waterFlowers) return false;
@@ -540,10 +666,16 @@ export class LivingSimulation {
       if (!action.meta.water || isInRiver(agent.x, agent.z)) return false;
       action.meta.water = false; this.world.flowers.moisture = .98; this.world.flowers.bloom = Math.max(.82, this.world.flowers.bloom);
       this.gardenerUid = agent.uid; this.signal('flowers', agent, P.garden, T.flowerPerception);
+      this.signal('water-splash', agent, P.garden, T.elementalRadius.water);
       this.discover('water-flowers', 'behavior', '给花的一口水', '从河里带来的水，让岸边的小花舒展开来。', [agent]);
     } else if (step.effect === 'pollen') {
-      this.signal('sneeze', agent, agent, T.sneezePerception); this.softNoise(agent, 2.5);
+      this.signal('sneeze', agent, agent, T.sneezePerception);
       this.discover('flower-sneeze', 'behavior', '花香里的小喷嚏', '凑近花朵时，鼻子忽然有一点痒。', [agent]);
+    } else if (step.effect === 'electric') {
+      if (!agent.profile.living.abilities.electric || !this.sparkSpace(agent, agent)) return false;
+      this.memories.get(agent.uid)!.electricAfter = now + T.repeatElectricSeconds;
+      this.signal('electric', agent, agent, T.elementalRadius.electric);
+      this.discover('little-electric', 'behavior', '脸颊边的小电光', `${agent.pokemon.name}先看了看周围，再轻轻放出一点电火花。`, [agent]);
     } else if (step.effect === 'invite') {
       if (action.kind === 'yieldFruit' && action.meta.fruitId !== undefined) {
         this.inviters.set(action.meta.fruitId, agent.uid);
@@ -561,7 +693,22 @@ export class LivingSimulation {
   }
 
   private signal(kind: LivingSignal['kind'], agent: EcologyAgent, point: EcologyPoint, radius: number): void {
-    this.signals.push({ x: point.x, z: point.z, id: ++this.signalSerial, kind, at: this.host.now(), sourceUid: agent.uid, radius });
+    const now = this.host.now(), instant = this.isInstantSignal(kind);
+    const signal: LivingSignal = { x: point.x, z: point.z, id: ++this.signalSerial, kind, at: now, sourceUid: agent.uid, radius,
+      expiresAt: now + (instant ? T.elementalSignalSeconds : 18), replies: 0, readyAt: new Map() };
+    if (instant) {
+      for (const other of this.host.agents) {
+        if (other === agent || dist(other, point) > radius || other.performance || other.partnerUid
+          || ['sleeping', 'happy', 'arriving'].includes(other.state) || other.needs.sleep >= .65 || this.host.wantsSleep(other)) continue;
+        const readyAt = now + .1 + dist(other, point) * .035 + other.profile.living.caution * .06 + this.host.random() * .12;
+        signal.readyAt.set(other.uid, readyAt);
+        const memory = this.memories.get(other.uid)!;
+        memory.nextThink = Math.min(memory.nextThink, readyAt);
+      }
+      // Gentle local effects may prompt a sleeping murmur, never a forced wake.
+      this.softNoise(point, Math.min(2.8, radius * .65));
+    }
+    this.signals.push(signal);
     if (this.signals.length > 24) this.signals.shift();
   }
 
@@ -586,8 +733,16 @@ export class LivingSimulation {
   private discover(key: string, category: DiscoveryCandidate['category'], title: string, description: string, agents: EcologyAgent[], bySpecies = true): void {
     const speciesIds = [...new Set(agents.map((a) => a.pokemonId))].sort();
     const id = `${category}:${key}${bySpecies ? `:${speciesIds.join('-')}` : ''}`;
+    const candidate: DiscoveryCandidate = { id, category, title, description, speciesIds,
+      participantUids: agents.map((a) => a.uid), at: this.host.now() };
+    const previous = this.recentEvents.at(-1);
+    if (!previous || previous.id !== id || candidate.at - previous.at > .2
+      || previous.participantUids.join('|') !== candidate.participantUids.join('|')) {
+      this.recentEvents.push(candidate);
+      if (this.recentEvents.length > T.maxRecentEvents) this.recentEvents.shift();
+    }
     if (this.discoveries.some((item) => item.id === id)) return;
-    this.discoveries.push({ id, category, title, description, speciesIds, participantUids: agents.map((a) => a.uid), at: this.host.now() });
+    this.discoveries.push(candidate);
     if (this.discoveries.length > 128) this.discoveries.shift();
     this.host.note(title);
   }

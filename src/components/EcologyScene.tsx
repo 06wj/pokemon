@@ -19,6 +19,8 @@ const tools: { id: LivingTool; label: string; icon: string }[] = [
   { id: 'rustle-flowers', label: '拨花', icon: 'flower' },
 ];
 function storageAvailable(): JournalStorage | null { try { return window.localStorage; } catch { return null; } }
+const audioPreferenceKey = 'natura.living-audio.v1';
+function initialAudioPreference(): boolean { try { return window.localStorage.getItem(audioPreferenceKey) !== 'muted'; } catch { return true; } }
 
 export function EcologyScene({ assetBase, onBack }: EcologySceneProps) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -45,6 +47,8 @@ export function EcologyScene({ assetBase, onBack }: EcologySceneProps) {
   const [capturing, setCapturing] = useState(false);
   const [restarting, setRestarting] = useState(false);
   const [boot, setBoot] = useState(0);
+  const [soundEnabled, setSoundEnabled] = useState(initialAudioPreference);
+  const soundEnabledRef = useRef(soundEnabled);
   panelOpenRef.current = panel !== null;
   const openPanel = useCallback((next: LivingPanel): void => {
     if (!panelOpenRef.current) panelTriggerRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
@@ -91,7 +95,7 @@ export function EcologyScene({ assetBase, onBack }: EcologySceneProps) {
     }).then(async (created) => {
       if (!created) return;
       if (cancelled) { created.destroy(); return; }
-      controller = created; controllerRef.current = created; created.resize(); setReady(true);
+      controller = created; controllerRef.current = created; created.resize(); created.setSoundEnabled(soundEnabledRef.current); setReady(true);
       if (panelOpenRef.current) created.setPaused(true);
       await created.startLiving();
       if (!cancelled && snapshotRef.current.count === 0) throw new Error('居民暂时没有抵达，请重新打开箱庭再试一次。');
@@ -163,6 +167,13 @@ export function EcologyScene({ assetBase, onBack }: EcologySceneProps) {
     finally { if (mountedRef.current) setRestarting(false); }
   };
   const selected = snapshot.agents.find((agent) => agent.uid === snapshot.followingId);
+  const toggleSound = (): void => {
+    const next = !soundEnabledRef.current;
+    soundEnabledRef.current = next; setSoundEnabled(next);
+    controllerRef.current?.setSoundEnabled(next);
+    if (next) controllerRef.current?.resumeAudioFromGesture();
+    try { window.localStorage.setItem(audioPreferenceKey, next ? 'enabled' : 'muted'); } catch { /* Audio is available without persistence. */ }
+  };
   const disabled = !ready || !snapshot.livingReady || restarting;
   const firePrepared = snapshot.world.campfire.prepared || snapshot.world.campfire.lit;
   const weather = snapshot.world.weather;
@@ -175,7 +186,7 @@ export function EcologyScene({ assetBase, onBack }: EcologySceneProps) {
       <header className="living-header"><div className="living-brand"><Icon name="tree" /><div><h1>共生之境</h1><small>A LITTLE WORLD, ALIVE.</small></div></div>
         <nav className="living-header-actions" aria-label="箱庭与收藏"><div className="living-time" role="group" aria-label="切换时间">
           <button disabled={!ready} aria-pressed={snapshot.timeOfDay === 'dawn'} onClick={() => controllerRef.current?.setTimeOfDay('dawn')}><Icon name="sun" /><span>清晨</span></button><button disabled={!ready} aria-pressed={snapshot.timeOfDay === 'dusk'} onClick={() => controllerRef.current?.setTimeOfDay('dusk')}><Icon name="dusk" /><span>黄昏</span></button>
-        </div><label className="living-weather"><span>天气</span><select aria-label="选择天气" value={weather.kind} disabled={!ready} onChange={(event) => controllerRef.current?.setWeather(event.currentTarget.value as LivingWeather)}><option value="sunny">晴天</option><option value="rain">下雨</option><option value="snow">下雪</option></select></label><button className="living-nav-button" onClick={() => { setPhoto(null); openPanel('album'); }} aria-label={`打开相册，${journal.photos.length}张照片`}><Icon name="album" /><span>相册</span></button><button className="living-nav-button" onClick={() => openPanel('discoveries')} aria-label={`打开发现手记，已发现${journal.discoveries.length}条`}><Icon name="book" /><span>发现</span>{journal.discoveries.length > 0 && <i aria-hidden="true">{journal.discoveries.length}</i>}</button><button className="living-icon-button" onClick={() => openPanel('settings')} aria-label="箱庭设置与帮助"><Icon name="more" /></button></nav>
+        </div><label className="living-weather"><span>天气</span><select aria-label="选择天气" value={weather.kind} disabled={!ready} onChange={(event) => controllerRef.current?.setWeather(event.currentTarget.value as LivingWeather)}><option value="sunny">晴天</option><option value="rain">下雨</option><option value="snow">下雪</option></select></label><button className="living-icon-button living-sound-toggle" aria-label={soundEnabled ? '关闭岛上声音' : '开启岛上声音'} aria-pressed={soundEnabled} title={soundEnabled ? '岛上声音已开启，点击静音' : '点击听听岛上的声音'} onClick={toggleSound}><Icon name={soundEnabled ? 'sound' : 'muted'} /></button><button className="living-nav-button" onClick={() => { setPhoto(null); openPanel('album'); }} aria-label={`打开相册，${journal.photos.length}张照片`}><Icon name="album" /><span>相册</span></button><button className="living-nav-button" onClick={() => openPanel('discoveries')} aria-label={`打开发现手记，已发现${journal.discoveries.length}条`}><Icon name="book" /><span>发现</span>{journal.discoveries.length > 0 && <i aria-hidden="true">{journal.discoveries.length}</i>}</button><button className="living-icon-button" onClick={() => openPanel('settings')} aria-label="箱庭设置与帮助"><Icon name="more" /></button></nav>
       </header>
       <main className="living-playfield" aria-label="共生之境生态箱庭">
         <div ref={containerRef} className="eco-canvas living-canvas" />

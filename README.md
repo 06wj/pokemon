@@ -10,9 +10,11 @@ A first visit opens the living world and automatically loads its twenty resident
 
 - **Autonomous daily life:** ripe fruit falls naturally; residents investigate, eat, explore, seek tree shade, sleep and wake. Small, temporary bubbles explain what catches their attention. There is no battle, level grind or missed-feeding penalty.
 - **Four core stories:** fruit foraging and eating; Charmander lighting a prepared campfire and attracting companions; Squirtle collecting river water and watering flowers; Pikachu smelling flowers and prompting nearby reactions. Idle, Walk, Run, Attack, Happy and Sleep are composed with movement, timing and effects.
+- **Small gestures and local reactions:** fire, water and Pikachu's brief electrical display have inspection, preparation and settling beats. Nearby residents respond according to distance, personality and their current activity. Continuous idle playback, small glances and body adjustments keep these pauses connected.
 - **Gentle intervention:** observe (**O**), select fruit throwing (**F**) and click suitable ground, shake the tree, prepare firewood or rustle flowers. Dragging still orbits the camera; a focused canvas accepts **Enter** to throw fruit beside the meadow. Click a resident portrait to follow, then pet it or return to the overview. Photograph the current view with **C** or the shutter button.
 - **Time and weather:** choose dawn/dusk and sunny/rain/snow. Snow accumulates gradually and melts after switching to rain or sunshine; weather influences where residents choose to go. Pausing stops accumulation and melting while still allowing weather selection. Restarting keeps the selected weather, clears snow coverage and restarts daily life.
-- **Local keepsakes:** up to 12 JPEG photos retain their visible subjects, associated discoveries, time and weather. A full album or storage error keeps existing photos and offers the new image for download. Species, behavior and moment discoveries use stable IDs across visits. Restarting preserves the album and discoveries; dialogs pause the world and support Escape and keyboard focus navigation.
+- **Island sounds:** the top-right sound switch remembers its setting. Web Audio starts only after a user gesture, adding quiet footsteps, fruit, leaves, fire, water and electrical sounds with distance and stereo placement. Pausing, opening a journal or hiding the page silences them; resuming does not replay missed sounds.
+- **Local keepsakes:** up to 12 JPEG photos retain their visible subjects, associated discoveries, time and weather. A full album or storage error keeps existing photos and offers the new image for download. Species, behavior and moment discoveries use stable IDs across visits; photo Moment labels use the latest real occurrence and its visible participants. Restarting preserves the album and discoveries; dialogs pause the world and support Escape and keyboard focus navigation.
 
 The [design catalog](docs/design/interaction-catalog.md) also contains future ideas. Its twenty scene cards are not a list of fully implemented features: shadow chasing, persistent relationship memory and broader collection systems remain later work.
 
@@ -61,6 +63,7 @@ WebGPU support and output depend on the browser and GPU. If rendering is incorre
 - **Application:** `EcologyScene` provides the game UI; `EcologyStageController` owns its assets, camera, clock and capture. `PokemonStageController` continues to serve the original gallery.
 - **Living systems:** `src/ecology/livingSimulation.ts` coordinates residents, while `actionComposer.ts` advances action sequences and `livingContent.ts` configures cast, interests and tuning. `livingWeather.ts` owns gradual snow and wetness changes.
 - **Presentation and records:** `src/hilo/livingEffects.ts` renders food, fire and interaction effects; `src/hilo/livingWeatherEffects.ts` handles precipitation and snow surfaces. `src/ecology/livingJournal.ts` validates and persists local photos/discoveries, preserving recoverable data on storage failures.
+- **Motion and sound:** `src/hilo/livingMotion.ts` adds small body gestures without changing navigation positions. `src/hilo/livingAudio.ts` synthesizes sounds locally, deduplicates action effects, caps footsteps and active sources, and owns audio pause/reset/disposal.
 - **Assets:** self-contained GLBs with skeletal animation and embedded textures. Per-mesh joint palettes fit the 128-bone GPU path on WebGL2 and WebGPU.
 - **Materials and lighting:** material adapters, HDR environment lighting, toon shading, habitat-specific water and particle effects.
 - **Delivery:** eligible opaque color textures use JPEG without reducing resolution. Other PNGs, including normal/data maps and expression textures, retain their original bytes. Models and the WebGPU shader compiler load on demand.
@@ -95,7 +98,7 @@ npm run build
 npm run preview
 ```
 
-For focused weather regression checks, run `node scripts/test-living-weather.mjs`. The living suite covers daily behavior, action completion, records, picking and routes. Check weather visuals, photo capture and input separately in browser runs for each rendering backend.
+For focused checks, run `node scripts/test-living-weather.mjs` or `node scripts/test-living-audio.mjs`. The living suite covers daily behavior, local reactions, motion, audio scheduling, records, picking and routes. Check visuals, photo capture and input separately in browser runs for each rendering backend; current verification limits are recorded in [implementation status](docs/design/implementation-status.md).
 
 Builds write `dist/` with relative asset paths for subdirectory hosting. Keep the generated `.wasm` file: the WebGPU shader compiler loads it on demand. Runtime model metadata is trimmed during builds, and production source maps are disabled. Documentation screenshots live outside `public/`, so they do not increase the deployed gallery payload.
 

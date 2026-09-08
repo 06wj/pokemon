@@ -26,7 +26,7 @@ export interface ComposedAction {
   elapsed: number;
   entered: boolean;
   fired: boolean;
-  meta: { fruitId?: number; sourceUid?: string; ate?: boolean; water?: boolean; nap?: boolean };
+  meta: { fruitId?: number; sourceUid?: string; ate?: boolean; water?: boolean; nap?: boolean; reactionKind?: string; reactionRecorded?: boolean };
 }
 
 export interface ComposerHost {
@@ -62,7 +62,8 @@ export function advanceAction(agent: EcologyAgent, action: ComposedAction, dt: n
     facing = Math.abs(angleDifference(agent.heading, target)) < 0.18;
   }
   const progress = Math.min(1, action.stepTime / Math.max(.01, step.duration));
-  if (step.effect && !action.fired && progress >= (step.effectAt ?? .45)) {
+  const effectAt = Math.max(0, Math.min(1, step.effectAt ?? .45));
+  if (step.effect && !action.fired && progress >= effectAt) {
     if ((step.point && step.reach !== undefined && separation(agent, step.point) > step.reach) || !facing) return 'cancelled';
     if (!host.effect(agent, action, step)) return 'cancelled';
     action.fired = true;
@@ -72,6 +73,7 @@ export function advanceAction(agent: EcologyAgent, action: ComposedAction, dt: n
     animation: step.kind === 'move' ? agent.gait : step.animation,
     bubble: step.kind === 'move' && action.stepTime > 1.8 ? null : step.bubble ?? null,
     effect: action.fired ? step.effect ?? null : null,
+    effectProgress: action.fired && step.effect ? effectAt >= 1 ? 1 : Math.max(0, Math.min(1, (progress - effectAt) / (1 - effectAt))) : undefined,
     progress, duration: step.duration, target: step.point ? { x: step.point.x, z: step.point.z } : null,
   };
   const reached = step.point && separation(agent, step.point) <= .2;

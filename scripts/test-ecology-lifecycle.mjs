@@ -181,6 +181,18 @@ try {
   controller.updateResident(movingAgent, gaitView, 1 / 30);
   assert.equal(gaitView.clip, 'sleep', 'A real sleeping state selects the sleep animation');
 
+  let poseRestarts = 0;
+  gaitView.restorePose = () => { poseRestarts++; };
+  movingAgent.state = 'resting';
+  movingAgent.performance = { sequenceId: 'inspect-test', stepId: 'look', animation: 'idle', effect: null,
+    bubble: 'curious', progress: .2, duration: 1, target: null };
+  controller.updateResident(movingAgent, gaitView, 1 / 30);
+  const enteredIdle = poseRestarts;
+  movingAgent.performance.stepId = 'wait';
+  controller.updateResident(movingAgent, gaitView, 1 / 30);
+  assert.equal(poseRestarts, enteredIdle, 'Consecutive looking / waiting steps preserve the idle skeleton loop');
+  movingAgent.performance = null;
+
   // The authored southern estuary lowers both ground and river surfaces. Every
   // locomotion view must follow that actual surface, rather than floating at y=0.
   const slopeAgent = { ...movingAgent, x: -0.5, z: 9.2, state: 'resting',

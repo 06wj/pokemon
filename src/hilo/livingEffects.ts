@@ -4,6 +4,7 @@ import { isInRiver, isOnBridge, terrainBaseHeight, waterSurfaceHeight } from '..
 import type { EcologyPoint } from '../ecology/layout.ts';
 import type { LivingEffect, LivingEffectResident, LivingFruit, LivingWorld } from '../ecology/livingTypes.ts';
 import { LivingWeatherEffects } from './livingWeatherEffects.ts';
+import { LivingElementalEffects, createLivingEmitterFrame } from './livingElementalEffects.ts';
 
 type Point3 = { x: number; y: number; z: number };
 type ParticleKind = 'water' | 'fire' | 'gold' | 'pollen' | 'crumb';
@@ -168,6 +169,8 @@ export class LivingEffects {
   private readonly glowMaterial: Hilo3d.PBRMaterial;
   private readonly fireLight: Hilo3d.PointLight;
   private readonly weatherEffects: LivingWeatherEffects;
+  private readonly elementalEffects: LivingElementalEffects;
+  private readonly emitter = createLivingEmitterFrame();
   private readonly shake = { x: 0, z: 0 };
   private previousMature = 0;
   private lastElapsed = -1;
@@ -215,7 +218,14 @@ export class LivingEffects {
       x: LIVING_POINTS.fire.x, y: terrainBaseHeight(LIVING_POINTS.fire.x, LIVING_POINTS.fire.z) + .75,
       z: LIVING_POINTS.fire.z, amount: 0, range: 5.1, enabled: false }).addTo(this.root);
     this.weatherEffects = new LivingWeatherEffects(stage);
+    this.elementalEffects = new LivingElementalEffects(stage);
   }
+
+  registerResidentRig(uid: string, pokemonId: string, rig: Hilo3d.Node): void {
+    this.elementalEffects.registerResidentRig(uid, pokemonId, rig);
+  }
+
+  unregisterResidentRig(uid: string): void { this.elementalEffects.unregisterResidentRig(uid); }
 
   update(dt: number, world: LivingWorld, residents: readonly LivingEffectResident[], elapsed: number): void {
     if (this.disposed || !Number.isFinite(elapsed)) return;
@@ -280,6 +290,7 @@ export class LivingEffects {
     this.updateFire(step, world, elapsed);
     this.updateParticles(step);
     this.weatherEffects.update(step, world, elapsed);
+    this.elementalEffects.update(residents, elapsed);
   }
 
   private updateFruit(view: FruitView, fruit: LivingFruit, elapsed: number): void {
@@ -303,13 +314,14 @@ export class LivingEffects {
   }
 
   private residentEffect(resident: LivingEffectResident, effect: LivingEffect, target: EcologyPoint | null): void {
+    // Continuous elemental performances have their own bounded geometry batches.
+    if (effect === 'ignite' || effect === 'splash' || effect === 'electric') return;
     const forward = target ? { x: target.x - resident.x, z: target.z - resident.z }
       : { x: Math.sin(resident.heading), z: Math.cos(resident.heading) };
     const length = Math.max(.001, Math.hypot(forward.x, forward.z));
     const dx = forward.x / length, dz = forward.z / length;
-    const mouthHeight = resident.pokemonId === '001' ? .42 : resident.pokemonId === '004' ? .72 : .61;
-    const mouth = { x: resident.x + dx * resident.radius * .8,
-      y: resident.y + Math.max(.2, resident.height * mouthHeight), z: resident.z + dz * resident.radius * .8 };
+    this.elementalEffects.readEmitter(resident, this.emitter);
+    const mouth = this.emitter.mouth;
     if (effect === 'bite') { this.crumbs(mouth); return; }
     if (effect === 'drink') {
       const point = target ?? { x: mouth.x, z: mouth.z };
@@ -317,29 +329,13 @@ export class LivingEffects {
       this.ripple(point.x + .06, waterSurfaceHeight(point.z) + .038, point.z, .52, .22);
       return;
     }
-    if (effect === 'splash') {
-      const goal = target ?? LIVING_POINTS.garden;
-      const destination = { x: goal.x, y: groundAt(goal.x, goal.z) + .12, z: goal.z };
-      const travel = Math.max(.34, Math.min(.66, Math.hypot(goal.x - mouth.x, goal.z - mouth.z) * .15));
-      for (let i = 0; i < 14; i++) {
-        const spread = .07, jitterX = (this.random() - .5) * spread, jitterZ = (this.random() - .5) * spread;
-        this.particle('water', mouth, (destination.x - mouth.x + jitterX) / travel,
-          (destination.y - mouth.y + .5 * 5.6 * travel * travel) / travel,
-          (destination.z - mouth.z + jitterZ) / travel, travel, .046 + this.random() * .029, 5.6, i * .018);
-      }
-      this.ripple(destination.x, destination.y, destination.z, .55, travel);
-      return;
-    }
-    const count = effect === 'ignite' ? 10 : effect === 'pollen' ? 10 : 3;
+    const count = effect === 'pollen' ? 10 : 3;
     for (let i = 0; i < count; i++) {
-      const speed = effect === 'ignite' ? 2.4 + this.random() * 1.6 : .25 + this.random() * .75;
-      const spread = effect === 'ignite' ? .28 : .65;
-      this.particle(effect === 'ignite' ? (i % 3 === 0 ? 'gold' : 'fire') : effect === 'pollen' ? 'pollen' : 'gold', mouth,
+      const speed = .25 + this.random() * .75, spread = .65;
+      this.particle(effect === 'pollen' ? 'pollen' : 'gold', mouth,
         dx * speed + (this.random() - .5) * spread, .10 + this.random() * .30,
         dz * speed + (this.random() - .5) * spread,
-        effect === 'ignite' ? .24 + this.random() * .20 : .7 + this.random() * .6,
-        effect === 'ignite' ? .09 + this.random() * .08 : .027 + this.random() * .025,
-        effect === 'ignite' ? -.25 : -.08, i * .014);
+        .7 + this.random() * .6, .027 + this.random() * .025, -.08, i * .014);
     }
   }
 
@@ -424,6 +420,7 @@ export class LivingEffects {
     this.meshes.push(mesh); return mesh;
   }
   private resetView(): void {
+    this.elementalEffects.reset();
     this.effectKeys.clear(); this.previousMature = 0; this.emberTime = 0; this.randomState = 20260908;
     for (const fruit of this.fruitViews) { fruit.id = null; fruit.mesh.visible = false; fruit.retiring = 0; }
     for (const item of this.particles) { item.active = false; item.mesh.visible = false; }
@@ -434,6 +431,7 @@ export class LivingEffects {
     if (this.disposed) return;
     this.disposed = true;
     this.weatherEffects.destroy();
+    this.elementalEffects.destroy();
     this.fireLight.enabled = false; this.fireLight.amount = 0;
     this.fireLight.destroy(this.stage.renderer);
     // Mesh.destroy is the public alpha8 resource boundary: it releases each

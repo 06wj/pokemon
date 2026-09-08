@@ -21,6 +21,7 @@ export interface EcologyAgent extends EcologyPoint {
   gait: EcologyGait;
   animationRate: number;
   plannedSpeed: number;
+  quietSteps: boolean;
   radius: number;
   state: EcologyState;
   behaviorLabel: string;
@@ -80,6 +81,7 @@ export class EcologySimulation {
   private readonly livingDirector: LivingSimulation | null;
   readonly world: LivingWorld;
   readonly discoveries: DiscoveryCandidate[];
+  readonly recentEvents: DiscoveryCandidate[];
 
   constructor(options: { seed?: number; capacity?: number; living?: boolean } = {}) {
     this.seed = options.seed ?? 20260906;
@@ -110,6 +112,7 @@ export class EcologySimulation {
     }) : null;
     this.world = this.livingDirector?.world ?? createLivingWorld();
     this.discoveries = this.livingDirector?.discoveries ?? [];
+    this.recentEvents = this.livingDirector?.recentEvents ?? [];
   }
 
   private random(): number {
@@ -170,7 +173,7 @@ export class EcologySimulation {
     if (!position) return null;
     const agent: EcologyAgent = {
       ...position, uid: `ecology-${++this.sequence}`, pokemonId: pokemon.id, pokemon, profile, radius,
-      heading: this.random() * Math.PI * 2, speed: 0, gait: 'walk', animationRate: 0, plannedSpeed: 0,
+      heading: this.random() * Math.PI * 2, speed: 0, gait: 'walk', animationRate: 0, plannedSpeed: 0, quietSteps: false,
       state: 'arriving', behaviorLabel: '来到栖息地',
       age: 0, stateTime: 0, partnerUid: null,
       needs: { energy: 0.78 + this.random() * 0.18, social: 0.5 + this.random() * 0.3, curiosity: 0.7, sleep: 0.1 + this.random() * 0.15, hunger: 0 },
@@ -278,6 +281,7 @@ export class EcologySimulation {
 
   private setState(agent: EcologyAgent, state: EcologyState, label: string): void {
     agent.state = state;
+    agent.quietSteps = false;
     agent.behaviorLabel = label;
     agent.stateTime = 0;
     if (state !== 'walking') { agent.speed = 0; agent.plannedSpeed = 0; agent.animationRate = 0; agent.gait = 'walk'; }
@@ -616,10 +620,14 @@ export class EcologySimulation {
     let desiredX = (waypoint.x - agent.x) / remaining;
     let desiredZ = (waypoint.z - agent.z) / remaining;
     let crowded = false;
+    let nearSleeper = false;
     for (const other of this.agents) {
       if (other === agent) continue;
       const separation = distance(agent, other);
-      const comfort = agent.radius + other.radius + 0.8;
+      const sleeping = Boolean(this.livingDirector) && other.state === 'sleeping'
+        && agent.profile.locomotion !== 'aquatic';
+      const comfort = agent.radius + other.radius + (sleeping ? 1.2 : .8);
+      if (sleeping && separation < comfort + 1.1) nearSleeper = true;
       if (separation < comfort + 0.5) crowded = true;
       if (separation > 0.001 && separation < comfort) {
         const weight = (comfort - separation) / comfort * 1.25;
@@ -627,18 +635,19 @@ export class EcologySimulation {
         desiredZ += (agent.z - other.z) / separation * weight;
       }
     }
+    agent.quietSteps = nearSleeper;
     const desiredHeading = Math.atan2(desiredX, desiredZ);
     const nearBridge = Math.abs(agent.x - BRIDGE.x) < BRIDGE.halfLength + 0.8
       && Math.abs(agent.z - BRIDGE.z) < BRIDGE.halfWidth + 0.75;
     const nearObstacle = ECOLOGY_OBSTACLES.some((obstacle) => distance(agent, obstacle) < agent.radius + obstacle.radius + 0.8);
     const inWater = isInRiver(agent.x, agent.z) && !isOnBridge(agent.x, agent.z);
     const running = agent.preferredGait === 'run' && agent.profile.runSpeed > agent.profile.moveSpeed
-      && agent.needs.energy > 0.45 && !nearBridge && !nearObstacle && !crowded
+      && agent.needs.energy > 0.45 && !nearBridge && !nearObstacle && !crowded && !nearSleeper
       && !(inWater && agent.profile.locomotion !== 'aquatic' && agent.profile.locomotion !== 'flying');
     agent.gait = running ? 'run' : 'walk';
     const nominal = running ? agent.profile.runSpeed : agent.profile.moveSpeed;
     const circadianPace = this.isInactiveTime(agent) ? 0.8 : 1;
-    const terrainPace = nearBridge ? 0.72 : crowded || nearObstacle ? 0.8
+    const terrainPace = nearSleeper ? .62 : nearBridge ? 0.72 : crowded || nearObstacle ? 0.8
       : inWater && agent.profile.locomotion === 'amphibious' ? 0.7 : 1;
     const headingDifference = Math.atan2(Math.sin(desiredHeading - agent.heading), Math.cos(desiredHeading - agent.heading));
     const turnPace = Math.max(0, Math.cos(headingDifference));

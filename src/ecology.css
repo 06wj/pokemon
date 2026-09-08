@@ -149,6 +149,17 @@
 .ecology-world-marker[data-state='sleeping'] { color: #d7e3cd; background: #425c55df; font-size: 11px; }
 .ecology-world-marker[data-state='happy']::after, .ecology-world-marker[data-state='socializing']::after, .ecology-world-marker[data-state='sleeping']::after { display: none; }
 .ecology-world-marker[hidden] { display: none; }
+.ecology-world-marker { transform-origin: center bottom; }
+.ecology-world-marker[data-bubble='electric'] { color: #805915; background: #fff1a9f5; border-color: #fff8c8; }
+.ecology-world-marker[data-bubble='water'] { color: #39757c; background: #e5f8f4f0; }
+.ecology-world-marker[data-bubble='warm'] { color: #ad642d; background: #fff0d3f0; }
+.living-sound-toggle[aria-pressed='false'] { color: var(--living-muted); }
+@media (max-width: 360px) {
+  .living-header .living-sound-toggle {
+    position: absolute; top: calc(100% + 12px); right: 107px;
+    min-width: 33px; min-height: 33px; background: #fffdf4ed; border-color: var(--living-line);
+  }
+}
 .app-root:has(> .ecology-entry) { position: relative; }
 .ecology-entry { position: absolute; z-index: 3; top: 28px; right: 215px; display: flex; align-items: center; gap: 9px; min-height: 35px; padding: 6px 12px; border: 1px solid #77876366; border-radius: 5px; background: #2e402b; color: #d5dfbf; font-size: 10px; }
 .ecology-entry small { font-size: 7px; color: #a9be8c; }
