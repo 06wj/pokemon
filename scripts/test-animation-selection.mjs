@@ -11,6 +11,7 @@ const server = await createServer({
 const { PokemonStageController } = await server.ssrLoadModule('/src/hilo/PokemonStageController.ts');
 const { ToonModel } = await server.ssrLoadModule('/src/hilo/toonRendering.ts');
 const { getPoseBounds } = await server.ssrLoadModule('/src/hilo/poseBounds.ts');
+const { playAnimationClip } = await server.ssrLoadModule('/src/hilo/animationPlayback.ts');
 const manifest = JSON.parse(await readFile(new URL('../src/content/animatedModels.json', import.meta.url), 'utf8'));
 // Idle-pose extents captured with the pre-upgrade pose baker (8e01bc7).
 // Bind-pose geometry bounds must never replace these when framing GPU-skinned models.
@@ -42,7 +43,7 @@ async function modelFor(id) {
   json.images = [];
   json.textures = [];
   json.materials = json.materials.map(({ name }) => ({ name }));
-  const model = await new Hilo3d.GLTFParser(JSON.stringify(json), { isMultiAnim: true }).parse({
+  const model = await new Hilo3d.GLTFParser(JSON.stringify(json)).parse({
     loadRes: async () => binary.buffer.slice(binary.byteOffset, binary.byteOffset + binary.length),
   });
   await model.ready;
@@ -106,10 +107,34 @@ function closePose(actual, expected) {
 }
 
 try {
+  // A manual controller must not be advanced a second time by Hilo's global
+  // ticker. One-shots hold, loops wrap, and switching restores omitted channels.
+  const root = new Hilo3d.Node();
+  const bone = new Hilo3d.Node({ name: 'clock-test', x: 2 }).addTo(root);
+  const motion = new Hilo3d.AnimationClip({ name: 'move', tracks: [new Hilo3d.AnimationTrack({
+    target: 'clock-test', property: 'translation', times: [0, 1], values: [2, 0, 0, 6, 0, 0],
+  })] });
+  const idle = new Hilo3d.AnimationClip({ name: 'idle', tracks: [new Hilo3d.AnimationTrack({
+    target: 'clock-test', property: 'scale', times: [0, 1], values: [1, 1, 1, 1, 1, 1],
+  })] });
+  const clock = new Hilo3d.Animation({ rootNode: root, clips: [motion, idle] });
+  playAnimationClip(clock, 'move', false);
+  clock.update(.25);
+  assert.equal(bone.x, 3, 'Manual animation deltas are seconds');
+  Hilo3d.Animation.tick(250);
+  assert.equal(bone.x, 3, 'Manual playback is not double-ticked globally');
+  clock.update(2);
+  assert.equal(bone.x, 6, 'A one-shot holds its terminal pose');
+  playAnimationClip(clock, 'move');
+  clock.update(1.25);
+  assert.equal(bone.x, 3, 'Looping clips wrap continuously');
+  playAnimationClip(clock, 'idle');
+  assert.equal(bone.x, 2, 'Switching restores a translation omitted by the new clip');
+  clock.destroy();
   for (const id of Object.keys(idleExtents)) {
     const model = await modelFor(id);
     try {
-      model.anim.play('idle'); model.anim.stop(); model.anim.resume(); model.anim.updateAnimStates();
+      model.anim.play('idle', { loop: true }); model.anim.pause(); model.anim.update(0);
       model.node.updateMatrixWorld(true);
       const geometry = model.meshes.map((mesh) => mesh.geometry);
       const vertices = geometry.map((item) => item.vertices.data.slice());
@@ -145,7 +170,7 @@ try {
       assert.equal(Math.max(...controller.current.meshes.map((mesh) => mesh.skeleton.jointCount)), maxJoints);
       controller.setAnimation('attack');
       const expected = await modelFor(id);
-      expected.anim.play('attack'); expected.anim.stop(); expected.anim.resume(); expected.anim.updateAnimStates();
+      expected.anim.play('attack', { loop: true }); expected.anim.pause(); expected.anim.update(0);
       expected.node.updateMatrixWorld(true);
       closePose(pose(controller.current.meshes), pose(expected.meshes));
       expected.anim.stop();
@@ -157,7 +182,7 @@ try {
     assert.equal(controller.current.animationName, 'sleep', 'A supported action survives a species change');
     assert.deepEqual(events.at(-1), { pokemonId: '002', name: 'sleep' }, 'UI receives the committed model and action together');
     const reference = await modelFor('002');
-    reference.anim.play('sleep'); reference.anim.stop(); reference.anim.resume(); reference.anim.updateAnimStates();
+    reference.anim.play('sleep', { loop: true }); reference.anim.pause(); reference.anim.update(0);
     reference.node.updateMatrixWorld(true);
     closePose(pose(controller.current.meshes), pose(reference.meshes));
     const sleepBounds = [controller.current.bounds.width, controller.current.bounds.height, controller.current.bounds.depth];
@@ -242,7 +267,7 @@ try {
     controller.setMaterial('original');
     assert.equal(controller.toonRendering.enabled, false);
     assert.equal(controller.toonRendering.habitat, null);
-    assert.deepEqual(waterModes, [true, false, false, true, false, true, false], 'Water follows every material transition');
+    assert.deepEqual(waterModes, [true, false, true, true, false, true, false], 'Water follows both pixel and toon material transitions');
     controller.lagoonWater = null;
 
     const validMaterialPreparation = controller.applyMaterial;

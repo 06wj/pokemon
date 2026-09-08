@@ -3,7 +3,7 @@ import { EcologySimulation } from '../src/ecology/simulation.ts';
 import { getEcologyProfile, socialAffinity } from '../src/ecology/profiles.ts';
 import { speciesFamilies } from '../src/ecology/speciesFamilies.ts';
 import { canTraverseSegment, findEcologyPath, isTraversable } from '../src/ecology/navigation.ts';
-import { isInRiver, isOnBridge, riverCenterX } from '../src/ecology/layout.ts';
+import { BRIDGE, SEA_LEVEL, isInRiver, isOnBridge, riverCenterX, terrainBaseHeight, waterSurfaceHeight } from '../src/ecology/layout.ts';
 import { ECOLOGY_CAPACITY, POKEMON_SCALE } from '../src/ecology/config.ts';
 
 const entry = (id, types = ['normal']) => ({ id, types, name: `Pokemon ${id}`, model: '', idleAnimation: 'idle',
@@ -26,6 +26,7 @@ function validate(sim) {
   for (const a of sim.agents) {
     for (const value of [a.x, a.z, a.heading, a.speed, a.animationRate, a.plannedSpeed, a.age, a.stateTime, ...Object.values(a.needs)]) assert.ok(Number.isFinite(value), `${a.uid}: finite state`);
     assert.ok(isTraversable(a, a.radius, a.profile.locomotion), `${a.pokemonId}: legal terrain at ${a.x},${a.z}`);
+    if (a.profile.locomotion === 'land') assert.ok(terrainBaseHeight(a.x, a.z) >= SEA_LEVEL + 0.12, 'Ground residents never enter the submerged estuary');
     assert.ok(Object.values(a.needs).every((value) => value >= 0 && value <= 1), 'Bounded needs');
     if (a.sleepGroupUid) assert.ok(sim.agents.some((other) => other.uid === a.sleepGroupUid), 'Sleep groups never reference removed residents');
     if (a.state === 'sleeping') {
@@ -89,8 +90,14 @@ assert.ok(bridgeCrossings > 0);
 assert.equal(findEcologyPath(origin, destination, 0.35, 'amphibious').length, 1, 'Amphibious animals can cross the water directly');
 const fishPath = findEcologyPath({ x: riverCenterX(-6), z: -6 }, { x: riverCenterX(6), z: 6 }, 0.35, 'aquatic');
 assert.ok(fishPath.length > 0, 'Fish can navigate the curved river');
-assert.ok(findEcologyPath({ x: riverCenterX(-6), z: -6 }, { x: riverCenterX(6), z: 6 }, 0.92, 'aquatic').length > 0, 'Large swimmers follow narrow bends without grid quantization traps');
+assert.deepEqual(findEcologyPath({ x: riverCenterX(-6), z: -6 }, { x: riverCenterX(6), z: 6 }, 0.92, 'aquatic'), [], 'Broad swimmers cannot squeeze through the reference river’s tight bends');
+assert.ok(findEcologyPath({ x: riverCenterX(-6), z: -6 }, { x: riverCenterX(-3), z: -3 }, 0.92, 'aquatic').length > 0, 'Broad swimmers can still navigate the river’s wider, gently curving reach');
 assert.deepEqual(findEcologyPath({ x: riverCenterX(-6), z: -6 }, origin, 0.35, 'aquatic'), [], 'Fish reject land destinations');
+assert.equal(terrainBaseHeight(0, 0), 0, 'The inner meadow retains its flat ground baseline');
+assert.ok(terrainBaseHeight(riverCenterX(8.8), 8.8) < -0.5, 'The southern river mouth descends before the original island edge');
+assert.equal(waterSurfaceHeight(11), SEA_LEVEL, 'The descending river joins the sea without falling below its surface');
+assert.ok(terrainBaseHeight(2.35, 9.7) < SEA_LEVEL + 0.12, 'The estuary also submerges part of the adjacent sand lip');
+assert.equal(isTraversable({ x: 2.35, z: 9.7 }, 0.01, 'land'), false, 'Even a small ground body rejects that submerged sand lip');
 
 const sim = new EcologySimulation({ seed: 314159 });
 for (const pokemon of fixtures) assert.ok(sim.add(pokemon), `Spawn ${pokemon.id}`);
@@ -179,17 +186,23 @@ assert.ok(sleepingFrames('dusk') > sleepingFrames('dawn'), 'Dusk causes more act
 assert.ok(getEcologyProfile(entry('092', ['ghost', 'poison'])).nocturnal);
 
 for (const seed of [1, 2, 3]) {
-  const test = new EcologySimulation({ seed });
-  const fire = test.add(entry('004', ['fire']));
-  const water = test.add(entry('007', ['water']));
+  // Isolate habitat routing from voluntary social visits; the mixed thirty-
+  // resident scenario above continues to exercise autonomous social behavior.
+  const fireTest = new EcologySimulation({ seed });
+  const waterTest = new EcologySimulation({ seed });
+  const fire = fireTest.add(entry('004', ['fire']));
+  const water = waterTest.add(entry('007', ['water']));
   let crossedBridge = 0;
   let warmBank = 0;
   let waterVisits = 0;
-  advance(test, 180, (frame) => {
+  advance(fireTest, 180, (frame) => {
     if (isInRiver(fire.x, fire.z)) { assert.ok(isOnBridge(fire.x, fire.z, fire.radius)); crossedBridge++; }
     if (fire.x > riverCenterX(fire.z) + 1.25) warmBank++;
+    if (frame % 30 === 0) validate(fireTest);
+  });
+  advance(waterTest, 180, (frame) => {
     if (isInRiver(water.x, water.z)) waterVisits++;
-    if (frame % 30 === 0) validate(test);
+    if (frame % 30 === 0) validate(waterTest);
   });
   assert.ok(crossedBridge > 0 && warmBank > 1000, 'A fire type independently routes across the bridge to the warm bank');
   assert.ok(waterVisits > 1800, 'A water type spends at least one third of its time in the stream');
@@ -216,14 +229,14 @@ for (const seed of [31, 92]) {
 const swimmerTest = new EcologySimulation({ seed: 130 });
 for (const pokemon of [entry('129', ['water']), entry('130', ['water', 'flying'])]) {
   const swimmer = swimmerTest.add(pokemon, 0.64, 2);
-  assert.ok(swimmer && Math.abs(swimmer.z) >= 2.5, 'Swimmers spawn in visible open water');
+  assert.ok(swimmer && Math.abs(swimmer.z - BRIDGE.z) >= BRIDGE.halfWidth + 1.3, 'Swimmers spawn in visible open water');
 }
 let underBridgeTransit = 0;
 advance(swimmerTest, 180, () => {
   for (const swimmer of swimmerTest.agents) {
-    if (swimmer.target) assert.ok(Math.abs(swimmer.target.z) >= 2.5, 'Swimming and meeting destinations remain outside the bridge');
-    if (swimmer.state === 'socializing') assert.ok(Math.abs(swimmer.z) >= 2.5, 'Swimmers meet in open water');
-    if (Math.abs(swimmer.z) < 1.2 && swimmer.state === 'walking') underBridgeTransit++;
+    if (swimmer.target) assert.ok(Math.abs(swimmer.target.z - BRIDGE.z) >= BRIDGE.halfWidth + 1.3, 'Swimming and meeting destinations remain outside the bridge');
+    if (swimmer.state === 'socializing') assert.ok(Math.abs(swimmer.z - BRIDGE.z) >= BRIDGE.halfWidth + 1.3, 'Swimmers meet in open water');
+    if (Math.abs(swimmer.z - BRIDGE.z) < BRIDGE.halfWidth && swimmer.state === 'walking') underBridgeTransit++;
   }
 });
 assert.ok(underBridgeTransit > 0, 'Swimmers can still transit beneath the bridge');
@@ -265,7 +278,7 @@ for (const seed of [1, 7, 29]) {
   const agent = test.add(entry('025', ['electric']));
   let walkFrames = 0, runFrames = 0, walkDistance = 0, runDistance = 0, napFrames = 0;
   let previous = { x: agent.x, z: agent.z };
-  advance(test, 300, (frame) => {
+  advance(test, 330, (frame) => {
     if (frame % 30 === 0) validate(test);
     const moved = Math.hypot(agent.x - previous.x, agent.z - previous.z);
     if (agent.state === 'walking' && moved > 1e-6) {

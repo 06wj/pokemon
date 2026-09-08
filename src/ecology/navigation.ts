@@ -1,14 +1,18 @@
-import { ECOLOGY_OBSTACLES, WORLD_BOUNDS, isInWorld, isOnBridge, riverCenterX, riverHalfWidth, type EcologyPoint } from './layout.ts';
+import { ECOLOGY_OBSTACLES, SEA_LEVEL, WORLD_BOUNDS, isInWorld, isOnBridge, riverBankClearance, riverCenterX, riverHalfWidth, terrainBaseHeight, type EcologyPoint } from './layout.ts';
 import type { Locomotion } from './profiles.ts';
 
 export function isTraversable(point: EcologyPoint, radius: number, locomotion: Locomotion): boolean {
   if (!Number.isFinite(point.x) || !Number.isFinite(point.z) || !isInWorld(point.x, point.z, radius + 0.08)) return false;
   const riverDistance = Math.abs(point.x - riverCenterX(point.z));
-  // The river's maximum lateral slope is .375, so include the circle's extra
-  // clearance against its curved bank instead of checking its centre alone.
-  const bankClearance = radius * 1.07 + 0.04;
+  // Bound the actual Hermite slope across this body's full depth. Tight new
+  // bends need more clearance than the former fixed 1.07 multiplier provided.
+  const bankClearance = riverBankClearance(point.z, radius);
   if (locomotion === 'aquatic' && riverDistance > riverHalfWidth - bankClearance) return false;
   if (locomotion === 'land' && riverDistance < riverHalfWidth + bankClearance && !isOnBridge(point.x, point.z, radius + 0.04)) return false;
+  // The southern notch reaches sea level inside the old ellipse. Ground bodies
+  // stay on its dry lip; amphibians may still follow the actual river channel.
+  if ((locomotion === 'land' || (locomotion === 'amphibious' && riverDistance >= riverHalfWidth))
+    && terrainBaseHeight(point.x, point.z) < SEA_LEVEL + 0.12) return false;
   return ECOLOGY_OBSTACLES.every((obstacle) => Math.hypot(point.x - obstacle.x, point.z - obstacle.z) >= radius + obstacle.radius + 0.07);
 }
 

@@ -10,6 +10,7 @@
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "test:ecology": "node scripts/test-ecology.mjs && node scripts/test-ecology-lifecycle.mjs && node scripts/test-ecology-toon.mjs && node scripts/test-ecology-picking.mjs",
+    "test:living": "node scripts/test-living-ecology.mjs && node scripts/test-living-weather.mjs && node scripts/test-living-journal.mjs && node scripts/test-living-picking.mjs && node scripts/test-viewer-location.mjs",
     "assets:optimize": "python3 scripts/optimize-assets.py",
     "models:validate": "node scripts/test-animated-models.mjs",
     "test:toon": "node scripts/test-toon-mesh-selection.mjs && node scripts/test-toon-rendering.mjs"
@@ -40,8 +41,8 @@
     "vite": "8.2.2"
   },
   "dependencies": {
-    "@hilo/addon-particle": "2.0.0-alpha.7",
-    "hilo3d": "2.0.0-alpha.7",
+    "@hilo/addon-particle": "2.0.0-alpha.8",
+    "hilo3d": "2.0.0-alpha.8",
     "react": "19.2.8",
     "react-dom": "19.2.8"
   }

@@ -18,6 +18,7 @@ try {
   const { EcologySimulation } = await server.ssrLoadModule('/src/ecology/simulation.ts');
   const { EcologyToon } = await server.ssrLoadModule('/src/hilo/ecologyToon.ts');
   const { ECOLOGY_CAPACITY, POKEMON_SCALE } = await server.ssrLoadModule('/src/ecology/config.ts');
+  const { BRIDGE, riverCenterX, terrainBaseHeight, waterSurfaceHeight } = await server.ssrLoadModule('/src/ecology/layout.ts');
   const { pokemon } = await server.ssrLoadModule('/src/content/pokemon.ts');
   const entry = (id) => pokemon.find((item) => item.id === id);
   const fixture = () => {
@@ -83,7 +84,7 @@ try {
   controller.setToon(false);
   assert.deepEqual([...controller.residents.values()], identity, 'Switching rendering preserves every resident and simulation');
   controller.setToon(true);
-  views[0].model.anim = { clips: { happy: { start: 3, end: 9 } }, stop() {} };
+  views[0].model.anim = { clips: [{ name: 'happy', start: 3, end: 9, duration: 6 }], stop() {} };
   const pet = controller.simulation.agents[0];
   controller.petPokemon(pet.uid);
   assert.ok(Math.abs(controller.controls.lastView.target.x - pet.x) < 1e-5, 'Petting immediately centers the camera on the touched animal');
@@ -140,7 +141,7 @@ try {
   assert.ok(orphan.meshes[0].isDestroyed, 'Unmount also releases late assets');
 
   const markers = Object.create(EcologyStageController.prototype);
-  const markerAgents = Array.from({ length: 7 }, (_, i) => ({ uid: `m${i}`, state: 'socializing', pokemon: { name: `Buddy ${i}` } }));
+  const markerAgents = Array.from({ length: 7 }, (_, i) => ({ uid: `m${i}`, state: 'socializing', stateTime: 0, pokemon: { name: `Buddy ${i}` } }));
   markerAgents[3].state = 'happy';
   Object.assign(markers, {
     simulation: { agents: markerAgents }, selectedId: 'm3', point: new Hilo3d.Vector3(), visibleMarkerIds: new Set(),
@@ -166,7 +167,7 @@ try {
   assert.deepEqual(visible(), ['m3'], 'Expired emotion bubbles disappear, leaving only the selected name');
 
   const gaitView = { rig: new Hilo3d.Node(), model: { anim: {
-    clips: { walk: {}, run: {}, sleep: {}, idle: {} }, play() {}, stop() {}, resume() {}, updateAnimStates() {}, tick() {},
+    clips: ['walk', 'run', 'sleep', 'idle'].map((name) => ({ name })), play() {}, stop() {}, pause() {}, update() {},
   } }, restorePose() {}, clip: 'idle', state: 'resting', height: 1, width: 1, depth: 1 };
   const movingAgent = { ...pet, age: 10, stateTime: 0, state: 'walking', gait: 'run', animationRate: 0.8, partnerUid: null };
   controller.updateResident(movingAgent, gaitView, 1 / 30);
@@ -179,6 +180,41 @@ try {
   movingAgent.state = 'sleeping';
   controller.updateResident(movingAgent, gaitView, 1 / 30);
   assert.equal(gaitView.clip, 'sleep', 'A real sleeping state selects the sleep animation');
+
+  // The authored southern estuary lowers both ground and river surfaces. Every
+  // locomotion view must follow that actual surface, rather than floating at y=0.
+  const slopeAgent = { ...movingAgent, x: -0.5, z: 9.2, state: 'resting',
+    profile: { ...movingAgent.profile, locomotion: 'land' } };
+  controller.updateResident(slopeAgent, gaitView, 0);
+  assert.ok(Math.abs(gaitView.rig.y - terrainBaseHeight(slopeAgent.x, slopeAgent.z) - 0.025) < 1e-6,
+    'Ground feet follow the dry estuary slope');
+  slopeAgent.profile.locomotion = 'flying'; slopeAgent.state = 'sleeping'; slopeAgent.stateTime = 2;
+  controller.updateResident(slopeAgent, gaitView, 0);
+  assert.ok(Math.abs(gaitView.rig.y - terrainBaseHeight(slopeAgent.x, slopeAgent.z) - 0.025) < 1e-6,
+    'Flying residents land on the actual slope when sleeping');
+  slopeAgent.profile.locomotion = 'amphibious'; slopeAgent.state = 'resting'; slopeAgent.z = 8.8; slopeAgent.x = riverCenterX(slopeAgent.z);
+  controller.updateResident(slopeAgent, gaitView, 0);
+  assert.ok(Math.abs(gaitView.rig.y - (waterSurfaceHeight(slopeAgent.z) - 0.14)) < 1e-6,
+    'Amphibious residents follow the descending river surface');
+  slopeAgent.profile.locomotion = 'aquatic';
+  controller.updateResident(slopeAgent, gaitView, 0);
+  assert.ok(Math.abs(gaitView.rig.y - (waterSurfaceHeight(slopeAgent.z) - gaitView.height * 0.3)) < 1e-6,
+    'Fish body immersion is relative to the real river surface');
+  slopeAgent.profile.locomotion = 'land'; slopeAgent.x = BRIDGE.x; slopeAgent.z = BRIDGE.z;
+  controller.updateResident(slopeAgent, gaitView, 0);
+  assert.ok(Math.abs(gaitView.rig.y - (BRIDGE.surfaceY + 0.005)) < 1e-6, 'The unchanged bridge deck retains its foot contact height');
+
+  const tracking = fixture().controller;
+  slopeAgent.x = -0.5; slopeAgent.z = 9.2;
+  tracking.simulation.agents.push(slopeAgent); tracking.residents.set(slopeAgent.uid, gaitView);
+  tracking.focusPokemon(slopeAgent.uid);
+  const beforeY = tracking.camera.y, beforeTargetY = tracking.controls.target.y;
+  const beforeSurface = terrainBaseHeight(slopeAgent.x, slopeAgent.z);
+  slopeAgent.z = 9.4;
+  tracking.updateFollowCamera();
+  const surfaceDelta = terrainBaseHeight(slopeAgent.x, slopeAgent.z) - beforeSurface;
+  assert.ok(Math.abs(tracking.camera.y - beforeY - surfaceDelta) < 1e-6, 'Following adds only the terrain elevation change to the camera');
+  assert.ok(Math.abs(tracking.controls.target.y - beforeTargetY - surfaceDelta) < 1e-6, 'Terrain following preserves camera-to-target framing');
   console.log('Ecology lifecycle: queued loads, reset races, rapid-click capacity, real scale, geometry release and unmount passed.');
 } finally {
   Hilo3d.GLTFLoader.prototype.load = originalLoad;

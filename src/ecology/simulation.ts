@@ -3,11 +3,14 @@ import { BRIDGE, ECOLOGY_OBSTACLES, ECOLOGY_ZONES, WORLD_BOUNDS, isInRiver, isOn
 import { canTraverseSegment, findEcologyPath, isTraversable } from './navigation.ts';
 import { getEcologyProfile, socialAffinity, type EcologyProfile } from './profiles.ts';
 import { ECOLOGY_CAPACITY } from './config.ts';
+import { LivingSimulation } from './livingSimulation.ts';
+import { createLivingWorld, type DiscoveryCandidate, type LivingPerformance, type LivingTool, type LivingWeather, type LivingWorld } from './livingTypes.ts';
+import { advanceLivingWeather, changeLivingWeather } from './livingWeather.ts';
 
 export type TimeOfDay = 'dawn' | 'dusk';
 export type EcologyState = 'arriving' | 'walking' | 'resting' | 'sleeping' | 'socializing' | 'happy';
 export type EcologyGait = 'walk' | 'run';
-type EcologyIntent = 'explore' | 'habitat' | 'social' | 'sleep';
+type EcologyIntent = 'explore' | 'habitat' | 'social' | 'sleep' | 'living';
 export interface EcologyAgent extends EcologyPoint {
   uid: string;
   pokemonId: string;
@@ -24,7 +27,8 @@ export interface EcologyAgent extends EcologyPoint {
   age: number;
   stateTime: number;
   partnerUid: string | null;
-  needs: { energy: number; social: number; curiosity: number; sleep: number };
+  needs: { energy: number; social: number; curiosity: number; sleep: number; hunger: number };
+  performance: LivingPerformance | null;
   target: EcologyPoint | null;
   path: EcologyPoint[];
   decisionIn: number;
@@ -73,11 +77,39 @@ export class EcologySimulation {
   private sequence = 0;
   private eventSequence = 0;
   private accumulator = 0;
+  private readonly livingDirector: LivingSimulation | null;
+  readonly world: LivingWorld;
+  readonly discoveries: DiscoveryCandidate[];
 
-  constructor(options: { seed?: number; capacity?: number } = {}) {
+  constructor(options: { seed?: number; capacity?: number; living?: boolean } = {}) {
     this.seed = options.seed ?? 20260906;
     this.randomState = this.seed;
     this.capacity = Math.max(1, Math.min(ECOLOGY_CAPACITY, Math.floor(options.capacity ?? ECOLOGY_CAPACITY)));
+    this.livingDirector = options.living ? new LivingSimulation({
+      agents: this.agents, now: () => this.elapsed, dusk: () => this.timeOfDay === 'dusk', random: () => this.random(),
+      canStand: (agent, point) => canLinger(point, agent.profile) && this.pointFree(agent, point, .08),
+      canRest: (agent, point) => this.canRest(agent, point),
+      moveTo: (agent, point, label, run) => {
+        if (!agent.pokemon.animations.some((clip) => clip.name === 'walk' || clip.name === 'run')) {
+          if (distance(agent, point) > .2) return false;
+          this.releasePair(agent); agent.intent = 'living'; agent.sleepGroupUid = null;
+          agent.path = []; agent.target = null; this.setState(agent, 'resting', label); return true;
+        }
+        const path = findEcologyPath(agent, point, agent.radius, agent.profile.locomotion);
+        if (!path.length || !canLinger(point, agent.profile)) return false;
+        this.releasePair(agent); agent.intent = 'living'; agent.destinationZone = null; agent.sleepGroupUid = null;
+        this.walkTo(agent, point, path, label, run); return true;
+      },
+      move: (agent, dt) => this.move(agent, dt),
+      stop: (agent, label, animation) => {
+        this.releasePair(agent); agent.path = []; agent.target = null;
+        this.setState(agent, animation === 'happy' ? 'happy' : 'resting', label);
+      },
+      sleep: (agent) => this.startSleep(agent, agent.uid), wake: (agent) => this.wake(agent),
+      wantsSleep: (agent) => this.shouldSleep(agent), note: (text) => this.event(text, 'social'),
+    }) : null;
+    this.world = this.livingDirector?.world ?? createLivingWorld();
+    this.discoveries = this.livingDirector?.discoveries ?? [];
   }
 
   private random(): number {
@@ -96,6 +128,7 @@ export class EcologySimulation {
   add(pokemon: PokemonEntry, footprintRadius?: number, modelHeight = 1): EcologyAgent | null {
     if (this.agents.length >= this.capacity) return null;
     const profile = getEcologyProfile(pokemon, modelHeight);
+    if (this.livingDirector && profile.living.waterBound) profile.locomotion = 'aquatic';
     // A navigation disc represents the authored body, excluding tails/wings.
     // Broad land animals retain their clearance even when they cannot fit the
     // bridge; swimmers use a channel-fitting core disc, excluding fins/tails.
@@ -106,7 +139,15 @@ export class EcologySimulation {
     let position: EcologyPoint | null = null;
     for (let attempt = 0; attempt < 160; attempt++) {
       let candidate: EcologyPoint;
-      if (profile.locomotion === 'aquatic') {
+      if (this.livingDirector && attempt < 72) {
+        const home = profile.living.home;
+        const angle = this.random() * Math.PI * 2;
+        const spread = .2 + radius + attempt / 72 * 3;
+        if (profile.locomotion === 'aquatic') {
+          const z = home.z + Math.sin(angle) * spread;
+          candidate = { x: riverCenterX(z) + Math.cos(angle) * Math.min(.35, spread * .2), z };
+        } else candidate = { x: home.x + Math.sin(angle) * spread, z: home.z + Math.cos(angle) * spread };
+      } else if (profile.locomotion === 'aquatic') {
         const z = this.random() * 14 - 7;
         candidate = { x: riverCenterX(z) + (this.random() - 0.5) * Math.max(0.1, riverHalfWidth - radius), z };
       } else if (family && attempt < 40) {
@@ -132,17 +173,21 @@ export class EcologySimulation {
       heading: this.random() * Math.PI * 2, speed: 0, gait: 'walk', animationRate: 0, plannedSpeed: 0,
       state: 'arriving', behaviorLabel: '来到栖息地',
       age: 0, stateTime: 0, partnerUid: null,
-      needs: { energy: 0.78 + this.random() * 0.18, social: 0.5 + this.random() * 0.3, curiosity: 0.7, sleep: 0.1 + this.random() * 0.15 },
+      needs: { energy: 0.78 + this.random() * 0.18, social: 0.5 + this.random() * 0.3, curiosity: 0.7, sleep: 0.1 + this.random() * 0.15, hunger: 0 },
+      performance: null,
       target: null, path: [], decisionIn: 1.1, socialCooldown: 0, pairDeadline: 0, stuckTime: 0, destinationZone: null,
       intent: 'explore', preferredGait: 'walk', sleepGroupUid: null, sleepDuration: 0, lastWakeAt: -30, lastRunAt: -30,
       sleepBias: this.random(), recentPartners: {}, visited: [],
     };
     this.agents.push(agent);
+    this.livingDirector?.add(agent);
     this.event(`${pokemon.name} 来到栖息地`, 'arrival');
     return agent;
   }
 
   reset(): void {
+    if (!this.livingDirector) Object.assign(this.world.weather, { wetness: 0, snow: 0, changedAt: 0 });
+    this.livingDirector?.reset();
     this.agents.length = 0;
     this.events.length = 0;
     this.elapsed = 0;
@@ -159,6 +204,7 @@ export class EcologySimulation {
     const index = this.agents.findIndex((agent) => agent.uid === uid);
     const agent = this.agents[index];
     if (!agent) return false;
+    this.livingDirector?.remove(agent);
     this.releasePair(agent);
     agent.path = [];
     agent.target = null;
@@ -178,9 +224,14 @@ export class EcologySimulation {
     }
   }
 
+  setWeather(kind: LivingWeather): void {
+    changeLivingWeather(this.world.weather, kind, this.elapsed);
+  }
+
   pet(uid: string, durationSeconds = 2.7): boolean {
     const agent = this.agents.find((item) => item.uid === uid);
     if (!agent) return false;
+    this.livingDirector?.cancel(agent);
     this.releasePair(agent);
     if (agent.state === 'sleeping' || agent.intent === 'sleep') {
       agent.lastWakeAt = this.elapsed;
@@ -196,6 +247,10 @@ export class EcologySimulation {
     agent.needs.energy = Math.min(1, agent.needs.energy + 0.06);
     this.event(`${agent.pokemon.name} 开心地回应了你`, 'pet');
     return true;
+  }
+
+  intervene(tool: LivingTool, point?: EcologyPoint): boolean {
+    return this.livingDirector?.intervene(tool, point) ?? false;
   }
 
   update(dtSeconds: number): void {
@@ -246,6 +301,8 @@ export class EcologySimulation {
 
   private step(dt: number): void {
     this.elapsed += dt;
+    if (this.livingDirector) this.livingDirector.updateWorld(dt);
+    else advanceLivingWeather(this.world.weather, dt);
     for (const agent of this.agents) {
       agent.age += dt;
       agent.stateTime += dt;
@@ -253,6 +310,7 @@ export class EcologySimulation {
       agent.socialCooldown = Math.max(0, agent.socialCooldown - dt);
       const inactive = this.isInactiveTime(agent);
       if (agent.state === 'sleeping') {
+        this.livingDirector?.onSleep(agent);
         agent.needs.energy = clamp01(agent.needs.energy + dt * 0.023);
         agent.needs.sleep = clamp01(agent.needs.sleep - dt * 0.017);
         const nearbyFamily = this.agents.some((other) => other !== agent && other.state === 'sleeping'
@@ -268,6 +326,7 @@ export class EcologySimulation {
       const exertion = agent.state === 'walking' ? (agent.gait === 'run' ? 0.021 : 0.01) : 0;
       agent.needs.energy = clamp01(agent.needs.energy + dt * (agent.state === 'resting' ? 0.003 : -0.002 - exertion));
       agent.needs.sleep = clamp01(agent.needs.sleep + dt * ((inactive ? 0.009 + agent.sleepBias * 0.003 : 0.0018) + exertion * 0.18));
+      if (this.livingDirector?.updateAgent(agent, dt)) continue;
       if (agent.state === 'happy' || agent.state === 'arriving') {
         if (agent.decisionIn <= 0) this.decide(agent);
         continue;
@@ -306,11 +365,15 @@ export class EcologySimulation {
 
   private decide(agent: EcologyAgent): void {
     if (this.shouldSleep(agent) && this.seekSleep(agent)) return;
+    if (this.livingDirector?.choose(agent)) return;
+    if (this.livingDirector && !agent.pokemon.animations.some((clip) => clip.name === 'walk' || clip.name === 'run')) {
+      this.setState(agent, 'resting', '安静地看看身边的伙伴'); agent.decisionIn = 4; return;
+    }
     agent.intent = 'explore';
     agent.sleepGroupUid = null;
     const duskSleep = this.isInactiveTime(agent) ? 0.12 : 0;
     const restScore = (1 - agent.needs.energy) * 0.7 + duskSleep;
-    const candidates = this.agents.filter((other) => other !== agent && !other.partnerUid && other.socialCooldown <= 0
+    const candidates = this.agents.filter((other) => other !== agent && !other.performance && !other.partnerUid && other.socialCooldown <= 0
       && other.state !== 'arriving' && other.state !== 'happy' && other.state !== 'sleeping' && other.intent !== 'sleep'
       && other.needs.energy > 0.3 && other.needs.social > 0.18 && !this.shouldSleep(other)
       && distance(agent, other) < 9 && !(agent.profile.locomotion === 'aquatic' && other.profile.locomotion === 'land')
@@ -376,6 +439,7 @@ export class EcologySimulation {
   }
 
   private seekSleep(agent: EcologyAgent): boolean {
+    if (this.livingDirector?.nap(agent)) return true;
     const anchors = this.agents.filter((other) => other !== agent && other.profile.familyId === agent.profile.familyId
       && (other.state === 'sleeping' || other.intent === 'sleep') && distance(agent, other) < 12
       && (agent.profile.locomotion === 'aquatic') === (other.profile.locomotion === 'aquatic'));
@@ -439,6 +503,12 @@ export class EcologySimulation {
   }
 
   private zoneCenter(agent: EcologyAgent, zone: EcologyZone): EcologyPoint & { radius: number } {
+    // Flower lovers keep exploring their authored flower patch between stories.
+    // Otherwise the legacy type-only grove preference pulls every grass/bug
+    // resident across the island before the east-bank garden can bloom.
+    if (this.livingDirector && agent.profile.living.interests.flowers > .8 && (zone === 'grove' || zone === 'meadow')) {
+      return { ...agent.profile.living.home, radius: 2.6 };
+    }
     // The narrow bridge is a real constraint, not a reason to shrink a resident.
     // Broad ground animals can warm themselves in the west-bank sun clearing.
     if (zone === 'warm-rock' && agent.profile.locomotion === 'land' && agent.radius > BRIDGE.halfWidth - 0.15) {

@@ -18,22 +18,16 @@ json.buffers[0].uri = 'model.bin';
 json.images = [];
 json.textures = [];
 json.materials = json.materials.map((material) => ({ name: material.name }));
-const model = await new Hilo3d.GLTFParser(JSON.stringify(json), { isMultiAnim: true }).parse({
+const model = await new Hilo3d.GLTFParser(JSON.stringify(json)).parse({
   loadRes: async () => binary.buffer.slice(binary.byteOffset, binary.byteOffset + binary.length),
 });
 await model.ready;
 const animation = model.anim;
-assert.ok(animation?.clips.sleep, 'The actual Snorlax model contains its authored sleep clip');
-const targets = [...new Set(Object.values(animation.clips).flatMap((clip) =>
-  clip.animStatesList.map((state) => animation.nodeNameMap[state.nodeName])))].filter(Boolean);
-const authoredPose = targets.filter((node) => node !== model.node).map((node) => ({ node,
-  position: node.position.clone(), quaternion: node.quaternion.clone(),
-  scale: new Hilo3d.Vector3(node.scaleX, node.scaleY, node.scaleZ) }));
+const sleep = animation?.clips.find((clip) => clip.name === 'sleep');
+assert.ok(sleep, 'The actual Snorlax model contains its authored sleep clip');
 function play(name) {
-  for (const { node, position, quaternion, scale } of authoredPose) {
-    node.position.copy(position); node.quaternion.copy(quaternion); node.setScale(scale.x, scale.y, scale.z);
-  }
-  animation.play(name); animation.stop(); animation.resume(); animation.updateAnimStates();
+  animation.stop(true);
+  animation.play(name, { loop: true }); animation.pause(); animation.update(0);
   model.node.updateMatrixWorld(true);
 }
 play('idle');
@@ -48,7 +42,7 @@ model.node.addTo(rig);
 const resident = { uid: 'snorlax', rig, meshes: model.meshes,
   width: idle.width * POKEMON_SCALE, height: idle.height * POKEMON_SCALE, depth: idle.depth * POKEMON_SCALE };
 play('sleep');
-animation.tick((animation.clips.sleep.end - animation.clips.sleep.start) * 500);
+animation.update(sleep.duration * 0.5);
 rig.updateMatrixWorld(true);
 
 // This is a measured surface point on the real sleeping mesh. The former idle

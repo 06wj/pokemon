@@ -1,6 +1,6 @@
 import * as Hilo3d from 'hilo3d';
 
-const compatibleVersion = '2.0.0-alpha.7';
+const compatibleVersion = '2.0.0-alpha.8';
 const shaderRevision = 'toon-pigment-and-attributes-1';
 const definitions = new WeakMap<Hilo3d.MaterialDefinition, Hilo3d.MaterialDefinition>();
 let shaderSources: { vertexSource: string; fragmentSource: string } | undefined;
@@ -55,7 +55,7 @@ ${attributesOutput.replace('hilo_FragColor', 'toon_SurfaceData')}`);
 export function getToonGeometryUnsupportedReason(mesh: Hilo3d.Mesh): string | null {
   if (!(mesh.material instanceof Hilo3d.PBRMaterial)) return 'The surface is not a native PBR material.';
   if (mesh.useInstanced || mesh.instanceCount > 1) {
-    // alpha.7 does not inject its built-in HILO_INSTANCED variant into custom GLSL.
+    // alpha.8 does not inject its built-in HILO_INSTANCED variant into custom GLSL.
     return 'The published custom-shader API does not preserve the instanced vertex variant.';
   }
   return getMaterialUnsupportedReason(mesh.material);
@@ -120,7 +120,7 @@ function getDefinition(source: Hilo3d.PBRMaterial): Hilo3d.MaterialDefinition {
  * destroyTextures(): the texture and uniform-buffer resources belong to source.
  */
 export class ToonGeometryMaterial extends Hilo3d.MaterialInstance {
-  // alpha.7's draw validation uses this public custom-GLSL marker for arbitrary MRT layouts.
+  // alpha.8's draw validation uses this public custom-GLSL marker for arbitrary MRT layouts.
   readonly isShaderMaterial = true;
   private sourceRevision = -1;
 

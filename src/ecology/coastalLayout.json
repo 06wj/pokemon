@@ -1,0 +1,62 @@
+{
+  "version": 2,
+  "coordinateSystem": "Y_UP",
+  "asset": "habitats/ecology-coastal-v2.glb",
+  "core": { "x": 13, "z": 10, "groundY": 0 },
+  "referenceCamera": { "width": 1416, "height": 1112, "orthoScale": 34.2, "azimuthDegrees": 10, "elevationDegrees": 50, "aimHeight": -1.1 },
+  "river": {
+    "halfWidth": 1.25,
+    "surfaceY": -0.04,
+    "interpolation": "monotone-hermite",
+    "centerline": [
+      [3.604, -12.663], [2.726, -9.854], [3.552, -8.367], [3.012, -6.703],
+      [3.135, -4.612], [3.376, -1.163], [3.644, -0.059], [2.053, 1.63],
+      [2.179, 3.176], [3.651, 5.126], [4.204, 7.709], [3.851, 9.181],
+      [3.569, 9.946], [3.35, 13.5]
+    ]
+  },
+  "bridge": { "x": 3.376, "z": -1.163, "halfLength": 2.2, "halfWidth": 1.2, "surfaceY": 0.08 },
+  "coast": {
+    "seaLevel": -1.05,
+    "baseRadii": { "x": 16, "z": 12.8 },
+    "zWobbleScale": 0.8,
+    "waves": [
+      { "function": "sin", "amplitude": 0.45, "frequency": 3, "phase": 0.4 },
+      { "function": "cos", "amplitude": 0.2, "frequency": 5, "phase": -0.7 },
+      { "function": "sin", "amplitude": 0.12, "frequency": 9, "phase": 0 }
+    ],
+    "beachStartOffset": 0.4,
+    "submergedShelfWidth": 3,
+    "estuary": { "startZ": 7.5, "length": 3, "depth": 1.4, "spread": 2.8 }
+  },
+  "zones": {
+    "meadow": { "x": -7.2, "z": 4.9, "radius": 3.7, "label": "花间草甸" },
+    "grove": { "x": -8.95, "z": -4.59, "radius": 3.2, "label": "果树林荫" },
+    "warm-rock": { "x": 8.423, "z": -4.39, "radius": 2.6, "label": "暖石坡" },
+    "river": { "x": 3.135, "z": -4.612, "radius": 1.25, "label": "蜿蜒溪流" }
+  },
+  "obstacles": [
+    { "id": "hero-fruit-tree", "x": -8.95, "z": -4.59, "radius": 1.05, "kind": "tree" },
+    { "id": "west-fruit-tree", "x": -4.72, "z": -7.29, "radius": 0.45, "kind": "tree" },
+    { "id": "north-fruit-tree", "x": -3, "z": -7.56, "radius": 0.45, "kind": "tree" },
+    { "id": "east-grove-tree", "x": 7.37, "z": -7.15, "radius": 0.45, "kind": "tree" },
+    { "id": "east-bank-tree", "x": 10.02, "z": -6.46, "radius": 0.5, "kind": "tree" },
+    { "id": "warm-rock-main", "x": 8.423, "z": -4.39, "radius": 1.65, "kind": "rock" },
+    { "id": "warm-rock-east", "x": 11.355, "z": -2.506, "radius": 1.75, "kind": "rock" },
+    { "id": "warm-rock-south", "x": 7.424, "z": -3.797, "radius": 0.7, "kind": "rock" },
+    { "id": "campfire", "x": -4.365, "z": -1.527, "radius": 1, "kind": "rock" },
+    { "id": "firewood-1", "x": -5.8, "z": -3, "radius": 0.55, "kind": "rock" },
+    { "id": "firewood-2", "x": -6.45, "z": -0.8, "radius": 0.45, "kind": "rock" }
+  ],
+  "landmarks": {
+    "flowers": { "x": -7.2, "z": 4.9 },
+    "flowerBeds": [{ "id": "west", "x": -10.18, "z": 3.725 }, { "id": "south", "x": -4.41, "z": 6.13 }],
+    "riverFlowers": { "x": 6.815, "z": 2.489 },
+    "riverFlowerBeds": [{ "id": "north", "x": 4.325, "z": -4.404 }, { "id": "south", "x": 6.815, "z": 2.489 }],
+    "shadeRestSpots": [
+      { "x": -10.55, "z": -4.19 },
+      { "x": -8.45, "z": -2.79 },
+      { "x": -7.35, "z": -4.89 }
+    ]
+  }
+}

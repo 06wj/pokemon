@@ -1,5 +1,20 @@
 import { materialThemes, type MaterialKey } from '../content/materials.ts';
 
+export type ViewerScene = 'ecology' | 'gallery';
+
+export function sceneFromUrl(href: string): ViewerScene {
+  const url = new URL(href);
+  const explicit = url.searchParams.get('scene');
+  if (explicit === 'ecology' || explicit === 'gallery') return explicit;
+  return url.hash.length > 1 ? 'gallery' : 'ecology';
+}
+
+export function sceneSwitchUrl(href: string, scene: ViewerScene): string {
+  const url = new URL(href);
+  url.searchParams.set('scene', scene);
+  return url.href;
+}
+
 export function materialFromUrl(href: string): MaterialKey {
   const value = new URL(href).searchParams.get('material');
   return materialThemes.find((theme) => theme.key === value)?.key ?? 'original';

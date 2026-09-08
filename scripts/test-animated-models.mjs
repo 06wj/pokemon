@@ -95,7 +95,7 @@ for (const id of ids) {
     parsingJson.images = [];
     parsingJson.textures = [];
     parsingJson.materials = (json.materials ?? []).map((material) => ({ name: material.name }));
-    model = await new Hilo3d.GLTFParser(JSON.stringify(parsingJson), { isMultiAnim: true }).parse({
+    model = await new Hilo3d.GLTFParser(JSON.stringify(parsingJson)).parse({
       loadRes: async () => binary.buffer.slice(binary.byteOffset, binary.byteOffset + binary.length),
     });
     await model.ready;
@@ -106,32 +106,19 @@ for (const id of ids) {
     }
     animation = model.anim;
     assert.ok(animation, 'Hilo3D parsed an animation');
-    assert.deepEqual(Object.keys(animation.clips).sort(), [...clipNames].sort(), 'Hilo3D parsed every manifest clip');
-    // Match the controller's restoration of authored local transforms. Different actions can
-    // omit different tracks, so replaying idle without restoring this baseline can retain a jaw,
-    // limb or root transform from the previous action.
-    const targets = new Set(Object.values(animation.clips).flatMap((clip) => (
-      (clip?.animStatesList ?? []).map((state) => animation.nodeNameMap[state.nodeName])
-    )));
-    const restPose = [...targets].filter((node) => node && node !== model.node)
-      .map((node) => ({
-        node, position: node.position.clone(), quaternion: node.quaternion.clone(),
-        scale: new Hilo3d.Vector3(node.scaleX, node.scaleY, node.scaleZ),
-      }));
-    const origins = [...new Set(Object.values(animation.nodeNameMap))].filter((node) => /^origin$/i.test(node.name));
+    assert.deepEqual(animation.clips.map((clip) => clip.name).sort(), [...clipNames].sort(), 'Hilo3D parsed every manifest clip');
+    const targetIds = new Set(animation.clips.flatMap((clip) => clip.tracks.map((track) => track.target)));
+    const restPose = [];
+    const origins = [];
+    model.node.traverse((node) => {
+      if (node !== model.node && (targetIds.has(node.animationId) || targetIds.has(node.name))) restPose.push({ node });
+      if (/^origin$/i.test(node.name)) origins.push(node);
+    });
     const playClip = (name) => {
-      // Preserve explicit TRS: decomposing a zero-scale appendage matrix produces NaN rotation.
-      for (const { node, position, quaternion, scale } of restPose) {
-        node.position.copy(position);
-        node.quaternion.copy(quaternion);
-        node.setScale(scale.x, scale.y, scale.z);
-      }
-      animation.loop = Infinity;
-      animation.play(name);
-      // The test owns the clock, as does PokemonStageController.
-      animation.stop();
-      animation.resume();
-      animation.updateAnimStates();
+      animation.stop(true);
+      animation.play(name, { loop: true });
+      animation.pause();
+      animation.update(0);
     };
     playClip(asset.idleAnimation);
     model.node.updateMatrixWorld(true);
@@ -181,7 +168,7 @@ for (const id of ids) {
     for (const clip of asset.animations) {
       playClip(clip.name);
       updatePose();
-      const duration = animation.endTime - animation.startTime;
+      const duration = animation.clips.find((item) => item.name === clip.name).duration;
       assert.ok(Number.isFinite(duration) && duration > 0, `${clip.name}: positive Hilo3D clip duration`);
       assert.ok(Math.abs(duration - clip.duration) <= 1 / asset.fps + 1e-5, `${clip.name}: duration matches manifest within one frame`);
       const initial = snapshot();
@@ -198,18 +185,18 @@ for (const id of ids) {
       let phasePose;
       let maxChange = 0;
       for (let frame = 1; frame <= sampleFrames; frame++) {
-        animation.tick(duration * 1000 / sampleFrames);
+        animation.update(duration / sampleFrames);
         updatePose();
         maxChange = Math.max(maxChange, checkPose(initial, clip.name));
         checkOrigin();
         if (frame === sampleFrames / 4) phasePose = snapshot();
       }
       assert.ok(maxChange > 1e-6, `${clip.name}: animation changes the visible pose`);
-      // Hilo3D holds the final pose at wrap, then evaluates the next tick from clip start.
-      // Two more wraps to the same quarter-cycle phase reveal accumulating root offsets.
+      // The layered mixer wraps continuously. Return to quarter phase, then advance
+      // complete cycles to detect accumulating root offsets.
+      animation.update(duration * 0.25);
       for (let cycle = 0; cycle < 2; cycle++) {
-        animation.tick(duration * 1000);
-        animation.tick(duration * 250);
+        animation.update(duration);
         updatePose();
         checkPose(initial, clip.name);
         checkOrigin();

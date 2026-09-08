@@ -3,7 +3,7 @@ import { DexPanel } from '../components/DexPanel';
 import { MaterialPanel } from '../components/MaterialPanel';
 import { Header, ViewerControls } from '../components/ViewerChrome';
 import type { MaterialKey } from '../content/materials';
-import { alternateBackend, backendSwitchUrl, materialFromUrl } from './viewerLocation';
+import { alternateBackend, backendSwitchUrl, materialFromUrl, sceneFromUrl, sceneSwitchUrl, type ViewerScene } from './viewerLocation';
 import { pokemon } from '../content/pokemon';
 import { getHabitat } from '../content/habitats';
 import { typeThemes } from '../content/typeThemes';
@@ -18,14 +18,17 @@ function initialIndex(): number {
 }
 
 export function App() {
-  const [scene, setScene] = useState(() => new URL(location.href).searchParams.get('scene') === 'ecology' ? 'ecology' : 'gallery');
-  const switchScene = (next: string): void => {
-    const url = new URL(location.href);
-    if (next === 'ecology') url.searchParams.set('scene', 'ecology');
-    else url.searchParams.delete('scene');
-    history.replaceState(null, '', url);
+  const [scene, setScene] = useState(() => sceneFromUrl(location.href));
+  const switchScene = (next: ViewerScene): void => {
+    history.replaceState(null, '', sceneSwitchUrl(location.href, next));
     setScene(next);
   };
+  useEffect(() => {
+    const sync = (): void => setScene(sceneFromUrl(location.href));
+    window.addEventListener('popstate', sync); window.addEventListener('hashchange', sync);
+    return () => { window.removeEventListener('popstate', sync); window.removeEventListener('hashchange', sync); };
+  }, []);
+  useEffect(() => { document.title = scene === 'ecology' ? '共生之境 · 微缩生态箱庭' : '自然图鉴 · KANTO 151'; }, [scene]);
   return scene === 'ecology'
     ? <EcologyScene assetBase={assetBase} onBack={() => switchScene('gallery')} />
     : <Gallery onEcology={() => switchScene('ecology')} />;
@@ -136,7 +139,7 @@ function Gallery({ onEcology }: { onEcology(): void }) {
   return (
     <div className={`app-root type-${primaryType}`} data-renderer={backend}>
       <Header onHome={() => setSelectedIndex(0)} />
-      <button className="ecology-entry" onClick={onEcology}><span>✧</span> 河谷生态园 <small>NEW</small><span>↗</span></button>
+      <button className="ecology-entry" onClick={onEcology}><span>✧</span> 共生之境 <small>NEW</small><span>↗</span></button>
       <div className="gallery-layout">
         <DexPanel assetBase={assetBase} entries={pokemon} selectedIndex={selectedIndex} onSelect={setSelectedIndex} />
         <main className="exhibition" aria-label="宝可梦生态展示">

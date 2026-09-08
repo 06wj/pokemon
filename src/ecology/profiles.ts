@@ -1,6 +1,7 @@
 import type { PokemonEntry } from '../content/pokemon.ts';
 import type { EcologyZone } from './layout.ts';
 import { speciesFamilies } from './speciesFamilies.ts';
+import { livingNature, type LivingNature } from './livingContent.ts';
 
 export type Locomotion = 'land' | 'amphibious' | 'aquatic' | 'flying';
 export interface EcologyProfile {
@@ -12,6 +13,7 @@ export interface EcologyProfile {
   runSpeed: number;
   sociability: number;
   nocturnal: boolean;
+  living: LivingNature;
 }
 
 const families = new Map(speciesFamilies.map((row) => [String(row.id), row]));
@@ -44,6 +46,7 @@ export function getEcologyProfile(pokemon: Pick<PokemonEntry, 'id' | 'types'> & 
     runSpeed: canRun ? moveSpeed * (locomotion === 'aquatic' ? 1.55 : 1.85) : moveSpeed,
     sociability: pokemon.id === '150' ? 0.42 : pokemon.id === '132' || pokemon.id === '133' ? 0.95 : 0.72,
     nocturnal: nocturnalSpecies.has(pokemon.id),
+    living: livingNature(pokemon.id, pokemon.types),
   };
 }
 

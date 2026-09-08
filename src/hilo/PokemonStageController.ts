@@ -10,6 +10,7 @@ import { HabitatEffects } from './habitatEffects';
 import { LagoonWater, LagoonWaterResources } from './lagoonWater';
 import { ToonModel, ToonRendering, toonAntialias } from './toonRendering';
 import { getPoseBounds } from './poseBounds';
+import { findAnimationClip, playAnimationClip } from './animationPlayback';
 
 interface LoadedPokemon {
   id: string;
@@ -35,15 +36,6 @@ interface PokemonStageOptions {
   onBackend(backend: string): void;
   onAnimationChange?(name: string, pokemonId: string): void;
   onSceneError?(message: string): void;
-}
-
-function playAnimationClip(animation: Hilo3d.Animation, name: string | undefined): void {
-  animation.loop = Infinity;
-  animation.play(name);
-  // This controller owns the clock; remove the registration made by Animation.play().
-  animation.stop();
-  animation.resume();
-  animation.updateAnimStates();
 }
 
 function galleryColor(hex: number): Hilo3d.Color {
@@ -128,7 +120,7 @@ export class PokemonStageController {
       const dt = Math.min(dtMilliseconds, 50);
       try {
         if (this.autoRotate && this.current) this.world.rotationY += dt / 1000 * 7;
-        this.current?.animation?.tick(dt);
+        this.current?.animation?.update(dt / 1000);
         this.updatePokemonPose();
         this.lagoonWater?.update(dt);
         stage.tick(dt);
@@ -196,7 +188,7 @@ export class PokemonStageController {
     const current = this.current;
     const animation = current?.animation;
     if (!current || !animation || this.destroyed) return;
-    if (!animation.clips[name]) {
+    if (!findAnimationClip(animation, name)) {
       console.error(`The current model does not contain animation ${name}.`);
       this.options.onSceneError?.('当前模型不包含此动作，请选择其他动作。');
       return;
@@ -303,7 +295,7 @@ export class PokemonStageController {
 
     // Acquire all required resources transactionally: fast navigation never mounts stale scenery.
     const results = await Promise.allSettled([
-      new Hilo3d.GLTFLoader().load({ src: `${this.options.assetBase}${data.model}`, isMultiAnim: true })
+      new Hilo3d.GLTFLoader().load({ src: `${this.options.assetBase}${data.model}` })
         .then(async (model) => {
           model.anim?.stop();
           try { await model.ready; return model; }
@@ -376,25 +368,8 @@ export class PokemonStageController {
       let animationName: string | undefined;
       let resetAnimationPose = (): void => {};
       if (animation) {
-        // A clip can omit channels present in a previous action. Restore authored local
-        // transforms before switching so, for example, an attack cannot leave the jaw open.
-        const targets = new Set(Object.values(animation.clips).flatMap((clip) => (
-          (clip?.animStatesList ?? []).map((state) => animation.nodeNameMap[state.nodeName])
-        )));
-        const restPose = [...targets].filter((node): node is Hilo3d.Node => Boolean(node) && node !== result.node)
-          .map((node) => ({
-            node, position: node.position.clone(), quaternion: node.quaternion.clone(),
-            scale: new Hilo3d.Vector3(node.scaleX, node.scaleY, node.scaleZ),
-          }));
-        resetAnimationPose = (): void => {
-          // Zero-scale bones hide authored appendages. Restoring a matrix would decompose
-          // that singular transform into NaN rotations, so retain its explicit TRS values.
-          for (const { node, position, quaternion, scale } of restPose) {
-            node.position.copy(position);
-            node.quaternion.copy(quaternion);
-            node.setScale(scale.x, scale.y, scale.z);
-          }
-        };
+        // The alpha.8 mixer restores captured TRS and custom-channel reference values.
+        resetAnimationPose = (): void => { animation.stop(true); };
         animationName = data.idleAnimation;
         playAnimationClip(animation, animationName);
       }
@@ -452,7 +427,7 @@ export class PokemonStageController {
       // Framing always comes from idle. Read the displayed action at commit time so
       // failed/obsolete loads cannot reset it, and changes during loading are retained.
       const preferredAnimation = this.current?.animationName ?? data.idleAnimation;
-      if (animation && animation.clips[preferredAnimation] && preferredAnimation !== animationName) {
+      if (animation && findAnimationClip(animation, preferredAnimation) && preferredAnimation !== animationName) {
         resetAnimationPose();
         playAnimationClip(animation, preferredAnimation);
         next.animationName = preferredAnimation;

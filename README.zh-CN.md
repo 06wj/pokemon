@@ -1,35 +1,30 @@
-# Pokémon Viewer · [English](README.md)
+# 共生之境 · [English](README.md)
 
-基于 [Hilo3D](https://hilo3d.js.org)、React 和 TypeScript 的浏览器端 3D 宝可梦查看器，包含第一世代 151 种宝可梦、骨骼动画、材质预设及按属性匹配的栖息地场景。应用界面为中文。
+基于 [Hilo3D](https://hilo3d.js.org)、React 和 TypeScript 的微缩生态互动游戏。20 只宝可梦生活在一座海岸小岛上：观察它们，轻轻改变环境，拍下伙伴之间自然发生的小故事。原有的 151 物种模型藏馆保留在游戏设置入口中。
 
 [在线演示](https://06wj.github.io/pokemon/)
 
-## 项目概览
+## 箱庭生活（P0）
 
-![完整应用界面，展示原生材质的妙蛙花](docs/screenshots/venusaur-original.jpg)
+首次访问默认进入箱庭，自动迎来 20 位固定居民；也可用 `?scene=ecology` 指定入口。设置中的「去宝可梦藏馆」进入原藏馆，`?scene=gallery` 或 `#003` 等模型深链也继续可用。显式 `scene` 参数优先于保留的模型 hash。
+
+- **自主日常：** 成熟树果自然掉落，居民发现、进食、满足后探索，困了寻找树荫与安静空位睡觉，再自然醒来。少量动态气泡表达兴趣与心情。没有战斗、刷等级或错过喂食的惩罚。
+- **四条主戏：** 水果觅食与进食；小火龙点燃备好的篝火，伙伴自主聚来；杰尼龟在河里吸水、上岸润花；皮卡丘闻花，引出附近伙伴的回应。复用 Idle、Walk、Run、Attack、Happy、Sleep，配合路径、节奏和特效编排。
+- **轻度干预：** 观察（**O**）、选择投果（**F**）后点合适的地面，也可摇树、备柴、拨花。拖动仍可转视角；画布获得焦点后按 **Enter** 可往花野旁投果。点击底边头像跟随伙伴，再摸摸或返回全景；拍照按钮或 **C** 留下当前画面。
+- **晨昏与天气：** 可选清晨 / 黄昏、晴天 / 下雨 / 下雪。雪逐渐积起，转雨或放晴后慢慢融化；天气影响伙伴选择的去处。暂停时可切天气，积雪与融化等待继续；重新开始保留所选天气、清零积雪，重新展开日常。
+- **本地收藏：** 相册最多 12 张 JPEG，记录画面中的主体、关联发现、时间与天气。满额或写入失败时保留旧照片，新照片仍可下载。物种 / 行为 / 瞬间按稳定 ID 去重保存，重开箱庭保留收藏。面板会暂停世界，支持 Esc 关闭和键盘焦点导航。
+
+[生活小戏目录](docs/design/interaction-catalog.md)还包含后续构想，20 张场景卡不代表全部已实现。追影子、长期关系记忆和更完整的收藏系统仍属后续扩展。
+
+## 原有藏馆
+
+![原有藏馆界面，展示原生材质的妙蛙花](docs/screenshots/venusaur-original.jpg)
 
 - 151 个普通形态模型、869 段动画，以 GLB 资源按需加载。
 - 六种材质预设：原生、卡通、像素、黄金、晶釉、幻彩泡泡。像素模式通过固定像素网格、四档明暗、有序抖色和有限色阶表现复古画面。像素与晶釉分别沿用 `glass`、`silver` URL 参数，以兼容旧链接。
 - 六套按宝可梦属性匹配的栖息地场景，包含环境光与粒子效果。
 - 支持 WebGPU 和 WebGL2，可手动切换渲染后端。
 - 适配桌面与移动端的模型选择、动画播放、环绕、缩放及全屏控制。
-- 新增「共生之境」河谷生态园：Blender MCP 制作的岛屿、溪流、木桥、林荫和花野，可切换清晨 / 黄昏，重复投放多只宝可梦并观察自主活动。
-
-## 共生之境
-
-从藏馆顶部的「河谷生态园」进入，或使用 `?scene=ecology`。点击列表会投放新的个体；也可以先放入六位示例伙伴。点击下方头像会拉近并持续跟随；摸摸或点击场景中的宝可梦会聚焦、跟随并播放开心动作。跟随时仍可环绕、缩放和平移，重置视角退出跟随并回到全景。小型伙伴使用更近的初始观察距离，手动缩放最近可到 0.65 场景单位。「清空 RESET」立即清除所有个体和等待中的投放，保留当前晨昏环境与渲染风格。
-
-宝可梦以 **GLB 原始比例统一乘以 0.9**，保持物种之间的大小关系，不使用图鉴尺寸归一化；落地点、寻路占地、点击和相机计算使用同一缩放尺寸。生态园最多容纳 30 个体，待加载的投放也计入上限。头顶姓名、情绪和睡眠提示合计最多显示两只，优先显示正在互动或跟随的伙伴。
-
-- **自主行为：** 30 Hz 固定步长的本地效用 AI，综合精力、探索欲、社交需求、困意、属性栖息偏好和晨昏节律决定散步、奔跑、交流及睡眠。记录近期伙伴和访问点，减少机械重复。无需在线 AI 服务。
-- **睡眠与步态：** 困倦的同族会寻找彼此附近的空位一起睡觉，保留身体间距；睡眠有最短时长和恢复条件，昼夜型物种作息不同，疲劳也会触发午睡。社交邀请不会打断睡眠，摸摸会唤醒。仅有奔跑动作的模型使用跑步速度；加减速、转向、拥挤和桥梁会影响实际移动，骨骼步态播放速率随实际速度同步。
-- **寻路与空间：** A* 网格寻路、路径平滑、连续路段地形检查和个体避让；陆生种通过木桥过河，鱼类沿溪流活动，桥下会下潜。较大地面个体不能通过过窄的桥时，会选择西岸适合的活动区。树干和岩石的几何位置与导航障碍共用数据。
-- **交流：** 同种及同一进化家族有更高社交偏好。靠近前双方预留互动，见面后互相转向和回应；超时、触摸打断及个体移除会释放双方状态，冷却时间避免连续重复互动。
-- **体型避让：** 占地代理来自 GLB 实际待机姿态。陆生种使用身体圆形占地，飞行和长尾水生种使用躯干近似；这不是逐骨骼的精确碰撞模拟。
-- **卡通开关：** 复用藏馆的色阶与描边渲染，同时作用于伙伴和静态景观，保留水流、火焰等独立效果。切换保留全部个体、动画、跟随视角和 AI 状态；卡通网格分组仅在个体成员变化时重建。
-- **场景制作：** 可编辑源文件为 `assets/ecology-sanctuary.blend`，运行时加载 `public/habitats/ecology.glb`。`scripts/ecologyGeometryRecipe.ts` 生成共享地形的网格配方，经 `scripts/prepare-ecology-geometry.mjs` 准备后，由 `scripts/create-ecology-landscape.py` 通过 Blender MCP 建模和导出。溪流纹理流动和黄昏萤火在 Hilo3D 中驱动。
-
-`npm run test:ecology` 验证 30 个体长时间运行、桥梁和水域限制、同族聚眠与唤醒、走跑实际速度、持续跟随、头顶两只提示上限、卡通切换、大体型占地、确定性重置，以及异步加载被清空 / 卸载时的资源回收。
 
 ## 材质示例
 
@@ -41,7 +36,7 @@
 
 卡通与像素同时作用于栖息地，共用原色、法线和深度渲染通路。像素模式在小尺寸目标上对每格进行九点采样，并按深度保留前后遮挡；明暗阈值采用短距离过渡并减弱有序抖色，以降低闪动。像素网格以最近邻方式放大，并在色调映射后再次对齐，保持方形边缘清晰。桌面像素块约 4 CSS 像素，窄屏保持 2 像素。模型统一按待机姿态的高度缩放，宽翅膀与长尾巴不再触发宽度或深度缩小限制。界面文字保留原始分辨率，切换材质保留骨骼动画与表情图集。
 
-## 操作与 URL 参数
+## 藏馆操作与 URL 参数
 
 - 按显示名称或图鉴编号搜索，从列表选择模型。
 - 拖动环绕；鼠标滚轮或双指手势缩放。
@@ -55,15 +50,17 @@
 | --- | --- | --- |
 | `backend` | `auto`、`webgpu`、`webgl2` | 自动选择 |
 | `material` | `original`、`toon`、`glass`、`gold`、`silver`、`iridescent` | `original` |
-| `scene` | `ecology`（生态园）；省略为藏馆 | 藏馆 |
-| URL hash | 图鉴编号，如 `#003` | `#001` |
+| `scene` | `ecology`（箱庭）、`gallery`（藏馆） | 无显式模型 hash 时进入箱庭 |
+| URL hash | 图鉴编号，如 `#003`；无显式 `scene` 时进入藏馆 | 无；藏馆内从 `#001` 开始 |
 
-WebGPU 的支持情况和画面表现取决于浏览器与 GPU。如出现异常，可切换至 [WebGL2](https://06wj.github.io/pokemon/?backend=webgl2#003)。WebGPU 开始初始化后发生的错误会显示在页面中，不会静默切换后端。
+WebGPU 的支持情况和画面表现取决于浏览器与 GPU。如出现异常，可尝试 [WebGL2 箱庭入口](https://06wj.github.io/pokemon/?scene=ecology&backend=webgl2)，或在藏馆内切换后端。WebGPU 开始初始化后发生的错误会显示在页面中，不会静默切换后端。
 
 ## 技术实现
 
-- **技术栈：** Hilo3D `2.0.0-alpha.4`、React 19、TypeScript 7、Vite 8。
-- **应用层：** React 管理选择状态、交互控件与 URL；`PokemonStageController` 管理三维场景及渲染生命周期。
+- **技术栈：** Hilo3D `2.0.0-alpha.8`、React 19、TypeScript 7、Vite 8。
+- **应用层：** `EcologyScene` 提供游戏界面，`EcologyStageController` 管理资源、镜头、时钟与拍照；`PokemonStageController` 继续服务原藏馆。
+- **生活系统：** `src/ecology/livingSimulation.ts` 协调居民，`actionComposer.ts` 推进动作序列，`livingContent.ts` 配置阵容、兴趣点与参数；`livingWeather.ts` 管理积雪、融化和湿润度变化。
+- **演出与记录：** `src/hilo/livingEffects.ts` 绘制水果、火焰与互动效果，`src/hilo/livingWeatherEffects.ts` 绘制雨雪与积雪表面；`src/ecology/livingJournal.ts` 负责本地相册、发现去重、数据校验和存储失败时的恢复保护。
 - **模型资源：** GLB 内嵌骨骼动画与贴图，按网格精简骨骼引用；WebGL2 使用 CPU 蒙皮兼容路径。
 - **材质与光照：** 材质适配层、HDR 环境光、卡通渲染，以及栖息地专用水面与粒子效果。
 - **资源交付：** 符合条件的不透明颜色贴图使用 JPEG，不降低分辨率；其余 PNG，包括法线、数据与表情贴图，保留原始字节。模型及 WebGPU 着色器编译器按需加载。
@@ -89,6 +86,7 @@ npm run dev
 
 ```bash
 npm run typecheck
+npm run test:living
 npm run test:ecology
 node scripts/test-viewer-location.mjs
 node scripts/test-animation-selection.mjs
@@ -97,9 +95,11 @@ npm run build
 npm run preview
 ```
 
+天气规则可单独运行 `node scripts/test-living-weather.mjs`。生活测试套件覆盖日常、动作收尾、收藏、拾取与路由；天气画面、拍照和输入交互仍应在各渲染后端分别进行浏览器检查。
+
 构建产物写入 `dist/`，采用相对路径，可部署在仓库子目录下。部署时保留生成的 `.wasm` 文件，WebGPU 着色器编译器会按需加载。发布清单只包含运行所需的模型与动作信息，不输出 source map。README 截图位于 `public/` 之外，不增加演示页面的发布体积。
 
-查看器使用 Hilo3D `2.0.0-alpha.7` 的 `shadowUpdateMode: 'full'`，让动画阴影切片在同一帧内完整刷新，不再受分页更新预算延迟。
+查看器使用 Hilo3D `2.0.0-alpha.8` 的 `shadowUpdateMode: 'full'`，让动画阴影切片在同一帧内完整刷新，不再受分页更新预算延迟。
 
 卡通渲染缓存网格筛选结果，一次 MRT 绘制同时输出原色和原生表面属性。原色缓冲采用 sRGB 8 位存储，合成后的 HDR 场景和描边分辨率保持不变。适配器组合当前固定版本的 Hilo3D 公开着色器源码，升级引擎时需一并审查。显式实例化和不兼容的光栅状态保留独立的原色、法线绘制路径。触摸优先设备使用 1024 阴影，桌面设备使用 2048。
 
@@ -107,8 +107,9 @@ npm run preview
 
 ```text
 src/app/          应用生命周期、选择状态与 URL
-src/components/   图鉴、材质面板与无障碍浏览控制
+src/components/   游戏工具栏、收藏面板、藏馆与无障碍控制
 src/content/      宝可梦、栖息地、材质主题与模型清单
+src/ecology/      生活模拟、动作配方、天气、导航与收藏
 src/hilo/         渲染、动画、水面、粒子与材质适配
 public/           发布模型、栖息地、背景与环境光资源
 scripts/          Blender 导出、资源优化与验证
@@ -138,6 +139,26 @@ npm run assets:optimize -- --ids 003
 优化脚本仅把满足误差限制、体积更小的不透明颜色贴图转为 JPEG：不降分辨率，使用 4:4:4 色度采样，其余 PNG 与图标不动。GLB 内相同图片共享存储，不改材质或几何数据。JPEG 属于有损压缩，新资源仍需在两个后端与目标设备上检查画面。
 
 原件备份在 `source/asset-optimization/originals/`；[逐文件报告](scripts/asset-optimization-report.json) 记录备份路径、大小与输出哈希。请另外保存本地备份。重复执行会跳过哈希未变的资源，避免二次有损压缩。有原始备份时，可用 `npm run assets:optimize -- --restore-quantized-pngs` 恢复旧版本量化过的 PNG。蒙皮等价测试 `node scripts/test-skin-equivalence.mjs /原始/models/路径` 同时要求贴图字节相同，应在 JPEG 转换前使用，不适合跨转换比较。
+
+### 重建海岸生态地图（v2）
+
+v2 地图的制作与发布资源如下：
+
+| 用途 | 文件 |
+| --- | --- |
+| 可编辑 Blender 场景 | `assets/ecology-coastal-v2.blend` |
+| 运行时景观 | `public/habitats/ecology-coastal-v2.glb` |
+| 场景与植被生成器 | `scripts/create-ecology-coastal.py`、`scripts/coastal_flora.py` |
+| 地形与导航共享布局 | `src/ecology/coastalLayout.json` |
+| PBR 材质的地表基础色烘焙贴图 | `assets/textures/coastal-terrain-albedo.png` |
+| 构图参考图 | `docs/design/images/coastal-island-map-v2.png` |
+| Blender 预览输出 | `artifacts/coastal-island-v2-day.png`、`artifacts/coastal-island-v2-dusk.png` |
+
+通过 **Blender MCP** 使用 Blender 的 `bpy.app.binary_path` 启动独立后台进程，工作目录设为仓库根目录，参数为 `--background --factory-startup --python scripts/create-ecology-coastal.py`。生成器从新场景开始，加载 `coastal_flora.py`，烘焙地表基础色，再写出可编辑场景、运行时 GLB 与日间 / 黄昏预览。当前交互式 Blender 文档保持打开；旧版 `assets/ecology-sanctuary.blend`、`source/` 下的生态场景源文件及 `public/habitats/ecology.glb` 继续保留。
+
+共享布局定义沙滩斜坡、水下沙洲、沿单调 Hermite 控制线延伸的溪流，以及南侧河口浅湾。Blender 源文件保留可编辑几何与程序化地表材质节点，并附带烘焙后的颜色贴图。兴趣点 anchor 与共享布局标定果树、火堆、花丛和休息处，运行时生活系统负责它们的状态变化与互动。
+
+每次重建后，用参考图核对构图和地标。上述 PNG 是 Blender 渲染输出；导出的 GLB 仍需在浏览器中检查，并针对该次构建执行相应资源与生态验证。
 
 ### 发布
 

@@ -88,7 +88,7 @@ ivec2 pixel(ivec2 p) { return clamp(p, ivec2(0), ivec2(sizeInk.xy) - 1); }
 vec4 pigment(ivec2 p) { return texelFetch(pigmentColor, pixel(p), 0); }
 vec4 surface(ivec2 p) { return texelFetch(surfaceData, pixel(p), 0); }
 vec3 decodeNormal(vec4 data) {
-  // Hilo3D alpha.7 stores octahedral normals in unsigned normalized RG channels.
+  // Hilo3D alpha.8 stores octahedral normals in unsigned normalized RG channels.
   vec2 xy = data.xy * 2.0 - 1.0;
   vec3 n = vec3(xy, 1.0 - abs(xy.x) - abs(xy.y));
   float fold = clamp(-n.z, 0.0, 1.0);
